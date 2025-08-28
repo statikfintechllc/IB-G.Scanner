@@ -14,7 +14,6 @@ import { AlertsManager } from '@/components/AlertsManager';
 import { IBKRSettings } from '@/components/IBKRSettings';
 import { AISearch } from '@/components/AISearch';
 import { AITopPicks } from '@/components/AITopPicks';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -202,13 +201,11 @@ function App() {
               />
             </div>
             <div className="flex-1 min-h-0 px-6 pb-6">
-              <div className="h-full border border-border rounded-lg overflow-hidden">
-                <ScrollArea className="h-full">
-                  <ScannerTable 
-                    stocks={filteredStocks}
-                    onStockSelect={handleStockSelect}
-                  />
-                </ScrollArea>
+              <div className="h-full border border-border rounded-lg overflow-auto">
+                <ScannerTable 
+                  stocks={filteredStocks}
+                  onStockSelect={handleStockSelect}
+                />
               </div>
             </div>
           </div>

@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { aiSearchService } from '@/lib/aiSearch';
 import { Stock, AISearchResult, SearchMemory } from '@/types';
@@ -146,8 +145,8 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                 Search Results {searchResults.length > 0 && `(${searchResults.length})`}
               </h3>
               
-              <div className="flex-1 min-h-0 border rounded-md overflow-hidden">
-                <ScrollArea className="h-full">
+              <div className="flex-1 min-h-0 border rounded-md overflow-auto">
+                <div className="h-full">
                   {searchResults.length > 0 ? (
                     <div className="p-4 space-y-3">
                     {searchResults.map((result, index) => (
@@ -217,7 +216,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                     <p className="text-xs">Try searching for patterns, sectors, or conditions</p>
                   </div>
                 )}
-                </ScrollArea>
+                </div>
               </div>
             </div>
 
@@ -232,7 +231,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-3 pt-0">
-                  <ScrollArea className="max-h-32">
+                  <div className="max-h-32 overflow-auto">
                     <div className="space-y-1">
                     {suggestions.map((suggestion, index) => (
                       <Button
@@ -246,7 +245,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                       </Button>
                     ))}
                     </div>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -259,7 +258,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-3 pt-0">
-                  <ScrollArea className="max-h-32">
+                  <div className="max-h-32 overflow-auto">
                     <div className="space-y-2">
                       {insights.map((insight, index) => (
                         <div key={index} className="text-xs text-muted-foreground p-2 bg-muted/20 rounded">
@@ -267,7 +266,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                         </div>
                       ))}
                     </div>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
 
@@ -280,7 +279,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-3 pt-0">
-                  <ScrollArea className="max-h-32">
+                  <div className="max-h-32 overflow-auto">
                     <div className="space-y-1">
                       {searchHistory.slice(0, 5).map((search, index) => (
                         <Button
@@ -299,7 +298,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                         </Button>
                       ))}
                     </div>
-                  </ScrollArea>
+                  </div>
                 </CardContent>
               </Card>
             </div>

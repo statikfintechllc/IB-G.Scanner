@@ -4,7 +4,6 @@ import { aiPatternService } from '@/lib/aiPatterns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
@@ -216,7 +215,7 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
 
           <div className="flex-1 min-h-0 p-6 pt-4">
             <TabsContent value="recommendations" className="h-full mt-0">
-              <ScrollArea className="h-full">
+              <div className="h-full overflow-auto">
                 <div className="space-y-3">
                   {recommendations.map((rec) => (
                     <Card 
@@ -294,11 +293,11 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                     </Card>
                   ))}
                 </div>
-              </ScrollArea>
+              </div>
             </TabsContent>
 
             <TabsContent value="patterns" className="h-full mt-0">
-              <ScrollArea className="h-full">
+              <div className="h-full overflow-auto">
                 <div className="space-y-3">
                   {marketScan?.patternMatches.map((match, idx) => (
                     <Card 
@@ -331,11 +330,11 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                     </Card>
                   ))}
                 </div>
-              </ScrollArea>
+              </div>
             </TabsContent>
 
             <TabsContent value="volume" className="h-full mt-0">
-              <ScrollArea className="h-full">
+              <div className="h-full overflow-auto">
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
@@ -420,7 +419,7 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                     </div>
                   </div>
                 </div>
-              </ScrollArea>
+              </div>
             </TabsContent>
           </div>
         </Tabs>

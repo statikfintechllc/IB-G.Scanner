@@ -270,8 +270,8 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                       )}
                     </div>
                     
-                    <div className="flex-1 min-h-0 border rounded-lg overflow-hidden">
-                      <ScrollArea className="h-full">
+                    <div className="flex-1 min-h-0 border rounded-lg overflow-auto">
+                      <div className="h-full">
                         {alerts.length === 0 ? (
                           <div className="text-center py-8 text-muted-foreground">
                             <AlertTriangle size={48} className="mx-auto mb-4 opacity-50" />
@@ -341,14 +341,14 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                     ))}
                           </div>
                         )}
-                      </ScrollArea>
+                      </div>
                     </div>
                   </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="settings" className="h-full mt-0">
-                <ScrollArea className="h-full">
+                <div className="h-full overflow-auto">
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-lg">Notification Settings</CardTitle>
@@ -436,7 +436,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                 </div>
                       </CardContent>
                     </Card>
-                  </ScrollArea>
+                  </div>
                 </TabsContent>
             </div>
           </Tabs>
