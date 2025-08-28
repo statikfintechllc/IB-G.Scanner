@@ -234,9 +234,6 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                             </SelectContent>
                           </Select>
                         </div>
-                      </SelectContent>
-                    </Select>
-                  </div>
                   
                   <div>
                     <Label htmlFor="value">
