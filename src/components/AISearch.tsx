@@ -104,17 +104,17 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-6xl h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-4 flex-shrink-0">
+      <DialogContent className="max-w-7xl h-[85vh] flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2">
             <Brain size={20} />
             AI-Powered Stock Search
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 flex flex-col gap-4 overflow-hidden px-6 pb-6">
+        <div className="flex-1 flex flex-col gap-6 min-h-0">
           {/* Search Input */}
-          <div className="flex gap-2 flex-shrink-0">
+          <div className="flex gap-3 flex-shrink-0">
             <div className="relative flex-1">
               <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -122,13 +122,13 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="pl-10"
+                className="pl-10 h-12 text-base"
               />
             </div>
             <Button 
               onClick={() => handleSearch()} 
               disabled={isSearching || !searchQuery.trim()}
-              className="flex-shrink-0"
+              className="flex-shrink-0 px-8 h-12"
             >
               {isSearching ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary" />
@@ -142,16 +142,16 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
             {/* Search Results */}
             <div className="lg:col-span-2 flex flex-col min-h-0">
               <div className="flex-shrink-0 mb-4">
-                <h3 className="text-base font-semibold flex items-center gap-2">
-                  <Target size={18} />
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Target size={20} />
                   Search Results {searchResults.length > 0 && `(${searchResults.length})`}
                 </h3>
               </div>
               
-              <div className="flex-1 min-h-0 border border-border rounded-lg overflow-hidden bg-card/30">
+              <div className="flex-1 min-h-0 border border-border rounded-lg overflow-hidden bg-card/50">
                 <div className="h-full overflow-y-auto custom-scrollbar">
                   {searchResults.length > 0 ? (
-                    <div className="p-6 space-y-4">
+                    <div className="p-4 space-y-3">
                       {searchResults.map((result, index) => (
                         <Card 
                           key={result.symbol}
@@ -162,16 +162,16 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                           )}
                           onClick={() => handleStockClick(result.symbol)}
                         >
-                          <CardContent className="p-6">
+                          <CardContent className="p-4">
                             <div className="flex items-start justify-between mb-3">
-                              <div className="flex flex-col gap-2">
-                                <h4 className="font-mono font-bold text-xl">{result.symbol}</h4>
-                                <Badge variant="outline" className="text-sm w-fit">
+                              <div className="flex flex-col gap-1">
+                                <h4 className="font-mono font-bold text-lg">{result.symbol}</h4>
+                                <Badge variant="outline" className="text-xs w-fit">
                                   Relevance: {result.relevanceScore}%
                                 </Badge>
                               </div>
                               {result.priceTargets && (
-                                <div className="text-right text-sm text-muted-foreground">
+                                <div className="text-right text-xs text-muted-foreground">
                                   <div>Target: ${result.priceTargets.target}</div>
                                   <div>Support: ${result.priceTargets.support}</div>
                                 </div>
@@ -179,10 +179,10 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                             </div>
 
                             {/* Reasons */}
-                            <div className="mb-4">
-                              <div className="flex flex-wrap gap-2">
+                            <div className="mb-3">
+                              <div className="flex flex-wrap gap-1">
                                 {result.reasons.slice(0, 3).map((reason, i) => (
-                                  <Badge key={i} variant="secondary" className="text-sm">
+                                  <Badge key={i} variant="secondary" className="text-xs">
                                     {reason}
                                   </Badge>
                                 ))}
@@ -191,13 +191,13 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
 
                             {/* Patterns */}
                             {result.patterns.length > 0 && (
-                              <div className="space-y-2">
+                              <div className="space-y-1">
                                 {result.patterns.slice(0, 2).map((pattern, i) => (
-                                  <div key={i} className="flex items-center justify-between text-sm">
+                                  <div key={i} className="flex items-center justify-between text-xs">
                                     <span className="text-muted-foreground">{pattern.pattern}</span>
                                     <Badge 
                                       className={cn(
-                                        "text-sm",
+                                        "text-xs",
                                         getPatternBadgeColor(pattern.confidence)
                                       )}
                                     >
@@ -226,24 +226,24 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
             <div className="space-y-4 flex flex-col min-h-0">
               {/* Search Suggestions */}
               <Card className="flex-shrink-0">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Lightbulb size={18} />
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Lightbulb size={16} />
                     Suggestions
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <div className="h-40 overflow-y-auto custom-scrollbar">
-                    <div className="space-y-2">
+                <CardContent className="p-3 pt-0">
+                  <div className="max-h-32 overflow-y-auto custom-scrollbar">
+                    <div className="space-y-1">
                       {suggestions.map((suggestion, index) => (
                         <Button
                           key={index}
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start text-sm h-auto py-3 px-3"
+                          className="w-full justify-start text-xs h-auto py-2 px-2 text-left"
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
-                          {suggestion}
+                          <span className="truncate">{suggestion}</span>
                         </Button>
                       ))}
                     </div>
@@ -253,17 +253,17 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
 
               {/* Market Insights */}
               <Card className="flex-1 min-h-0">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <TrendingUp size={18} />
-                    Market Insights
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <TrendingUp size={16} />
+                    Insights
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 pt-0 flex flex-col min-h-0">
+                <CardContent className="p-3 pt-0 flex flex-col min-h-0">
                   <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {insights.map((insight, index) => (
-                        <div key={index} className="text-sm text-muted-foreground p-3 bg-muted/20 rounded-md">
+                        <div key={index} className="text-xs text-muted-foreground p-2 bg-muted/20 rounded-md">
                           {insight}
                         </div>
                       ))}
@@ -274,21 +274,21 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
 
               {/* Search History */}
               <Card className="flex-shrink-0">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <History size={18} />
-                    Recent Searches
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <History size={16} />
+                    Recent
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <div className="h-32 overflow-y-auto custom-scrollbar">
-                    <div className="space-y-2">
+                <CardContent className="p-3 pt-0">
+                  <div className="max-h-24 overflow-y-auto custom-scrollbar">
+                    <div className="space-y-1">
                       {searchHistory.slice(0, 5).map((search, index) => (
                         <Button
                           key={index}
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start text-sm h-auto py-2 px-3"
+                          className="w-full justify-start text-xs h-auto py-1 px-2"
                           onClick={() => handleSuggestionClick(search.query)}
                         >
                           <div className="truncate">
