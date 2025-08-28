@@ -163,10 +163,43 @@
 }
 
 /* Dialog positioning fix - ensure dialogs are properly centered */
-[data-slot="dialog-content"] {
+[data-radix-dialog-content] {
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
   z-index: 50 !important;
+  margin: 0 !important;
+}
+
+/* Additional dialog centering overrides */
+[role="dialog"] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 50 !important;
+  margin: 0 !important;
+}
+
+/* Specific dialog classes */
+.ai-search-dialog,
+.alerts-dialog,
+.ibkr-dialog {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 50 !important;
+  margin: 0 !important;
+}
+
+/* Override any conflicting positioning */
+[data-state="open"][role="dialog"] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 50 !important;
+  margin: 0 !important;
 }
