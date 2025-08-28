@@ -32,7 +32,7 @@ export interface ScannerFilters {
 
 export interface Tab {
   id: string;
-  type: 'scanner' | 'chart' | 'ai_picks';
+  type: 'scanner' | 'chart' | 'ai_picks' | 'sfti_top10';
   title: string;
   symbol?: string;
 }

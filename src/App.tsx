@@ -12,7 +12,7 @@ import { StockChart } from '@/components/StockChart';
 import { AlertsManager } from '@/components/AlertsManager';
 import { IBKRSettings } from '@/components/IBKRSettings';
 import { AISearch } from '@/components/AISearch';
-import { AITopPicks } from '@/components/AITopPicks';
+import { SFTiTop10 } from '@/components/SFTiTop10';
 import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -34,10 +34,10 @@ function App() {
   const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
   const [filters, setFilters] = useKV<ScannerFilters>('scanner-filters', DEFAULT_FILTERS);
   const [tabs, setTabs] = useKV<Tab[]>('scanner-tabs', [
-    { id: 'ai_picks', type: 'ai_picks', title: 'AI Top Picks' },
+    { id: 'sfti_top10', type: 'sfti_top10', title: 'SFTi Top 10' },
     { id: 'scanner', type: 'scanner', title: 'Scanner' }
   ]);
-  const [activeTabId, setActiveTabId] = useKV<string>('active-tab', 'ai_picks');
+  const [activeTabId, setActiveTabId] = useKV<string>('active-tab', 'sfti_top10');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -160,13 +160,13 @@ function App() {
   };
 
   const handleTabClose = (tabId: string) => {
-    if (tabId === 'scanner' || tabId === 'ai_picks') return;
+    if (tabId === 'scanner' || tabId === 'sfti_top10') return;
 
     setTabs(prevTabs => {
       const newTabs = prevTabs.filter(tab => tab.id !== tabId);
       
       if (activeTabId === tabId) {
-        setActiveTabId('ai_picks');
+        setActiveTabId('sfti_top10');
       }
       
       return newTabs;
@@ -233,8 +233,8 @@ function App() {
 
       {/* Content */}
       <div className="flex-1 overflow-hidden">
-        {activeTab?.type === 'ai_picks' ? (
-          <AITopPicks stocks={filteredStocks} onStockSelect={handleStockSelect} />
+        {activeTab?.type === 'sfti_top10' ? (
+          <SFTiTop10 stocks={filteredStocks} onStockSelect={handleStockSelect} />
         ) : activeTab?.type === 'scanner' ? (
           <div className="h-full flex flex-col">
             <div className="p-6 pb-4 flex-shrink-0">
