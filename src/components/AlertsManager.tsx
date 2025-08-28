@@ -190,93 +190,93 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="w-[95vw] max-w-[95vw] h-[90vh] flex flex-col p-0">
-        <DialogHeader className="p-4 pb-3 flex-shrink-0">
-          <DialogTitle className="text-lg flex items-center gap-2">
-            <Bell size={18} />
+      <DialogContent className="w-[95vw] max-w-[95vw] h-[85vh] flex flex-col p-3">
+        <DialogHeader className="pb-2 flex-shrink-0">
+          <DialogTitle className="text-base flex items-center gap-2">
+            <Bell size={16} />
             Price Alerts & Notifications
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 min-h-0 px-4 pb-4">
+        <div className="flex-1 min-h-0">
           <Tabs defaultValue="alerts" className="h-full flex flex-col">
-            <TabsList className="grid w-full grid-cols-2 mb-4 flex-shrink-0">
-              <TabsTrigger value="alerts" className="text-sm">Alerts</TabsTrigger>
-              <TabsTrigger value="settings" className="text-sm">Settings</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-3 flex-shrink-0 h-8">
+              <TabsTrigger value="alerts" className="text-xs">Alerts</TabsTrigger>
+              <TabsTrigger value="settings" className="text-xs">Settings</TabsTrigger>
             </TabsList>
 
             <div className="flex-1 min-h-0">
               <TabsContent value="alerts" className="h-full mt-0">
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 h-full">
-                  {/* Add New Alert - Takes 1/3 on large screens */}
-                  <Card className="flex-shrink-0 h-fit">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <Plus size={18} />
-                        Create New Alert
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4 px-4 pb-4">
-                      <div className="grid grid-cols-1 gap-4">
-                        <div>
-                          <Label htmlFor="symbol" className="text-sm font-medium">Symbol</Label>
-                          <Input
-                            id="symbol"
-                            placeholder="AAPL"
-                            value={newAlert.symbol}
-                            onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
-                            className="font-mono mt-1 text-sm"
-                          />
-                        </div>
-                        
-                        <div>
-                          <Label htmlFor="type" className="text-sm font-medium">Alert Type</Label>
-                          <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
-                            <SelectTrigger className="mt-1 text-sm">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="price_above">Price Above</SelectItem>
-                              <SelectItem value="price_below">Price Below</SelectItem>
-                              <SelectItem value="volume_spike">Volume Spike</SelectItem>
-                              <SelectItem value="breakout">Breakout Pattern</SelectItem>
-                              <SelectItem value="pattern_recognition">Pattern Recognition</SelectItem>
-                              <SelectItem value="ai_signal">AI Signal</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                  
-                        <div>
-                          <Label htmlFor="value" className="text-sm font-medium">
-                            {newAlert.type === 'volume_spike' ? 'Average Volume' : newAlert.type === 'breakout' ? 'Sensitivity' : 'Price'}
-                          </Label>
-                          <Input
-                            id="value"
-                            type="number"
-                            step={newAlert.type.includes('price') ? '0.0001' : '1000'}
-                            placeholder={newAlert.type === 'volume_spike' ? '1000000' : newAlert.type === 'breakout' ? '1' : '1.0000'}
-                            value={newAlert.value || ''}
-                            onChange={(e) => setNewAlert(prev => ({ ...prev, value: parseFloat(e.target.value) || 0 }))}
-                            className="mt-1 text-sm"
-                          />
-                        </div>
-                  
-                        <div className="pt-2">
-                          <Button onClick={handleAddAlert} className="w-full text-sm py-4">
-                            <Plus size={16} className="mr-2" />
+                <div className="grid grid-cols-1 lg:grid-cols-5 gap-3 h-full">
+                  {/* Add New Alert - Compressed to 2/5 */}
+                  <div className="lg:col-span-2">
+                    <Card className="h-full">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm flex items-center gap-2">
+                          <Plus size={14} />
+                          Create New Alert
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3 p-3 pt-0">
+                        <div className="space-y-3">
+                          <div>
+                            <Label htmlFor="symbol" className="text-xs font-medium">Symbol</Label>
+                            <Input
+                              id="symbol"
+                              placeholder="AAPL"
+                              value={newAlert.symbol}
+                              onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
+                              className="font-mono mt-1 text-xs h-8"
+                            />
+                          </div>
+                          
+                          <div>
+                            <Label htmlFor="type" className="text-xs font-medium">Alert Type</Label>
+                            <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
+                              <SelectTrigger className="mt-1 text-xs h-8">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="price_above">Price Above</SelectItem>
+                                <SelectItem value="price_below">Price Below</SelectItem>
+                                <SelectItem value="volume_spike">Volume Spike</SelectItem>
+                                <SelectItem value="breakout">Breakout Pattern</SelectItem>
+                                <SelectItem value="pattern_recognition">Pattern Recognition</SelectItem>
+                                <SelectItem value="ai_signal">AI Signal</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                    
+                          <div>
+                            <Label htmlFor="value" className="text-xs font-medium">
+                              {newAlert.type === 'volume_spike' ? 'Average Volume' : newAlert.type === 'breakout' ? 'Sensitivity' : 'Price'}
+                            </Label>
+                            <Input
+                              id="value"
+                              type="number"
+                              step={newAlert.type.includes('price') ? '0.0001' : '1000'}
+                              placeholder={newAlert.type === 'volume_spike' ? '1000000' : newAlert.type === 'breakout' ? '1' : '1.0000'}
+                              value={newAlert.value || ''}
+                              onChange={(e) => setNewAlert(prev => ({ ...prev, value: parseFloat(e.target.value) || 0 }))}
+                              className="mt-1 text-xs h-8"
+                            />
+                          </div>
+                    
+                          <Button onClick={handleAddAlert} className="w-full text-xs h-8 mt-3">
+                            <Plus size={14} className="mr-1" />
                             Add Alert
                           </Button>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
 
-                  {/* Active Alerts - Takes 2/3 on large screens */}
-                  <div className="flex flex-col min-h-0 xl:col-span-2">
-                    <div className="flex items-center justify-between mb-3 flex-shrink-0">
-                      <h3 className="text-lg font-semibold">Active Alerts ({alerts.length})</h3>
+                  {/* Active Alerts - Takes 3/5 */}
+                  <div className="flex flex-col min-h-0 lg:col-span-3">
+                    <div className="flex items-center justify-between mb-2 flex-shrink-0">
+                      <h3 className="text-sm font-semibold">Active Alerts ({alerts.length})</h3>
                       {alerts.some(a => a.triggered) && (
-                        <Button variant="outline" size="sm" onClick={handleClearTriggered} className="text-xs">
+                        <Button variant="outline" size="sm" onClick={handleClearTriggered} className="text-xs h-7">
                           Clear Triggered
                         </Button>
                       )}
@@ -285,33 +285,33 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                     <div className="flex-1 min-h-0 border border-border rounded-lg overflow-hidden bg-card/50">
                       <div className="h-full overflow-y-auto custom-scrollbar">
                         {alerts.length === 0 ? (
-                          <div className="text-center py-8 text-muted-foreground h-full flex flex-col items-center justify-center px-4">
-                            <AlertTriangle size={40} className="mx-auto mb-3 opacity-50" />
-                            <p className="text-base">No alerts configured</p>
+                          <div className="text-center py-6 text-muted-foreground h-full flex flex-col items-center justify-center px-3">
+                            <AlertTriangle size={32} className="mx-auto mb-2 opacity-50" />
+                            <p className="text-sm">No alerts configured</p>
                             <p className="text-xs">Create your first alert</p>
                           </div>
                         ) : (
-                          <div className="p-3 space-y-2">
+                          <div className="p-2 space-y-1">
                             {alerts.map(alert => (
                               <div 
                                 key={alert.id}
                                 className={cn(
-                                  "flex items-center justify-between p-3 rounded-lg border",
+                                  "flex items-center justify-between p-2 rounded-lg border",
                                   alert.triggered ? "bg-destructive/10 border-destructive/50" : "bg-card"
                                 )}
                               >
-                                <div className="flex items-center gap-3 flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-1 min-w-0">
                                   <div className={cn(
-                                    "p-2 rounded-full flex-shrink-0",
+                                    "p-1.5 rounded-full flex-shrink-0",
                                     alert.triggered ? "bg-destructive/20" : "bg-muted"
                                   )}>
                                     {getAlertIcon(alert.type)}
                                   </div>
                                   
                                   <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 flex-wrap">
-                                      <span className="font-mono font-bold text-sm">{alert.symbol}</span>
-                                      <Badge variant="outline" className="text-xs">
+                                    <div className="flex items-center gap-1 flex-wrap">
+                                      <span className="font-mono font-bold text-xs">{alert.symbol}</span>
+                                      <Badge variant="outline" className="text-xs h-4 px-1">
                                         {getAlertTypeLabel(alert.type)}
                                       </Badge>
                                       <span className="text-xs text-muted-foreground">
@@ -320,12 +320,12 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                                     </div>
                                     
                                     {alert.triggered && alert.message && (
-                                      <p className="text-xs text-destructive mt-1 truncate">{alert.message}</p>
+                                      <p className="text-xs text-destructive mt-0.5 truncate">{alert.message}</p>
                                     )}
                                   </div>
                                 </div>
                                 
-                                <div className="flex items-center gap-2 flex-shrink-0">
+                                <div className="flex items-center gap-1 flex-shrink-0">
                                   <Switch
                                     checked={alert.enabled}
                                     onCheckedChange={(enabled) => handleToggleAlert(alert.id, enabled)}
@@ -336,7 +336,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                                       variant="outline" 
                                       size="sm"
                                       onClick={() => handleResetAlert(alert.id)}
-                                      className="text-xs"
+                                      className="text-xs h-6 px-2"
                                     >
                                       Reset
                                     </Button>
@@ -346,8 +346,9 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                                     variant="outline" 
                                     size="sm"
                                     onClick={() => handleRemoveAlert(alert.id)}
+                                    className="h-6 w-6 p-0"
                                   >
-                                    <Trash2 size={12} />
+                                    <Trash2 size={10} />
                                   </Button>
                                 </div>
                               </div>
@@ -362,101 +363,99 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
 
               <TabsContent value="settings" className="h-full mt-0">
                 <div className="h-full overflow-y-auto custom-scrollbar">
-                  <div className="max-w-4xl mx-auto">
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="text-lg">Notification Settings</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-4 p-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div className="space-y-4">
-                            <h4 className="font-semibold text-base">General Settings</h4>
-                            
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <Label htmlFor="enabled" className="text-sm">Enable Notifications</Label>
-                                <p className="text-xs text-muted-foreground">Master switch for all notifications</p>
-                              </div>
-                              <Switch
-                                id="enabled"
-                                checked={settings.enabled}
-                                onCheckedChange={(checked) => handleSettingsChange('enabled', checked)}
-                              />
+                  <Card className="h-fit">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm">Notification Settings</CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-3 pt-0">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-3">
+                          <h4 className="font-semibold text-sm">General Settings</h4>
+                          
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <Label htmlFor="enabled" className="text-xs">Enable Notifications</Label>
+                              <p className="text-xs text-muted-foreground">Master switch for all notifications</p>
                             </div>
-
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <Label htmlFor="sound" className="text-sm">Sound Notifications</Label>
-                                <p className="text-xs text-muted-foreground">Play sound when alerts trigger</p>
-                              </div>
-                              <Switch
-                                id="sound"
-                                checked={settings.sound}
-                                onCheckedChange={(checked) => handleSettingsChange('sound', checked)}
-                                disabled={!settings.enabled}
-                              />
-                            </div>
-
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <Label htmlFor="desktop" className="text-sm">Desktop Notifications</Label>
-                                <p className="text-xs text-muted-foreground">Show browser notifications</p>
-                              </div>
-                              <Switch
-                                id="desktop"
-                                checked={settings.desktop}
-                                onCheckedChange={(checked) => handleSettingsChange('desktop', checked)}
-                                disabled={!settings.enabled}
-                              />
-                            </div>
+                            <Switch
+                              id="enabled"
+                              checked={settings.enabled}
+                              onCheckedChange={(checked) => handleSettingsChange('enabled', checked)}
+                            />
                           </div>
 
-                          <div className="space-y-4">
-                            <h4 className="font-semibold text-base">Alert Types</h4>
-                            
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <Label htmlFor="priceAlerts" className="text-sm">Price Alerts</Label>
-                                <p className="text-xs text-muted-foreground">Enable price-based alerts</p>
-                              </div>
-                              <Switch
-                                id="priceAlerts"
-                                checked={settings.priceAlerts}
-                                onCheckedChange={(checked) => handleSettingsChange('priceAlerts', checked)}
-                                disabled={!settings.enabled}
-                              />
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <Label htmlFor="sound" className="text-xs">Sound Notifications</Label>
+                              <p className="text-xs text-muted-foreground">Play sound when alerts trigger</p>
                             </div>
+                            <Switch
+                              id="sound"
+                              checked={settings.sound}
+                              onCheckedChange={(checked) => handleSettingsChange('sound', checked)}
+                              disabled={!settings.enabled}
+                            />
+                          </div>
 
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <Label htmlFor="volumeAlerts" className="text-sm">Volume Alerts</Label>
-                                <p className="text-xs text-muted-foreground">Enable volume spike alerts</p>
-                              </div>
-                              <Switch
-                                id="volumeAlerts"
-                                checked={settings.volumeAlerts}
-                                onCheckedChange={(checked) => handleSettingsChange('volumeAlerts', checked)}
-                                disabled={!settings.enabled}
-                              />
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <Label htmlFor="desktop" className="text-xs">Desktop Notifications</Label>
+                              <p className="text-xs text-muted-foreground">Show browser notifications</p>
                             </div>
-
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <Label htmlFor="newsAlerts" className="text-sm">News Alerts</Label>
-                                <p className="text-xs text-muted-foreground">Enable news-based alerts</p>
-                              </div>
-                              <Switch
-                                id="newsAlerts"
-                                checked={settings.newsAlerts}
-                                onCheckedChange={(checked) => handleSettingsChange('newsAlerts', checked)}
-                                disabled={!settings.enabled}
-                              />
-                            </div>
+                            <Switch
+                              id="desktop"
+                              checked={settings.desktop}
+                              onCheckedChange={(checked) => handleSettingsChange('desktop', checked)}
+                              disabled={!settings.enabled}
+                            />
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+
+                        <div className="space-y-3">
+                          <h4 className="font-semibold text-sm">Alert Types</h4>
+                          
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <Label htmlFor="priceAlerts" className="text-xs">Price Alerts</Label>
+                              <p className="text-xs text-muted-foreground">Enable price-based alerts</p>
+                            </div>
+                            <Switch
+                              id="priceAlerts"
+                              checked={settings.priceAlerts}
+                              onCheckedChange={(checked) => handleSettingsChange('priceAlerts', checked)}
+                              disabled={!settings.enabled}
+                            />
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <Label htmlFor="volumeAlerts" className="text-xs">Volume Alerts</Label>
+                              <p className="text-xs text-muted-foreground">Enable volume spike alerts</p>
+                            </div>
+                            <Switch
+                              id="volumeAlerts"
+                              checked={settings.volumeAlerts}
+                              onCheckedChange={(checked) => handleSettingsChange('volumeAlerts', checked)}
+                              disabled={!settings.enabled}
+                            />
+                          </div>
+
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <Label htmlFor="newsAlerts" className="text-xs">News Alerts</Label>
+                              <p className="text-xs text-muted-foreground">Enable news-based alerts</p>
+                            </div>
+                            <Switch
+                              id="newsAlerts"
+                              checked={settings.newsAlerts}
+                              onCheckedChange={(checked) => handleSettingsChange('newsAlerts', checked)}
+                              disabled={!settings.enabled}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               </TabsContent>
             </div>
