@@ -215,9 +215,9 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
 
           <div className="flex-1 min-h-0 p-6 pt-4">
             <TabsContent value="recommendations" className="h-full mt-0">
-              <div className="h-full overflow-auto">
+              <div className="h-full overflow-y-auto custom-scrollbar">
                 <div className="space-y-3">
-                  {recommendations.map((rec) => (
+                  {recommendations.length > 0 ? recommendations.map((rec) => (
                     <Card 
                       key={rec.id} 
                       className="bg-card/50 hover:bg-card/70 transition-colors cursor-pointer"
@@ -291,15 +291,21 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
+                  )) : (
+                    <div className="h-full flex flex-col items-center justify-center text-center text-muted-foreground">
+                      <Brain size={48} className="mb-4 opacity-50" />
+                      <p>No AI recommendations available</p>
+                      <p className="text-sm">Add stocks to get AI-powered insights</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </TabsContent>
 
             <TabsContent value="patterns" className="h-full mt-0">
-              <div className="h-full overflow-auto">
+              <div className="h-full overflow-y-auto custom-scrollbar">
                 <div className="space-y-3">
-                  {marketScan?.patternMatches.map((match, idx) => (
+                  {marketScan?.patternMatches && marketScan.patternMatches.length > 0 ? marketScan.patternMatches.map((match, idx) => (
                     <Card 
                       key={idx}
                       className="bg-card/50 hover:bg-card/70 transition-colors cursor-pointer"
@@ -328,13 +334,19 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
+                  )) : (
+                    <div className="h-full flex flex-col items-center justify-center text-center text-muted-foreground">
+                      <Activity size={48} className="mb-4 opacity-50" />
+                      <p>No pattern matches found</p>
+                      <p className="text-sm">Patterns will appear as market data updates</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </TabsContent>
 
             <TabsContent value="volume" className="h-full mt-0">
-              <div className="h-full overflow-auto">
+              <div className="h-full overflow-y-auto custom-scrollbar">
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
@@ -342,7 +354,7 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                       Unusual Volume Activity
                     </h3>
                     <div className="space-y-2">
-                      {marketScan?.volumeAnalysis.unusualVolume.slice(0, 10).map((stock) => (
+                      {marketScan?.volumeAnalysis.unusualVolume && marketScan.volumeAnalysis.unusualVolume.length > 0 ? marketScan.volumeAnalysis.unusualVolume.slice(0, 10).map((stock) => (
                         <Card 
                           key={stock.symbol}
                           className="bg-card/50 hover:bg-card/70 transition-colors cursor-pointer"
@@ -370,7 +382,12 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                             </div>
                           </CardContent>
                         </Card>
-                      ))}
+                      )) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <BarChart3 size={32} className="mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No unusual volume detected</p>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -382,7 +399,7 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                       Volume Leaders
                     </h3>
                     <div className="space-y-2">
-                      {marketScan?.volumeAnalysis.volumeLeaders.slice(0, 10).map((stock, idx) => (
+                      {marketScan?.volumeAnalysis.volumeLeaders && marketScan.volumeAnalysis.volumeLeaders.length > 0 ? marketScan.volumeAnalysis.volumeLeaders.slice(0, 10).map((stock, idx) => (
                         <Card 
                           key={stock.symbol}
                           className="bg-card/50 hover:bg-card/70 transition-colors cursor-pointer"
@@ -415,7 +432,12 @@ export function AITopPicks({ stocks, onStockSelect }: AITopPicksProps) {
                             </div>
                           </CardContent>
                         </Card>
-                      ))}
+                      )) : (
+                        <div className="text-center py-8 text-muted-foreground">
+                          <BarChart3 size={32} className="mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No volume data available</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

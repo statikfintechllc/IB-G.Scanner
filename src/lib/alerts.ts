@@ -234,6 +234,9 @@ export class AlertService {
     alert.triggered = true;
     alert.message = message;
 
+    // Emit event for UI updates
+    window.dispatchEvent(new CustomEvent('alertTriggered', { detail: { alert } }));
+
     // Show toast notification
     const toastType = alert.type === 'price_below' || alert.type === 'breakout' ? 'warning' : 'success';
     toast[toastType](message, {

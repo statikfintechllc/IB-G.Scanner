@@ -244,7 +244,7 @@ function App() {
               />
             </div>
             <div className="flex-1 min-h-0 px-6 pb-6">
-              <div className="h-full border border-border rounded-lg overflow-auto">
+              <div className="h-full border border-border rounded-lg overflow-auto custom-scrollbar">
                 <ScannerTable 
                   stocks={filteredStocks}
                   onStockSelect={handleStockSelect}
