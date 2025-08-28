@@ -106,25 +106,25 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="ai-search-dialog !max-w-[95vw] !w-[95vw] h-[85vh] flex flex-col p-6">
-        <DialogHeader className="flex-shrink-0 pb-2">
+      <DialogContent className="ai-search-dialog max-w-[85vw] w-[85vw] h-[75vh] flex flex-col p-4">
+        <DialogHeader className="flex-shrink-0 pb-3">
           <DialogTitle className="flex items-center gap-2 text-sm">
             <Brain size={16} />
             AI Stock Search
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 flex flex-col gap-3 min-h-0">
+        <div className="flex-1 flex flex-col gap-4 min-h-0">
           {/* Search Input with History Dropdown */}
-          <div className="flex gap-3 flex-shrink-0">
-            <div className="relative flex-1">
+          <div className="flex gap-2 flex-shrink-0">
+            <div className="relative flex-1 max-w-md">
               <Search size={14} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search for breakout patterns, high volume stocks, sector trends..."
+                placeholder="Search for breakout patterns, high volume stocks..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="pl-9 h-7 text-xs w-full"
+                className="pl-9 h-8 text-sm"
               />
               
               {/* Recent Searches Dropdown */}
@@ -173,22 +173,22 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
             <Button 
               onClick={() => handleSearch()} 
               disabled={isSearching || !searchQuery.trim()}
-              className="flex-shrink-0 px-3 h-7 text-xs"
+              className="flex-shrink-0 px-4 h-8 text-sm"
             >
               {isSearching ? (
-                <div className="animate-spin rounded-full h-2.5 w-2.5 border-b-2 border-primary-foreground" />
+                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary-foreground" />
               ) : (
                 'Search'
               )}
             </Button>
           </div>
 
-          {/* Main Content Area - Two Column Layout */}
-          <div className="flex-1 flex gap-5 min-h-0">
-            {/* Left Column - Search Results (Bigger) */}
-            <div className="w-1/2 flex flex-col min-h-0">
+          {/* Main Content Area - Compact Layout */}
+          <div className="flex-1 flex gap-4 min-h-0">
+            {/* Left Column - Search Results */}
+            <div className="w-[55%] flex flex-col min-h-0">
               <div className="flex-shrink-0 mb-2">
-                <h3 className="text-xs font-semibold flex items-center gap-2">
+                <h3 className="text-sm font-semibold flex items-center gap-2">
                   <Target size={14} />
                   Search Results {searchResults.length > 0 && `(${searchResults.length})`}
                 </h3>
@@ -197,7 +197,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
               <div className="flex-1 min-h-0 border border-border rounded-lg overflow-hidden bg-card/50">
                 <div className="h-full overflow-y-auto custom-scrollbar">
                   {searchResults.length > 0 ? (
-                    <div className="p-4 space-y-4">
+                    <div className="p-3 space-y-3">
                       {searchResults.map((result, index) => (
                         <Card 
                           key={result.symbol}
@@ -208,7 +208,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                           )}
                           onClick={() => handleStockClick(result.symbol)}
                         >
-                          <CardContent className="p-4">
+                          <CardContent className="p-3">
                             <div className="flex items-start justify-between mb-3">
                               <div className="flex flex-col gap-2">
                                 <h4 className="font-mono font-bold text-lg">{result.symbol}</h4>
@@ -268,28 +268,28 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
               </div>
             </div>
 
-            {/* Right Section - Quick Suggestions and Market Insights (Side by Side) */}
-            <div className="w-1/2 flex gap-3 min-h-0">
+            {/* Right Section - Quick Suggestions and Market Insights */}
+            <div className="w-[45%] flex gap-3 min-h-0">
               {/* Quick Suggestions */}
               <div className="w-1/2 flex flex-col min-h-0">
                 <div className="flex-shrink-0 mb-2">
-                  <h3 className="text-xs font-semibold flex items-center gap-2">
+                  <h3 className="text-sm font-semibold flex items-center gap-2">
                     <Lightbulb size={14} />
-                    Quick Suggestions
+                    Suggestions
                   </h3>
                 </div>
                 <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card/50">
-                  <div className="h-full overflow-y-auto custom-scrollbar p-3">
-                    <div className="space-y-2">
+                  <div className="h-full overflow-y-auto custom-scrollbar p-2">
+                    <div className="space-y-1">
                       {suggestions.map((suggestion, index) => (
                         <Button
                           key={index}
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start text-xs h-auto py-2 px-2 text-left rounded-md leading-tight"
+                          className="w-full justify-start text-xs h-auto py-1.5 px-2 text-left rounded-md leading-tight"
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
-                          <span className="leading-tight whitespace-normal break-words">{suggestion}</span>
+                          <span className="leading-tight whitespace-normal break-words text-left">{suggestion}</span>
                         </Button>
                       ))}
                     </div>
@@ -300,14 +300,14 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
               {/* Market Insights */}
               <div className="w-1/2 flex flex-col min-h-0">
                 <div className="flex-shrink-0 mb-2">
-                  <h3 className="text-xs font-semibold flex items-center gap-2">
+                  <h3 className="text-sm font-semibold flex items-center gap-2">
                     <TrendingUp size={14} />
-                    Market Insights
+                    Insights
                   </h3>
                 </div>
                 <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card/50">
-                  <div className="h-full overflow-y-auto custom-scrollbar p-3">
-                    <div className="space-y-3">
+                  <div className="h-full overflow-y-auto custom-scrollbar p-2">
+                    <div className="space-y-2">
                       {insights.map((insight, index) => (
                         <div key={index} className="text-xs text-muted-foreground p-2 bg-muted/20 rounded-md leading-tight whitespace-normal break-words">
                           {insight}

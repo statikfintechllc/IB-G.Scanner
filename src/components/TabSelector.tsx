@@ -44,12 +44,12 @@ export function TabSelector({ stocks, onStockSelect, openTabSymbols }: TabSelect
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>Add Chart Tab</DialogTitle>
+      <DialogContent className="max-w-md w-[400px]">
+        <DialogHeader className="pb-3">
+          <DialogTitle className="text-sm">Add Chart Tab</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {/* Search */}
           <div className="relative">
             <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
@@ -62,8 +62,8 @@ export function TabSelector({ stocks, onStockSelect, openTabSymbols }: TabSelect
           </div>
 
           {/* Stock List */}
-          <ScrollArea className="h-64">
-            <div className="space-y-1">
+          <ScrollArea className="h-48">
+            <div className="space-y-1 pr-2">
               {availableStocks.length > 0 ? (
                 availableStocks.slice(0, 50).map((stock) => (
                   <div
