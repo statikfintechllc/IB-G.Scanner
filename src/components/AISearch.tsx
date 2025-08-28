@@ -106,15 +106,15 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="ai-search-dialog !max-w-[95vw] !w-[95vw] h-[85vh] flex flex-col p-8">>
-        <DialogHeader className="flex-shrink-0 pb-3">
-          <DialogTitle className="flex items-center gap-2 text-base">
-            <Brain size={18} />
+      <DialogContent className="ai-search-dialog !max-w-[95vw] !w-[95vw] h-[85vh] flex flex-col p-6">
+        <DialogHeader className="flex-shrink-0 pb-2">
+          <DialogTitle className="flex items-center gap-2 text-sm">
+            <Brain size={16} />
             AI Stock Search
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 flex flex-col gap-4 min-h-0">
+        <div className="flex-1 flex flex-col gap-3 min-h-0">
           {/* Search Input with History Dropdown */}
           <div className="flex gap-3 flex-shrink-0">
             <div className="relative flex-1">
@@ -124,7 +124,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="pl-9 h-8 text-sm w-full"
+                className="pl-9 h-7 text-xs w-full"
               />
               
               {/* Recent Searches Dropdown */}
@@ -133,9 +133,9 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 h-5 w-5 p-0"
+                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-4 w-4 p-0"
                   >
-                    <ChevronDown size={12} />
+                    <ChevronDown size={10} />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-96 p-2" align="end">
@@ -173,10 +173,10 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
             <Button 
               onClick={() => handleSearch()} 
               disabled={isSearching || !searchQuery.trim()}
-              className="flex-shrink-0 px-4 h-8 text-sm"
+              className="flex-shrink-0 px-3 h-7 text-xs"
             >
               {isSearching ? (
-                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary-foreground" />
+                <div className="animate-spin rounded-full h-2.5 w-2.5 border-b-2 border-primary-foreground" />
               ) : (
                 'Search'
               )}
@@ -184,12 +184,12 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
           </div>
 
           {/* Main Content Area - Two Column Layout */}
-          <div className="flex-1 flex gap-6 min-h-0">
+          <div className="flex-1 flex gap-5 min-h-0">
             {/* Left Column - Search Results (Bigger) */}
             <div className="w-1/2 flex flex-col min-h-0">
-              <div className="flex-shrink-0 mb-3">
-                <h3 className="text-sm font-semibold flex items-center gap-2">
-                  <Target size={16} />
+              <div className="flex-shrink-0 mb-2">
+                <h3 className="text-xs font-semibold flex items-center gap-2">
+                  <Target size={14} />
                   Search Results {searchResults.length > 0 && `(${searchResults.length})`}
                 </h3>
               </div>
@@ -269,12 +269,12 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
             </div>
 
             {/* Right Section - Quick Suggestions and Market Insights (Side by Side) */}
-            <div className="w-1/2 flex gap-4 min-h-0">
+            <div className="w-1/2 flex gap-3 min-h-0">
               {/* Quick Suggestions */}
               <div className="w-1/2 flex flex-col min-h-0">
-                <div className="flex-shrink-0 mb-3">
-                  <h3 className="text-sm font-semibold flex items-center gap-2">
-                    <Lightbulb size={16} />
+                <div className="flex-shrink-0 mb-2">
+                  <h3 className="text-xs font-semibold flex items-center gap-2">
+                    <Lightbulb size={14} />
                     Quick Suggestions
                   </h3>
                 </div>
@@ -299,9 +299,9 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
 
               {/* Market Insights */}
               <div className="w-1/2 flex flex-col min-h-0">
-                <div className="flex-shrink-0 mb-3">
-                  <h3 className="text-sm font-semibold flex items-center gap-2">
-                    <TrendingUp size={16} />
+                <div className="flex-shrink-0 mb-2">
+                  <h3 className="text-xs font-semibold flex items-center gap-2">
+                    <TrendingUp size={14} />
                     Market Insights
                   </h3>
                 </div>
