@@ -205,74 +205,72 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
               <TabsTrigger value="settings" className="text-xs">Settings</TabsTrigger>
             </TabsList>
 
-            <div className="flex-1 min-h-0">
-              <TabsContent value="alerts" className="h-full mt-0">
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-2 h-full">
-                  {/* Add New Alert - Compressed to 2/5 */}
-                  <div className="lg:col-span-2">
-                    <Card className="h-full">
-                      <CardHeader className="pb-1 pt-2">
-                        <CardTitle className="text-xs flex items-center gap-1">
-                          <Plus size={12} />
-                          Create New Alert
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-2 pt-0">
-                        <div className="space-y-2">
-                          <div>
-                            <Label htmlFor="symbol" className="text-xs font-medium">Symbol</Label>
-                            <Input
-                              id="symbol"
-                              placeholder="AAPL"
-                              value={newAlert.symbol}
-                              onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
-                              className="font-mono mt-1 text-xs h-7"
-                            />
-                          </div>
-                          
-                          <div>
-                            <Label htmlFor="type" className="text-xs font-medium">Alert Type</Label>
-                            <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
-                              <SelectTrigger className="mt-1 text-xs h-7">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="price_above">Price Above</SelectItem>
-                                <SelectItem value="price_below">Price Below</SelectItem>
-                                <SelectItem value="volume_spike">Volume Spike</SelectItem>
-                                <SelectItem value="breakout">Breakout Pattern</SelectItem>
-                                <SelectItem value="pattern_recognition">Pattern Recognition</SelectItem>
-                                <SelectItem value="ai_signal">AI Signal</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                    
-                          <div>
-                            <Label htmlFor="value" className="text-xs font-medium">
-                              {newAlert.type === 'volume_spike' ? 'Avg Volume' : newAlert.type === 'breakout' ? 'Sensitivity' : 'Price'}
-                            </Label>
-                            <Input
-                              id="value"
-                              type="number"
-                              step={newAlert.type.includes('price') ? '0.0001' : '1000'}
-                              placeholder={newAlert.type === 'volume_spike' ? '1000000' : newAlert.type === 'breakout' ? '1' : '1.0000'}
-                              value={newAlert.value || ''}
-                              onChange={(e) => setNewAlert(prev => ({ ...prev, value: parseFloat(e.target.value) || 0 }))}
-                              className="mt-1 text-xs h-7"
-                            />
-                          </div>
-                    
-                          <Button onClick={handleAddAlert} className="w-full text-xs h-7 mt-2">
-                            <Plus size={12} className="mr-1" />
-                            Add Alert
-                          </Button>
+            <div className="flex-1 min-h-0 overflow-hidden">
+              <TabsContent value="alerts" className="h-full mt-0 overflow-hidden">
+                <div className="h-full max-h-full overflow-hidden flex flex-col gap-2">
+                  {/* Create New Alert - Compressed */}
+                  <Card className="flex-shrink-0">
+                    <CardHeader className="pb-1 pt-2">
+                      <CardTitle className="text-xs flex items-center gap-1">
+                        <Plus size={12} />
+                        Create New Alert
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-2 pt-0">
+                      <div className="flex gap-2 items-end">
+                        <div className="flex-1">
+                          <Label htmlFor="symbol" className="text-xs font-medium">Symbol</Label>
+                          <Input
+                            id="symbol"
+                            placeholder="AAPL"
+                            value={newAlert.symbol}
+                            onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
+                            className="font-mono mt-1 text-xs h-7"
+                          />
                         </div>
-                      </CardContent>
-                    </Card>
-                  </div>
+                        
+                        <div className="flex-1">
+                          <Label htmlFor="type" className="text-xs font-medium">Alert Type</Label>
+                          <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
+                            <SelectTrigger className="mt-1 text-xs h-7">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="price_above">Price Above</SelectItem>
+                              <SelectItem value="price_below">Price Below</SelectItem>
+                              <SelectItem value="volume_spike">Volume Spike</SelectItem>
+                              <SelectItem value="breakout">Breakout Pattern</SelectItem>
+                              <SelectItem value="pattern_recognition">Pattern Recognition</SelectItem>
+                              <SelectItem value="ai_signal">AI Signal</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                  
+                        <div className="flex-1">
+                          <Label htmlFor="value" className="text-xs font-medium">
+                            {newAlert.type === 'volume_spike' ? 'Avg Volume' : newAlert.type === 'breakout' ? 'Sensitivity' : 'Price'}
+                          </Label>
+                          <Input
+                            id="value"
+                            type="number"
+                            step={newAlert.type.includes('price') ? '0.0001' : '1000'}
+                            placeholder={newAlert.type === 'volume_spike' ? '1000000' : newAlert.type === 'breakout' ? '1' : '1.0000'}
+                            value={newAlert.value || ''}
+                            onChange={(e) => setNewAlert(prev => ({ ...prev, value: parseFloat(e.target.value) || 0 }))}
+                            className="mt-1 text-xs h-7"
+                          />
+                        </div>
+                  
+                        <Button onClick={handleAddAlert} className="text-xs h-7 px-3">
+                          <Plus size={12} className="mr-1" />
+                          Add Alert
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
 
-                  {/* Active Alerts - Takes 3/5 */}
-                  <div className="flex flex-col min-h-0 lg:col-span-3">
+                  {/* Active Alerts - Takes remaining space */}
+                  <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
                     <div className="flex items-center justify-between mb-1 flex-shrink-0">
                       <h3 className="text-xs font-semibold">Active Alerts ({alerts.length})</h3>
                       {alerts.some(a => a.triggered) && (
@@ -362,9 +360,9 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                 </div>
               </TabsContent>
 
-              <TabsContent value="settings" className="h-full mt-0">
-                <div className="h-full overflow-y-auto custom-scrollbar">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-1">
+              <TabsContent value="settings" className="h-full mt-0 overflow-hidden">
+                <div className="h-full max-h-full overflow-y-auto custom-scrollbar">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-1 h-fit">
                     <div className="space-y-1">
                       <h4 className="font-semibold text-xs mb-1">General Settings</h4>
                       
