@@ -106,7 +106,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="ai-search-dialog max-w-[85vw] w-[85vw] h-[75vh] flex flex-col p-4">
+      <DialogContent className="ai-search-dialog max-w-[75vw] w-[75vw] h-[65vh] flex flex-col p-4">
         <DialogHeader className="flex-shrink-0 pb-3">
           <DialogTitle className="flex items-center gap-2 text-sm">
             <Brain size={16} />
@@ -186,7 +186,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
           {/* Main Content Area - Compact Layout */}
           <div className="flex-1 flex gap-4 min-h-0">
             {/* Left Column - Search Results */}
-            <div className="w-[55%] flex flex-col min-h-0">
+            <div className="w-[60%] flex flex-col min-h-0">
               <div className="flex-shrink-0 mb-2">
                 <h3 className="text-sm font-semibold flex items-center gap-2">
                   <Target size={14} />
@@ -269,7 +269,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
             </div>
 
             {/* Right Section - Quick Suggestions and Market Insights */}
-            <div className="w-[45%] flex gap-3 min-h-0">
+            <div className="w-[40%] flex gap-2 min-h-0">
               {/* Quick Suggestions */}
               <div className="w-1/2 flex flex-col min-h-0">
                 <div className="flex-shrink-0 mb-2">

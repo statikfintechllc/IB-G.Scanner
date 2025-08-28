@@ -163,41 +163,76 @@
 }
 
 /* Fix dialog overlay positioning and centering */
-[data-radix-overlay] {
+[data-radix-popper-content-wrapper],
+[data-radix-portal] {
   position: fixed !important;
   inset: 0 !important;
   z-index: 50 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  pointer-events: none !important;
+}
+
+[data-radix-dialog-overlay] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 50 !important;
   background-color: rgba(0, 0, 0, 0.8) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 /* Center dialog content within overlay */
 [data-radix-dialog-content] {
-  position: relative !important;
-  max-width: 80vw !important;
-  width: auto !important;
-  max-height: 85vh !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
   margin: 0 !important;
-  transform: none !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-  bottom: auto !important;
+  pointer-events: auto !important;
+  z-index: 51 !important;
+}
+
+/* Ensure popovers also center properly */
+[data-radix-popover-content] {
+  position: absolute !important;
+  pointer-events: auto !important;
+  z-index: 52 !important;
 }
 
 /* Fallback for any dialog elements */
 [role="dialog"] {
-  position: relative !important;
-  margin: 0 auto !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  pointer-events: auto !important;
+  z-index: 51 !important;
+}
+
+/* Force absolute centering for all dialogs */
+.dialog-content,
+[data-state="open"][role="dialog"] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 /* AI Search Dialog specific styling */
 .ai-search-dialog {
-  max-width: 85vw !important;
-  width: 85vw !important;
-  max-height: 85vh !important;
+  max-width: 75vw !important;
+  width: 75vw !important;
+  max-height: 75vh !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 /* Make inner content boxes more compact horizontally */

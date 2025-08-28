@@ -44,7 +44,7 @@ export function TabSelector({ stocks, onStockSelect, openTabSymbols }: TabSelect
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-md w-[400px]">
+      <DialogContent className="max-w-lg w-[500px]">
         <DialogHeader className="pb-3">
           <DialogTitle className="text-sm">Add Chart Tab</DialogTitle>
         </DialogHeader>
