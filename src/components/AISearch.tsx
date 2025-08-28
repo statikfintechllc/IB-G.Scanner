@@ -104,55 +104,55 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-[95vw] w-[1800px] h-[85vh] flex flex-col">
-        <DialogHeader className="flex-shrink-0 pb-4">
-          <DialogTitle className="flex items-center gap-2 text-xl">
-            <Brain size={24} />
-            AI-Powered Stock Search
+      <DialogContent className="max-w-[98vw] w-[2400px] h-[90vh] flex flex-col p-8">
+        <DialogHeader className="flex-shrink-0 pb-6">
+          <DialogTitle className="flex items-center gap-3 text-2xl">
+            <Brain size={32} />
+            AI-Powered Stock Search & Analysis
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 flex flex-col gap-6 min-h-0">
+        <div className="flex-1 flex flex-col gap-8 min-h-0">
           {/* Search Input */}
-          <div className="flex gap-4 flex-shrink-0">
+          <div className="flex gap-6 flex-shrink-0">
             <div className="relative flex-1">
-              <Search size={18} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+              <Search size={20} className="absolute left-5 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search for breakout patterns, high volume stocks, sector trends..."
+                placeholder="Search for breakout patterns, high volume stocks, sector trends, momentum plays..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="pl-12 h-14 text-base"
+                className="pl-14 h-16 text-lg"
               />
             </div>
             <Button 
               onClick={() => handleSearch()} 
               disabled={isSearching || !searchQuery.trim()}
-              className="flex-shrink-0 px-10 h-14 text-base"
+              className="flex-shrink-0 px-12 h-16 text-lg"
             >
               {isSearching ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-foreground" />
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-foreground" />
               ) : (
                 'Search'
               )}
             </Button>
           </div>
 
-          {/* Main Content Area - Two Column Layout */}
-          <div className="flex-1 flex gap-8 min-h-0">
+          {/* Main Content Area - Three Column Layout */}
+          <div className="flex-1 flex gap-10 min-h-0">
             {/* Left Column - Search Results */}
-            <div className="w-3/5 flex flex-col min-h-0">
-              <div className="flex-shrink-0 mb-4">
-                <h3 className="text-xl font-semibold flex items-center gap-3">
-                  <Target size={24} />
+            <div className="w-2/5 flex flex-col min-h-0">
+              <div className="flex-shrink-0 mb-6">
+                <h3 className="text-2xl font-semibold flex items-center gap-4">
+                  <Target size={28} />
                   Search Results {searchResults.length > 0 && `(${searchResults.length})`}
                 </h3>
               </div>
               
-              <div className="flex-1 min-h-0 border border-border rounded-lg overflow-hidden bg-card/50">
+              <div className="flex-1 min-h-0 border border-border rounded-xl overflow-hidden bg-card/50">
                 <div className="h-full overflow-y-auto custom-scrollbar">
                   {searchResults.length > 0 ? (
-                    <div className="p-6 space-y-4">
+                    <div className="p-8 space-y-6">
                       {searchResults.map((result, index) => (
                         <Card 
                           key={result.symbol}
@@ -163,16 +163,16 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                           )}
                           onClick={() => handleStockClick(result.symbol)}
                         >
-                          <CardContent className="p-5">
-                            <div className="flex items-start justify-between mb-3">
-                              <div className="flex flex-col gap-2">
-                                <h4 className="font-mono font-bold text-xl">{result.symbol}</h4>
-                                <Badge variant="outline" className="text-sm w-fit">
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div className="flex flex-col gap-3">
+                                <h4 className="font-mono font-bold text-2xl">{result.symbol}</h4>
+                                <Badge variant="outline" className="text-base w-fit">
                                   Relevance: {result.relevanceScore}%
                                 </Badge>
                               </div>
                               {result.priceTargets && (
-                                <div className="text-right text-sm text-muted-foreground space-y-1">
+                                <div className="text-right text-base text-muted-foreground space-y-2">
                                   <div>Target: ${result.priceTargets.target}</div>
                                   <div>Support: ${result.priceTargets.support}</div>
                                 </div>
@@ -180,10 +180,10 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                             </div>
 
                             {/* Reasons */}
-                            <div className="mb-3">
-                              <div className="flex flex-wrap gap-2">
+                            <div className="mb-4">
+                              <div className="flex flex-wrap gap-3">
                                 {result.reasons.slice(0, 3).map((reason, i) => (
-                                  <Badge key={i} variant="secondary" className="text-sm">
+                                  <Badge key={i} variant="secondary" className="text-base py-2 px-4">
                                     {reason}
                                   </Badge>
                                 ))}
@@ -192,13 +192,13 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
 
                             {/* Patterns */}
                             {result.patterns.length > 0 && (
-                              <div className="space-y-2">
+                              <div className="space-y-3">
                                 {result.patterns.slice(0, 2).map((pattern, i) => (
-                                  <div key={i} className="flex items-center justify-between text-sm">
+                                  <div key={i} className="flex items-center justify-between text-base">
                                     <span className="text-muted-foreground">{pattern.pattern}</span>
                                     <Badge 
                                       className={cn(
-                                        "text-sm",
+                                        "text-base py-1 px-3",
                                         getPatternBadgeColor(pattern.confidence)
                                       )}
                                     >
@@ -213,103 +213,100 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                       ))}
                     </div>
                   ) : (
-                    <div className="p-12 text-center text-muted-foreground h-full flex flex-col items-center justify-center">
-                      <Brain size={64} className="mx-auto mb-6 opacity-50" />
-                      <p className="text-xl mb-2">No search results yet</p>
-                      <p className="text-base">Try searching for patterns, sectors, or conditions</p>
+                    <div className="p-16 text-center text-muted-foreground h-full flex flex-col items-center justify-center">
+                      <Brain size={80} className="mx-auto mb-8 opacity-50" />
+                      <p className="text-2xl mb-4">No search results yet</p>
+                      <p className="text-lg">Try searching for patterns, sectors, or conditions</p>
                     </div>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Recent Searches and Suggestions */}
-            <div className="w-2/5 flex flex-col gap-6 min-h-0">
-              {/* Recent Searches - Top */}
+            {/* Middle Column - Recent Searches */}
+            <div className="w-1/5 flex flex-col min-h-0">
+              <div className="flex-shrink-0 mb-6">
+                <h3 className="text-2xl font-semibold flex items-center gap-4">
+                  <History size={28} />
+                  Recent
+                </h3>
+              </div>
+              
+              <div className="flex-1 border border-border rounded-xl overflow-hidden bg-card/50">
+                <div className="h-full overflow-y-auto custom-scrollbar p-6">
+                  <div className="space-y-4">
+                    {searchHistory.slice(0, 10).map((search, index) => (
+                      <Button
+                        key={index}
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-start text-base h-auto py-4 px-4 rounded-lg"
+                        onClick={() => handleSuggestionClick(search.query)}
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <span className="text-left leading-relaxed truncate">{search.query}</span>
+                          <Badge variant="outline" className="ml-3 text-sm flex-shrink-0">
+                            {search.results.length}
+                          </Badge>
+                        </div>
+                      </Button>
+                    ))}
+                    {searchHistory.length === 0 && (
+                      <div className="text-center text-muted-foreground py-16">
+                        <p className="text-lg mb-3">No recent searches</p>
+                        <p className="text-sm">Your search history will appear here</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Quick Suggestions and Market Insights */}
+            <div className="w-2/5 flex flex-col gap-8 min-h-0">
+              {/* Quick Suggestions */}
               <div className="flex-1 min-h-0">
-                <div className="flex-shrink-0 mb-4">
-                  <h3 className="text-xl font-semibold flex items-center gap-3">
-                    <History size={24} />
-                    Recent Searches
+                <div className="flex-shrink-0 mb-6">
+                  <h3 className="text-2xl font-semibold flex items-center gap-4">
+                    <Lightbulb size={28} />
+                    Quick Suggestions
                   </h3>
                 </div>
-                
-                <div className="h-full border border-border rounded-lg overflow-hidden bg-card/50">
+                <div className="h-full border border-border rounded-xl overflow-hidden bg-card/50">
                   <div className="h-full overflow-y-auto custom-scrollbar p-6">
-                    <div className="space-y-3">
-                      {searchHistory.slice(0, 8).map((search, index) => (
+                    <div className="space-y-4">
+                      {suggestions.map((suggestion, index) => (
                         <Button
                           key={index}
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start text-base h-auto py-4 px-4 rounded-lg"
-                          onClick={() => handleSuggestionClick(search.query)}
+                          className="w-full justify-start text-base h-auto py-4 px-4 text-left rounded-lg"
+                          onClick={() => handleSuggestionClick(suggestion)}
                         >
-                          <div className="flex items-center justify-between w-full">
-                            <span className="text-left leading-relaxed">{search.query}</span>
-                            <Badge variant="outline" className="ml-3 text-xs">
-                              {search.results.length}
-                            </Badge>
-                          </div>
+                          <span className="leading-relaxed whitespace-normal">{suggestion}</span>
                         </Button>
                       ))}
-                      {searchHistory.length === 0 && (
-                        <div className="text-center text-muted-foreground py-12">
-                          <p className="text-lg mb-2">No recent searches</p>
-                          <p className="text-sm">Your search history will appear here</p>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Quick Suggestions and Market Insights - Side by side at bottom */}
-              <div className="flex gap-6 h-80 flex-shrink-0">
-                {/* Quick Suggestions */}
-                <div className="flex-1 flex flex-col min-h-0">
-                  <div className="flex-shrink-0 mb-3">
-                    <h4 className="text-lg font-semibold flex items-center gap-2">
-                      <Lightbulb size={20} />
-                      Quick Suggestions
-                    </h4>
-                  </div>
-                  <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card/50">
-                    <div className="h-full overflow-y-auto custom-scrollbar p-4">
-                      <div className="space-y-2">
-                        {suggestions.map((suggestion, index) => (
-                          <Button
-                            key={index}
-                            variant="ghost"
-                            size="sm"
-                            className="w-full justify-start text-sm h-auto py-3 px-3 text-left rounded-md"
-                            onClick={() => handleSuggestionClick(suggestion)}
-                          >
-                            <span className="leading-relaxed whitespace-normal">{suggestion}</span>
-                          </Button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+              {/* Market Insights */}
+              <div className="flex-1 min-h-0">
+                <div className="flex-shrink-0 mb-6">
+                  <h3 className="text-2xl font-semibold flex items-center gap-4">
+                    <TrendingUp size={28} />
+                    Market Insights
+                  </h3>
                 </div>
-
-                {/* Market Insights */}
-                <div className="flex-1 flex flex-col min-h-0">
-                  <div className="flex-shrink-0 mb-3">
-                    <h4 className="text-lg font-semibold flex items-center gap-2">
-                      <TrendingUp size={20} />
-                      Market Insights
-                    </h4>
-                  </div>
-                  <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card/50">
-                    <div className="h-full overflow-y-auto custom-scrollbar p-4">
-                      <div className="space-y-3">
-                        {insights.map((insight, index) => (
-                          <div key={index} className="text-sm text-muted-foreground p-3 bg-muted/20 rounded-md leading-relaxed whitespace-normal">
-                            {insight}
-                          </div>
-                        ))}
-                      </div>
+                <div className="h-full border border-border rounded-xl overflow-hidden bg-card/50">
+                  <div className="h-full overflow-y-auto custom-scrollbar p-6">
+                    <div className="space-y-4">
+                      {insights.map((insight, index) => (
+                        <div key={index} className="text-base text-muted-foreground p-4 bg-muted/20 rounded-lg leading-relaxed whitespace-normal">
+                          {insight}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
