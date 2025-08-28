@@ -161,3 +161,14 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+/* Force AI Search dialog to be extra wide */
+.ai-search-dialog {
+  max-width: 95vw !important;
+  width: 95vw !important;
+}
+
+.ai-search-dialog[data-slot="dialog-content"] {
+  max-width: 95vw !important;
+  width: 95vw !important;
+}
