@@ -2,36 +2,43 @@
 
 ## Core Purpose & Success
 
-**Mission Statement**: A professional-grade penny stock scanner that provides real-time market data, advanced charting, and intelligent price alerts through Interactive Brokers integration, designed for serious traders who need institutional-quality tools in a modern interface.
+**Mission Statement**: A professional-grade penny stock scanner that provides real-time market data, advanced charting, AI-powered pattern recognition, and intelligent price alerts through Interactive Brokers integration, designed for serious traders who need institutional-quality tools with AI assistance in a modern interface.
 
 **Success Indicators**: 
 - Real-time data streaming from IBKR with <1 second latency
 - Alert system triggering with 99%+ accuracy on price/volume conditions
-- Professional TradingView-quality charts with technical indicators
+- Professional IBKR-native charts with technical indicators
+- AI search finds relevant patterns with 80%+ user satisfaction
 - Successful connection to IBKR TWS/Gateway for live market data
 
-**Experience Qualities**: **Responsive**, **Professional**, **Reliable**
+**Experience Qualities**: **Intelligent**, **Professional**, **Reliable**
 
 ## Project Classification & Approach
 
-**Complexity Level**: Complex Application (advanced functionality, real-time data, external API integration)
+**Complexity Level**: Complex Application (advanced functionality, real-time data, external API integration, AI-powered features)
 
-**Primary User Activity**: Acting (making trading decisions based on real-time data analysis)
+**Primary User Activity**: Acting (making trading decisions based on AI-enhanced real-time data analysis)
 
 ## Thought Process for Feature Selection
 
-**Core Problem Analysis**: Professional penny stock traders need real-time scanning, advanced charting, and intelligent alerts but existing solutions either lack IBKR integration, have poor UX, or charge premium fees.
+**Core Problem Analysis**: Professional penny stock traders need real-time scanning, advanced charting, AI pattern recognition, and intelligent alerts but existing solutions either lack IBKR integration, have poor UX, lack AI assistance, or charge premium fees.
 
-**User Context**: Active traders during market hours (pre-market 4AM-9:30AM, regular 9:30AM-4PM, after-hours 4PM-8PM EST) who need instant access to breakouts, volume spikes, and price alerts.
+**User Context**: Active traders during market hours (pre-market 4AM-9:30AM, regular 9:30AM-4PM, after-hours 4PM-8PM EST) who need instant access to breakouts, volume spikes, price alerts, and AI-powered market insights.
 
-**Critical Path**: Connect to IBKR → Load scanner with filters → Monitor real-time updates → Receive alerts → Open detailed charts → Make trading decisions
+**Critical Path**: Connect to IBKR → Load scanner with AI suggestions → Monitor real-time updates → Receive alerts → Open detailed IBKR charts → Use AI search for patterns → Make trading decisions
 
 **Key Moments**: 
-1. **Alert Trigger**: The moment a stock hits user-defined criteria
-2. **Chart Analysis**: Deep-dive into technical indicators for decision making
-3. **Real-time Updates**: Watching live price action during volatile periods
+1. **AI Pattern Recognition**: The moment AI identifies a trading opportunity
+2. **Alert Trigger**: The moment a stock hits user-defined criteria
+3. **Chart Analysis**: Deep-dive into IBKR technical indicators for decision making
+4. **Real-time Updates**: Watching live price action during volatile periods
 
 ## Essential Features
+
+### AI-Powered Search & Pattern Recognition
+- **Functionality**: Natural language search for stocks with pattern analysis, memory, and learning capabilities
+- **Purpose**: Intelligent discovery of trading opportunities using AI to identify patterns humans might miss
+- **Success Criteria**: Search results relevant 80%+ of the time, pattern recognition confidence scores accurate
 
 ### Core Scanner Engine
 - **Functionality**: Real-time filtering of penny stocks ($0.01-$5.00) based on price, volume, market cap, float, and percentage changes
@@ -39,14 +46,14 @@
 - **Success Criteria**: Filter results update within 3 seconds of market data changes
 
 ### IBKR TWS Integration
-- **Functionality**: Direct socket connection to Interactive Brokers TWS/Gateway for live market data
-- **Purpose**: Access institutional-quality real-time data with minimal latency
+- **Functionality**: Direct socket connection to Interactive Brokers TWS/Gateway for live market data and charting
+- **Purpose**: Access institutional-quality real-time data with minimal latency directly from IBKR
 - **Success Criteria**: Maintain stable connection with automatic reconnection and <1 second data latency
 
-### Professional TradingView Charts
-- **Functionality**: Real-time candlestick charts with technical indicators (EMA, RSI, MACD, Volume)
-- **Purpose**: Professional-grade technical analysis for trading decisions
-- **Success Criteria**: Charts load within 2 seconds and update in real-time with smooth animations
+### Professional IBKR Charts
+- **Functionality**: Real-time candlestick charts powered by IBKR data with technical indicators (EMA, RSI, MACD, Volume)
+- **Purpose**: Professional-grade technical analysis using IBKR's native charting capabilities
+- **Success Criteria**: Charts load within 2 seconds and update in real-time with IBKR market data
 
 ### Intelligent Price Alerts
 - **Functionality**: Multi-condition alerts (price breakouts, volume spikes, pattern detection) with sound/desktop notifications

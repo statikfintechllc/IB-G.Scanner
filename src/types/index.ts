@@ -93,3 +93,41 @@ export interface NotificationSettings {
   volumeAlerts: boolean;
   newsAlerts: boolean;
 }
+
+export interface PatternAnalysis {
+  pattern: string;
+  confidence: number;
+  description: string;
+  timeframe: string;
+  signals: string[];
+}
+
+export interface AISearchResult {
+  symbol: string;
+  relevanceScore: number;
+  reasons: string[];
+  patterns: PatternAnalysis[];
+  priceTargets?: {
+    support: number;
+    resistance: number;
+    target: number;
+  };
+}
+
+export interface SearchMemory {
+  query: string;
+  results: AISearchResult[];
+  timestamp: Date;
+  filters: ScannerFilters;
+  userFeedback?: 'helpful' | 'not_helpful';
+}
+
+export interface MarketPattern {
+  id: string;
+  name: string;
+  type: 'bullish' | 'bearish' | 'neutral';
+  timeframe: string;
+  indicators: string[];
+  conditions: Record<string, any>;
+  accuracy: number;
+}

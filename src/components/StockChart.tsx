@@ -1,4 +1,4 @@
-import { TradingViewChart } from './TradingViewChart';
+import { IBKRChart } from './IBKRChart';
 
 interface StockChartProps {
   symbol: string;
@@ -9,7 +9,7 @@ interface StockChartProps {
 
 export function StockChart({ symbol, currentPrice, change, changePercent }: StockChartProps) {
   return (
-    <TradingViewChart 
+    <IBKRChart 
       symbol={symbol}
       currentPrice={currentPrice}
       change={change}

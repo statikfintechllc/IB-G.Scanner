@@ -12,6 +12,7 @@ import { TabSystem } from '@/components/TabSystem';
 import { StockChart } from '@/components/StockChart';
 import { AlertsManager } from '@/components/AlertsManager';
 import { IBKRSettings } from '@/components/IBKRSettings';
+import { AISearch } from '@/components/AISearch';
 import { Toaster } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -142,12 +143,8 @@ function App() {
     });
   };
 
-  const handleAddTab = () => {
-    // For demo, just add a random stock
-    if (filteredStocks.length > 0) {
-      const randomStock = filteredStocks[Math.floor(Math.random() * filteredStocks.length)];
-      handleStockSelect(randomStock.symbol);
-    }
+  const handleAddTab = (symbol: string) => {
+    handleStockSelect(symbol);
   };
 
   const activeTab = tabs.find(tab => tab.id === activeTabId);
@@ -170,6 +167,7 @@ function App() {
             <div className="text-sm text-muted-foreground">
               {filteredStocks.length} stocks • Updated {new Date().toLocaleTimeString()}
             </div>
+            <AISearch stocks={filteredStocks} onStockSelect={handleStockSelect} />
             <AlertsManager />
             <IBKRSettings />
           </div>
@@ -183,28 +181,31 @@ function App() {
         onTabChange={setActiveTabId}
         onTabClose={handleTabClose}
         onAddTab={handleAddTab}
+        stocks={filteredStocks}
         maxTabs={6}
       />
 
       {/* Content */}
-      <div className="h-[calc(100vh-8rem)] overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {activeTab?.type === 'scanner' ? (
-          <div className="h-full flex flex-col">
-            <div className="p-6 pb-0">
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="p-6 pb-4 flex-shrink-0">
               <FilterPanel 
                 filters={filters} 
                 onFiltersChange={setFilters}
               />
             </div>
-            <div className="flex-1 overflow-auto p-6 pt-0">
-              <ScannerTable 
-                stocks={filteredStocks}
-                onStockSelect={handleStockSelect}
-              />
+            <div className="flex-1 overflow-hidden px-6 pb-6">
+              <div className="h-full overflow-auto">
+                <ScannerTable 
+                  stocks={filteredStocks}
+                  onStockSelect={handleStockSelect}
+                />
+              </div>
             </div>
           </div>
         ) : (
-          <div className="h-full">
+          <div className="flex-1 overflow-hidden">
             {activeTab?.symbol && (
               <StockChart 
                 symbol={activeTab.symbol}

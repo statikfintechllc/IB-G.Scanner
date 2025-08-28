@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, Plus, BarChart } from '@phosphor-icons/react';
+import { X, BarChart } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
-import { Tab } from '@/types';
+import { Tab, Stock } from '@/types';
+import { TabSelector } from './TabSelector';
 
 interface TabSystemProps {
   tabs: Tab[];
   activeTabId: string;
   onTabChange: (tabId: string) => void;
   onTabClose: (tabId: string) => void;
-  onAddTab: () => void;
+  onAddTab: (symbol: string) => void;
+  stocks: Stock[];
   maxTabs?: number;
 }
 
@@ -19,6 +21,7 @@ export function TabSystem({
   onTabChange, 
   onTabClose, 
   onAddTab,
+  stocks,
   maxTabs = 6 
 }: TabSystemProps) {
   const [draggedTab, setDraggedTab] = useState<string | null>(null);
@@ -29,6 +32,7 @@ export function TabSystem({
   };
 
   const canAddTab = tabs.length < maxTabs;
+  const openTabSymbols = tabs.filter(tab => tab.symbol).map(tab => tab.symbol!);
 
   return (
     <div className="flex items-center bg-card border-b border-border overflow-x-auto">
@@ -69,15 +73,11 @@ export function TabSystem({
       </div>
 
       {canAddTab && (
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={onAddTab}
-          className="px-3 py-2 border-l border-border rounded-none hover:bg-muted/50 flex-shrink-0"
-          title="Add new chart tab"
-        >
-          <Plus size={16} />
-        </Button>
+        <TabSelector 
+          stocks={stocks}
+          onStockSelect={onAddTab}
+          openTabSymbols={openTabSymbols}
+        />
       )}
     </div>
   );
