@@ -2,12 +2,17 @@ import { useState, useEffect } from 'react';
 import { Stock, ScannerFilters } from '@/types';
 import { generateMockData, updateStockPrices } from '@/lib/mockData';
 import { getMarketHours } from '@/lib/market';
+import { alertService } from '@/lib/alerts';
+import { ibkrService } from '@/lib/ibkr';
 import { useKV } from '@github/spark/hooks';
 import { ScannerTable } from '@/components/ScannerTable';
 import { FilterPanel } from '@/components/FilterPanel';
 import { MarketStatus } from '@/components/MarketStatus';
 import { TabSystem, Tab } from '@/components/TabSystem';
 import { StockChart } from '@/components/StockChart';
+import { AlertsManager } from '@/components/AlertsManager';
+import { IBKRSettings } from '@/components/IBKRSettings';
+import { Toaster } from 'sonner';
 import { cn } from '@/lib/utils';
 
 const DEFAULT_FILTERS: ScannerFilters = {
@@ -46,11 +51,27 @@ function App() {
     const updateInterval = marketHours.isOpen ? 3000 : 30000; // 3s during market hours, 30s when closed
 
     const interval = setInterval(() => {
-      setStocks(prevStocks => updateStockPrices(prevStocks));
+      setStocks(prevStocks => {
+        const updatedStocks = updateStockPrices(prevStocks);
+        // Check alerts on updated data
+        alertService.checkAlerts(updatedStocks);
+        return updatedStocks;
+      });
     }, updateInterval);
 
     return () => clearInterval(interval);
   }, [stocks.length]);
+
+  // Listen for chart open events from alerts
+  useEffect(() => {
+    const handleOpenChart = (event: CustomEvent) => {
+      const { symbol } = event.detail;
+      handleStockSelect(symbol);
+    };
+
+    window.addEventListener('openChart', handleOpenChart as EventListener);
+    return () => window.removeEventListener('openChart', handleOpenChart as EventListener);
+  }, []);
 
   // Apply filters
   useEffect(() => {
@@ -149,6 +170,8 @@ function App() {
             <div className="text-sm text-muted-foreground">
               {filteredStocks.length} stocks • Updated {new Date().toLocaleTimeString()}
             </div>
+            <AlertsManager />
+            <IBKRSettings />
           </div>
         </div>
       </div>
@@ -193,6 +216,15 @@ function App() {
           </div>
         )}
       </div>
+
+      {/* Toast Notifications */}
+      <Toaster 
+        position="top-right"
+        theme="dark"
+        richColors
+        expand={true}
+        duration={4000}
+      />
     </div>
   );
 }

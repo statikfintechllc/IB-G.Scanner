@@ -41,3 +41,48 @@ export interface TechnicalIndicator {
   enabled: boolean;
   params?: Record<string, number>;
 }
+
+export interface ChartData {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export interface PriceAlert {
+  id: string;
+  symbol: string;
+  type: 'price_above' | 'price_below' | 'volume_spike' | 'breakout';
+  value: number;
+  enabled: boolean;
+  triggered: boolean;
+  createdAt: Date;
+  message?: string;
+}
+
+export interface IBKRConnection {
+  host: string;
+  port: number;
+  clientId: number;
+  connected: boolean;
+  status: 'disconnected' | 'connecting' | 'connected' | 'error';
+  error?: string;
+}
+
+export interface IBKRMessage {
+  type: 'market_data' | 'error' | 'connection_status';
+  symbol?: string;
+  data?: any;
+  error?: string;
+}
+
+export interface NotificationSettings {
+  enabled: boolean;
+  sound: boolean;
+  desktop: boolean;
+  priceAlerts: boolean;
+  volumeAlerts: boolean;
+  newsAlerts: boolean;
+}
