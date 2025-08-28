@@ -104,34 +104,34 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-[98vw] w-[2400px] h-[90vh] flex flex-col p-8">
-        <DialogHeader className="flex-shrink-0 pb-6">
-          <DialogTitle className="flex items-center gap-3 text-2xl">
-            <Brain size={32} />
+      <DialogContent className="max-w-[95vw] w-[3200px] h-[90vh] flex flex-col p-10">
+        <DialogHeader className="flex-shrink-0 pb-8">
+          <DialogTitle className="flex items-center gap-4 text-3xl">
+            <Brain size={36} />
             AI-Powered Stock Search & Analysis
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 flex flex-col gap-8 min-h-0">
+        <div className="flex-1 flex flex-col gap-10 min-h-0">
           {/* Search Input */}
-          <div className="flex gap-6 flex-shrink-0">
+          <div className="flex gap-8 flex-shrink-0">
             <div className="relative flex-1">
-              <Search size={20} className="absolute left-5 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+              <Search size={22} className="absolute left-6 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search for breakout patterns, high volume stocks, sector trends, momentum plays..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="pl-14 h-16 text-lg"
+                className="pl-16 h-18 text-xl"
               />
             </div>
             <Button 
               onClick={() => handleSearch()} 
               disabled={isSearching || !searchQuery.trim()}
-              className="flex-shrink-0 px-12 h-16 text-lg"
+              className="flex-shrink-0 px-16 h-18 text-xl"
             >
               {isSearching ? (
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-foreground" />
+                <div className="animate-spin rounded-full h-7 w-7 border-b-2 border-primary-foreground" />
               ) : (
                 'Search'
               )}
@@ -139,10 +139,10 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
           </div>
 
           {/* Main Content Area - Three Column Layout */}
-          <div className="flex-1 flex gap-10 min-h-0">
+          <div className="flex-1 flex gap-12 min-h-0">
             {/* Left Column - Search Results */}
             <div className="w-2/5 flex flex-col min-h-0">
-              <div className="flex-shrink-0 mb-6">
+              <div className="flex-shrink-0 mb-8">
                 <h3 className="text-2xl font-semibold flex items-center gap-4">
                   <Target size={28} />
                   Search Results {searchResults.length > 0 && `(${searchResults.length})`}
@@ -223,56 +223,56 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
               </div>
             </div>
 
-            {/* Middle Column - Recent Searches */}
-            <div className="w-1/5 flex flex-col min-h-0">
-              <div className="flex-shrink-0 mb-6">
-                <h3 className="text-2xl font-semibold flex items-center gap-4">
-                  <History size={28} />
-                  Recent
-                </h3>
-              </div>
-              
-              <div className="flex-1 border border-border rounded-xl overflow-hidden bg-card/50">
-                <div className="h-full overflow-y-auto custom-scrollbar p-6">
-                  <div className="space-y-4">
-                    {searchHistory.slice(0, 10).map((search, index) => (
-                      <Button
-                        key={index}
-                        variant="ghost"
-                        size="sm"
-                        className="w-full justify-start text-base h-auto py-4 px-4 rounded-lg"
-                        onClick={() => handleSuggestionClick(search.query)}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="text-left leading-relaxed truncate">{search.query}</span>
-                          <Badge variant="outline" className="ml-3 text-sm flex-shrink-0">
-                            {search.results.length}
-                          </Badge>
+            {/* Right Section - Recent Searches, Quick Suggestions, and Market Insights */}
+            <div className="w-3/5 flex gap-8 min-h-0">
+              {/* Recent Searches Column */}
+              <div className="w-1/3 flex flex-col min-h-0">
+                <div className="flex-shrink-0 mb-8">
+                  <h3 className="text-2xl font-semibold flex items-center gap-4">
+                    <History size={28} />
+                    Recent Searches
+                  </h3>
+                </div>
+                
+                <div className="flex-1 border border-border rounded-xl overflow-hidden bg-card/50">
+                  <div className="h-full overflow-y-auto custom-scrollbar p-6">
+                    <div className="space-y-4">
+                      {searchHistory.slice(0, 10).map((search, index) => (
+                        <Button
+                          key={index}
+                          variant="ghost"
+                          size="sm"
+                          className="w-full justify-start text-base h-auto py-4 px-4 rounded-lg"
+                          onClick={() => handleSuggestionClick(search.query)}
+                        >
+                          <div className="flex items-center justify-between w-full">
+                            <span className="text-left leading-relaxed truncate">{search.query}</span>
+                            <Badge variant="outline" className="ml-3 text-sm flex-shrink-0">
+                              {search.results.length}
+                            </Badge>
+                          </div>
+                        </Button>
+                      ))}
+                      {searchHistory.length === 0 && (
+                        <div className="text-center text-muted-foreground py-16">
+                          <p className="text-lg mb-3">No recent searches</p>
+                          <p className="text-sm">Your search history will appear here</p>
                         </div>
-                      </Button>
-                    ))}
-                    {searchHistory.length === 0 && (
-                      <div className="text-center text-muted-foreground py-16">
-                        <p className="text-lg mb-3">No recent searches</p>
-                        <p className="text-sm">Your search history will appear here</p>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Right Column - Quick Suggestions and Market Insights */}
-            <div className="w-2/5 flex flex-col gap-8 min-h-0">
-              {/* Quick Suggestions */}
-              <div className="flex-1 min-h-0">
-                <div className="flex-shrink-0 mb-6">
+              {/* Quick Suggestions Column */}
+              <div className="w-1/3 flex flex-col min-h-0">
+                <div className="flex-shrink-0 mb-8">
                   <h3 className="text-2xl font-semibold flex items-center gap-4">
                     <Lightbulb size={28} />
                     Quick Suggestions
                   </h3>
                 </div>
-                <div className="h-full border border-border rounded-xl overflow-hidden bg-card/50">
+                <div className="flex-1 border border-border rounded-xl overflow-hidden bg-card/50">
                   <div className="h-full overflow-y-auto custom-scrollbar p-6">
                     <div className="space-y-4">
                       {suggestions.map((suggestion, index) => (
@@ -291,15 +291,15 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                 </div>
               </div>
 
-              {/* Market Insights */}
-              <div className="flex-1 min-h-0">
-                <div className="flex-shrink-0 mb-6">
+              {/* Market Insights Column */}
+              <div className="w-1/3 flex flex-col min-h-0">
+                <div className="flex-shrink-0 mb-8">
                   <h3 className="text-2xl font-semibold flex items-center gap-4">
                     <TrendingUp size={28} />
                     Market Insights
                   </h3>
                 </div>
-                <div className="h-full border border-border rounded-xl overflow-hidden bg-card/50">
+                <div className="flex-1 border border-border rounded-xl overflow-hidden bg-card/50">
                   <div className="h-full overflow-y-auto custom-scrollbar p-6">
                     <div className="space-y-4">
                       {insights.map((insight, index) => (
