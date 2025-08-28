@@ -162,13 +162,17 @@
   overflow-y: auto;
 }
 
-/* Force AI Search dialog to be extra wide */
-.ai-search-dialog {
+/* Force all major dialogs to be extra wide and user-friendly */
+.ai-search-dialog,
+[data-radix-popper-content-wrapper] > [role="dialog"],
+[data-state="open"][role="dialog"] {
   max-width: 95vw !important;
   width: 95vw !important;
 }
 
-.ai-search-dialog[data-slot="dialog-content"] {
+.ai-search-dialog[data-slot="dialog-content"],
+[data-radix-popper-content-wrapper] > [role="dialog"] > div,
+[data-state="open"][role="dialog"] > div {
   max-width: 95vw !important;
   width: 95vw !important;
 }

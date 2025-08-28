@@ -121,28 +121,28 @@ export function IBKRSettings() {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-4xl h-[90vh] overflow-hidden flex flex-col">
-        <DialogHeader className="flex-shrink-0 p-6 pb-4">
-          <DialogTitle className="flex items-center gap-2">
-            <Settings size={20} />
+      <DialogContent className="w-[95vw] max-w-[95vw] h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="flex-shrink-0 p-4 pb-3">
+          <DialogTitle className="text-lg flex items-center gap-2">
+            <Settings size={18} />
             IBKR TWS Connection Settings
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-6 pb-6">
-          <div className="space-y-8 max-w-3xl mx-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar px-4 pb-4">
+          <div className="space-y-6 max-w-6xl mx-auto">
             {/* Connection Status */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <Wifi size={20} />
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Wifi size={18} />
                   Connection Status
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-lg">Status:</span>
-                  <Badge className={cn("text-lg px-4 py-2", getStatusColor())}>
+                  <span className="text-base">Status:</span>
+                  <Badge className={cn("text-sm px-3 py-1", getStatusColor())}>
                     {getStatusIcon()}
                     <span className="ml-2">{getStatusLabel()}</span>
                   </Badge>
@@ -151,23 +151,23 @@ export function IBKRSettings() {
                 {connection.connected && (
                   <>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg">Host:</span>
-                      <span className="font-mono text-lg">{connection.host}:{connection.port}</span>
+                      <span className="text-base">Host:</span>
+                      <span className="font-mono text-sm">{connection.host}:{connection.port}</span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg">Client ID:</span>
-                      <span className="font-mono text-lg">{connection.clientId}</span>
+                      <span className="text-base">Client ID:</span>
+                      <span className="font-mono text-sm">{connection.clientId}</span>
                     </div>
                   </>
                 )}
                 
                 {connection.error && (
-                  <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/50">
+                  <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/50">
                     <div className="flex items-center gap-2 text-destructive">
-                      <AlertTriangle size={18} />
-                      <span className="font-semibold text-lg">Connection Error</span>
+                      <AlertTriangle size={16} />
+                      <span className="font-semibold text-sm">Connection Error</span>
                     </div>
-                    <p className="text-base mt-2">{connection.error}</p>
+                    <p className="text-sm mt-1">{connection.error}</p>
                   </div>
                 )}
               </CardContent>
@@ -176,27 +176,27 @@ export function IBKRSettings() {
             {/* Connection Configuration */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Configuration</CardTitle>
+                <CardTitle className="text-lg">Configuration</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="host" className="text-lg">TWS Host</Label>
+                    <Label htmlFor="host" className="text-sm">TWS Host</Label>
                     <Input
                       id="host"
                       value={config.host || 'localhost'}
                       onChange={(e) => handleConfigChange('host', e.target.value)}
                       placeholder="localhost"
                       disabled={connection.connected}
-                      className="mt-2 text-lg"
+                      className="mt-1 text-sm"
                     />
-                    <p className="text-base text-muted-foreground mt-2">
+                    <p className="text-xs text-muted-foreground mt-1">
                       IP address of TWS/Gateway
                     </p>
                   </div>
                   
                   <div>
-                    <Label htmlFor="port" className="text-lg">Port</Label>
+                    <Label htmlFor="port" className="text-sm">Port</Label>
                     <Input
                       id="port"
                       type="number"
@@ -204,28 +204,28 @@ export function IBKRSettings() {
                       onChange={(e) => handleConfigChange('port', parseInt(e.target.value) || 7497)}
                       placeholder="7497"
                       disabled={connection.connected}
-                      className="mt-2 text-lg"
+                      className="mt-1 text-sm"
                     />
-                    <p className="text-base text-muted-foreground mt-2">
+                    <p className="text-xs text-muted-foreground mt-1">
                       7497 (live) or 7496 (paper)
                     </p>
                   </div>
-                </div>
-                
-                <div>
-                  <Label htmlFor="clientId" className="text-lg">Client ID</Label>
-                  <Input
-                    id="clientId"
-                    type="number"
-                    value={config.clientId || 1}
-                    onChange={(e) => handleConfigChange('clientId', parseInt(e.target.value) || 1)}
-                    placeholder="1"
-                    disabled={connection.connected}
-                    className="mt-2 text-lg"
-                  />
-                  <p className="text-base text-muted-foreground mt-2">
-                    Unique identifier (1-32)
-                  </p>
+
+                  <div>
+                    <Label htmlFor="clientId" className="text-sm">Client ID</Label>
+                    <Input
+                      id="clientId"
+                      type="number"
+                      value={config.clientId || 1}
+                      onChange={(e) => handleConfigChange('clientId', parseInt(e.target.value) || 1)}
+                      placeholder="1"
+                      disabled={connection.connected}
+                      className="mt-1 text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Unique identifier (1-32)
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -233,29 +233,29 @@ export function IBKRSettings() {
             {/* Connection Controls */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Actions</CardTitle>
+                <CardTitle className="text-lg">Actions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex gap-4">
+                <div className="flex gap-3">
                   {connection.connected ? (
                     <Button 
                       variant="destructive" 
                       onClick={handleDisconnect}
-                      className="flex-1 text-lg py-6"
+                      className="flex-1 text-sm py-4"
                     >
-                      <WifiOff size={18} className="mr-2" />
+                      <WifiOff size={16} className="mr-2" />
                       Disconnect
                     </Button>
                   ) : (
                     <Button 
                       onClick={handleConnect}
                       disabled={isConnecting}
-                      className="flex-1 text-lg py-6"
+                      className="flex-1 text-sm py-4"
                     >
                       {isConnecting ? (
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
                       ) : (
-                        <Wifi size={18} className="mr-2" />
+                        <Wifi size={16} className="mr-2" />
                       )}
                       {isConnecting ? 'Connecting...' : 'Connect'}
                     </Button>
@@ -264,50 +264,66 @@ export function IBKRSettings() {
               </CardContent>
             </Card>
 
-            <Separator />
-
             {/* Setup Instructions */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Setup Instructions</CardTitle>
+                <CardTitle className="text-lg">Setup Instructions</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-base space-y-3">
-                  <div className="flex items-start gap-3">
-                    <span className="font-bold text-lg">1.</span>
-                    <span>Install and run TWS or IB Gateway on this computer</span>
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-base">Quick Setup</h4>
+                    <div className="text-sm space-y-2">
+                      <div className="flex items-start gap-2">
+                        <span className="font-bold text-sm">1.</span>
+                        <span>Install and run TWS or IB Gateway</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="font-bold text-sm">2.</span>
+                        <span>Enable API: File → Global Configuration → API → Settings</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="font-bold text-sm">3.</span>
+                        <span>Check "Enable ActiveX and Socket Clients"</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="font-bold text-sm">4.</span>
+                        <span>Set Socket port: 7497 (live) or 7496 (paper)</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="font-bold text-sm">5.</span>
+                        <span>Add "127.0.0.1" to trusted IP addresses</span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="font-bold text-sm">6.</span>
+                        <span>Restart TWS and connect</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <span className="font-bold text-lg">2.</span>
-                    <span>Enable API connections in TWS: File → Global Configuration → API → Settings</span>
+
+                  <div className="space-y-3">
+                    <h4 className="font-semibold text-base">Important Notes</h4>
+                    <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
+                      <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-2">
+                        <AlertTriangle size={16} />
+                        <span className="font-semibold text-sm">Development Mode</span>
+                      </div>
+                      <p className="text-xs text-blue-600 dark:text-blue-400">
+                        This app requires a proxy server to connect to IBKR's socket API. 
+                        In development mode, mock data is used for demonstration.
+                      </p>
+                    </div>
+                    
+                    <div className="p-3 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
+                      <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 mb-2">
+                        <AlertTriangle size={16} />
+                        <span className="font-semibold text-sm">Security</span>
+                      </div>
+                      <p className="text-xs text-amber-600 dark:text-amber-400">
+                        Never share your IBKR credentials. This app only connects to your local TWS instance.
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <span className="font-bold text-lg">3.</span>
-                    <span>Check "Enable ActiveX and Socket Clients"</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="font-bold text-lg">4.</span>
-                    <span>Set Socket port to 7497 (live) or 7496 (paper trading)</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="font-bold text-lg">5.</span>
-                    <span>Add "127.0.0.1" to trusted IP addresses</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="font-bold text-lg">6.</span>
-                    <span>Restart TWS and try connecting</span>
-                  </div>
-                </div>
-                
-                <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
-                  <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 mb-2">
-                    <AlertTriangle size={18} />
-                    <span className="font-semibold text-lg">Note</span>
-                  </div>
-                  <p className="text-base text-blue-600 dark:text-blue-400">
-                    This app requires a proxy server to connect to IBKR's socket API. 
-                    In development mode, mock data is used for demonstration.
-                  </p>
                 </div>
               </CardContent>
             </Card>
