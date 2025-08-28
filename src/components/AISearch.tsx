@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Brain, TrendingUp, Target, Lightbulb, History, ChevronDown } from '@phosphor-icons/react';
+import { Search, Brain, Target, Lightbulb, History, ChevronDown } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,15 +22,13 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
   const [searchResults, setSearchResults] = useState<AISearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [insights, setInsights] = useState<string[]>([]);
   const [searchHistory, setSearchHistory] = useKV<SearchMemory[]>('ai-search-history', []);
   const [isOpen, setIsOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
-  // Load suggestions and insights on mount
+  // Load suggestions on mount
   useEffect(() => {
     loadSuggestions();
-    loadInsights();
   }, [stocks]);
 
   const loadSuggestions = async () => {
@@ -39,15 +37,6 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
       setSuggestions(newSuggestions);
     } catch (error) {
       console.error('Failed to load suggestions:', error);
-    }
-  };
-
-  const loadInsights = async () => {
-    try {
-      const newInsights = await aiSearchService.getMarketInsights(stocks);
-      setInsights(newInsights);
-    } catch (error) {
-      console.error('Failed to load insights:', error);
     }
   };
 
@@ -183,10 +172,10 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
             </Button>
           </div>
 
-          {/* Main Content Area - Compact Layout */}
+          {/* Main Content Area */}
           <div className="flex-1 flex gap-4 min-h-0">
             {/* Left Column - Search Results */}
-            <div className="w-[60%] flex flex-col min-h-0">
+            <div className="w-[70%] flex flex-col min-h-0">
               <div className="flex-shrink-0 mb-2">
                 <h3 className="text-sm font-semibold flex items-center gap-2">
                   <Target size={14} />
@@ -268,52 +257,28 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
               </div>
             </div>
 
-            {/* Right Section - Quick Suggestions and Market Insights */}
-            <div className="w-[40%] flex gap-4 min-h-0">
-              {/* Quick Suggestions */}
-              <div className="w-1/2 flex flex-col min-h-0">
-                <div className="flex-shrink-0 mb-2">
-                  <h3 className="text-sm font-semibold flex items-center gap-2">
-                    <Lightbulb size={14} />
-                    Quick Suggestions
-                  </h3>
-                </div>
-                <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card/50">
-                  <div className="h-full overflow-y-auto custom-scrollbar p-3">
-                    <div className="space-y-2">
-                      {suggestions.map((suggestion, index) => (
-                        <Button
-                          key={index}
-                          variant="ghost"
-                          size="sm"
-                          className="w-full justify-start text-sm h-auto py-2 px-3 text-left rounded-md leading-normal hover:bg-muted/70"
-                          onClick={() => handleSuggestionClick(suggestion)}
-                        >
-                          <span className="leading-normal whitespace-normal break-words text-left">{suggestion}</span>
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+            {/* Right Column - Quick Suggestions */}
+            <div className="w-[30%] flex flex-col min-h-0">
+              <div className="flex-shrink-0 mb-2">
+                <h3 className="text-sm font-semibold flex items-center gap-2">
+                  <Lightbulb size={14} />
+                  Quick Suggestions
+                </h3>
               </div>
-
-              {/* Market Insights */}
-              <div className="w-1/2 flex flex-col min-h-0">
-                <div className="flex-shrink-0 mb-2">
-                  <h3 className="text-sm font-semibold flex items-center gap-2">
-                    <TrendingUp size={14} />
-                    Market Insights
-                  </h3>
-                </div>
-                <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card/50">
-                  <div className="h-full overflow-y-auto custom-scrollbar p-3">
-                    <div className="space-y-3">
-                      {insights.map((insight, index) => (
-                        <div key={index} className="text-sm text-muted-foreground p-3 bg-muted/20 rounded-md leading-relaxed whitespace-normal break-words border border-border/50">
-                          {insight}
-                        </div>
-                      ))}
-                    </div>
+              <div className="flex-1 border border-border rounded-lg overflow-hidden bg-card/50">
+                <div className="h-full overflow-y-auto custom-scrollbar p-3">
+                  <div className="space-y-2">
+                    {suggestions.map((suggestion, index) => (
+                      <Button
+                        key={index}
+                        variant="ghost"
+                        size="sm"
+                        className="w-full justify-start text-sm h-auto py-2 px-3 text-left rounded-md leading-normal hover:bg-muted/70"
+                        onClick={() => handleSuggestionClick(suggestion)}
+                      >
+                        <span className="leading-normal whitespace-normal break-words text-left">{suggestion}</span>
+                      </Button>
+                    ))}
                   </div>
                 </div>
               </div>

@@ -12,6 +12,7 @@ import { StockChart } from '@/components/StockChart';
 import { AlertsManager } from '@/components/AlertsManager';
 import { IBKRSettings } from '@/components/IBKRSettings';
 import { AISearch } from '@/components/AISearch';
+import { MarketInsights } from '@/components/MarketInsights';
 import { SFTiTop10 } from '@/components/SFTiTop10';
 import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -227,6 +228,7 @@ function App() {
               {filteredStocks.length} stocks • Updated {new Date().toLocaleTimeString()}
             </div>
             <AISearch stocks={filteredStocks} onStockSelect={handleStockSelect} />
+            <MarketInsights stocks={filteredStocks} />
             <AlertsManager />
             <IBKRSettings />
           </div>
