@@ -336,7 +336,10 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                           >
                             <Trash2 size={14} />
                           </Button>
-                          )}
+                        </div>
+                      </div>
+                    ))}
+                          </div>
                         )}
                       </ScrollArea>
                     </div>
