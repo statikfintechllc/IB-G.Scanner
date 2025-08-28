@@ -438,7 +438,6 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                     </Card>
                   </ScrollArea>
                 </TabsContent>
-              </div>
             </div>
           </Tabs>
         </div>
