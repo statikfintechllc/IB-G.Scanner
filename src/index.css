@@ -162,114 +162,35 @@
   overflow-y: auto;
 }
 
-/* FORCE CENTER ALL MODAL CONTENT - NUCLEAR OPTION */
-[data-radix-portal] {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 50 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  pointer-events: none !important;
-}
-
+/* Center modals properly without breaking functionality */
 [data-radix-dialog-overlay] {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 50 !important;
-  background-color: rgba(0, 0, 0, 0.8) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  pointer-events: auto !important;
 }
 
-/* ABSOLUTE CENTER EVERYTHING - NO EXCEPTIONS */
-[data-radix-dialog-content],
-[data-radix-popover-content],
-[role="dialog"],
-.dialog-content,
-[data-radix-dropdown-menu-content],
-[data-radix-select-content] {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  max-width: 70vw !important;
-  max-height: 90vh !important;
-  margin: 0 !important;
-  padding: 1rem !important;
-  pointer-events: auto !important;
-  z-index: 51 !important;
-  right: auto !important;
-  bottom: auto !important;
-  inset: auto !important;
-}
-
-/* OVERRIDE ANY POSITIONING STYLES */
-[data-state="open"] {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  right: auto !important;
-  bottom: auto !important;
-  inset: auto !important;
-}
-
-/* NUCLEAR OVERRIDE FOR ALL MODAL ELEMENTS */
-div[role="dialog"],
-div[data-radix-dialog-content],
-div[data-radix-popover-content],
-div[data-radix-dropdown-menu-content] {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  right: auto !important;
-  bottom: auto !important;
-  inset: auto !important;
-  margin: 0 !important;
+[data-radix-dialog-content] {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  transform: none !important;
+  margin: 0 auto !important;
+  max-width: min(90vw, 600px) !important;
+  width: auto !important;
 }
 
 /* Make dialog content more compact horizontally */
 [role="dialog"] {
-  max-width: 70vw !important;
+  max-width: min(90vw, 600px) !important;
   width: auto !important;
-  min-width: 400px !important;
 }
 
 /* Make inner content boxes more compact horizontally */
-[role="dialog"] .grid,
-[role="dialog"] .flex {
-  gap: 0.75rem !important;
+[role="dialog"] .grid {
+  gap: 1rem !important;
 }
 
-/* Reduce padding on all dialog content boxes */
-[role="dialog"] [data-slot="content"],
+/* Reduce excessive padding */
 [role="dialog"] .p-6 {
-  padding: 1rem !important;
-}
-
-/* Make inner content sections more compact */
-[role="dialog"] .w-1\/2 {
-  width: 45% !important;
-}
-
-[role="dialog"] .w-full {
-  max-width: 100% !important;
-}
-
-/* Make all dialog interiors more compact and user-friendly */
-[role="dialog"] .space-y-4 > * + * {
-  margin-top: 0.75rem !important;
-}
-
-[role="dialog"] .space-y-3 > * + * {
-  margin-top: 0.5rem !important;
-}
-
-/* Compact the dialog header and content sections */
-[role="dialog"] .space-y-6 > * + * {
-  margin-top: 1rem !important;
+  padding: 1.5rem !important;
 }
