@@ -24,10 +24,26 @@ export class IBKRService {
   }
 
   /**
+   * Get current market data for multiple symbols
+   */
+  async getMarketData(symbols: string[]): Promise<any[]> {
+    // For now, return empty array if IBKR not connected
+    // In production, this would fetch real data from IBKR
+    if (!this.connection.connected) {
+      console.warn('IBKR not connected, returning empty data');
+      return [];
+    }
+
+    // Implementation would request market data for each symbol
+    // and return formatted stock data
+    return [];
+  }
+
+  /**
    * Connect to IBKR TWS/Gateway
    * Uses WebSocket to connect to local TWS instance
    */
-  async connect(config?: Partial<IBKRConnection>): Promise<boolean> {
+  async connect(config?: Partial<IBKRConnection>): Promise<IBKRConnection> {
     if (config) {
       this.connection = { ...this.connection, ...config };
     }
@@ -78,12 +94,12 @@ export class IBKRService {
         this.connection.error = 'Connection failed';
       };
 
-      return true;
+      return this.connection;
     } catch (error) {
       console.error('Failed to connect to IBKR:', error);
       this.connection.status = 'error';
       this.connection.error = error instanceof Error ? error.message : 'Unknown error';
-      return false;
+      return this.connection;
     }
   }
 

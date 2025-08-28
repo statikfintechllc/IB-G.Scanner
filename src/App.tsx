@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Stock, ScannerFilters, Tab } from '@/types';
-import { generateMockData, updateStockPrices } from '@/lib/mockData';
 import { getMarketHours } from '@/lib/market';
 import { alertService } from '@/lib/alerts';
 import { ibkrService } from '@/lib/ibkr';
@@ -39,31 +38,60 @@ function App() {
     { id: 'scanner', type: 'scanner', title: 'Scanner' }
   ]);
   const [activeTabId, setActiveTabId] = useKV<string>('active-tab', 'ai_picks');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Initialize data
+  // Initialize IBKR connection and data
   useEffect(() => {
-    const initialData = generateMockData();
-    setStocks(initialData);
+    const initializeData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Try to connect to IBKR
+        const connection = await ibkrService.connect();
+        if (connection.connected) {
+          console.log('IBKR connected successfully');
+          // For now, start with empty array - real implementation would fetch watchlist
+          setStocks([]);
+        } else {
+          console.warn('IBKR connection failed, running in demo mode');
+          setStocks([]);
+        }
+      } catch (error) {
+        console.warn('IBKR initialization error:', error);
+        setError('IBKR connection failed - running in demo mode');
+        setStocks([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    initializeData();
   }, []);
 
-  // Real-time updates
+  // Real-time updates from IBKR
   useEffect(() => {
-    if (stocks.length === 0) return;
+    if (loading || stocks.length === 0) return;
 
     const marketHours = getMarketHours();
-    const updateInterval = marketHours.isOpen ? 3000 : 30000; // 3s during market hours, 30s when closed
+    const updateInterval = marketHours.isOpen ? 3000 : 30000;
 
-    const interval = setInterval(() => {
-      setStocks(prevStocks => {
-        const updatedStocks = updateStockPrices(prevStocks);
-        // Check alerts on updated data
-        alertService.checkAlerts(updatedStocks);
-        return updatedStocks;
-      });
+    const interval = setInterval(async () => {
+      try {
+        const symbols = stocks.map(s => s.symbol);
+        if (symbols.length > 0) {
+          const updatedStocks = await ibkrService.getMarketData(symbols);
+          setStocks(updatedStocks);
+          alertService.checkAlerts(updatedStocks);
+        }
+      } catch (error) {
+        console.warn('Failed to update market data:', error);
+      }
     }, updateInterval);
 
     return () => clearInterval(interval);
-  }, [stocks.length]);
+  }, [stocks.length, loading]);
 
   // Listen for chart open events from alerts
   useEffect(() => {
@@ -117,7 +145,7 @@ function App() {
 
     if (tabs.length >= 6) {
       toast.error('Maximum 6 tabs allowed. Close a tab to open a new one.');
-      return; // Max tabs reached
+      return;
     }
 
     const newTab: Tab = {
@@ -132,12 +160,11 @@ function App() {
   };
 
   const handleTabClose = (tabId: string) => {
-    if (tabId === 'scanner' || tabId === 'ai_picks') return; // Can't close scanner or AI picks tabs
+    if (tabId === 'scanner' || tabId === 'ai_picks') return;
 
     setTabs(prevTabs => {
       const newTabs = prevTabs.filter(tab => tab.id !== tabId);
       
-      // If we closed the active tab, switch to AI picks
       if (activeTabId === tabId) {
         setActiveTabId('ai_picks');
       }
@@ -153,6 +180,17 @@ function App() {
   const activeTab = tabs.find(tab => tab.id === activeTabId);
   const currentStock = activeTab?.symbol ? stocks.find(s => s.symbol === activeTab.symbol) : null;
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-sm text-muted-foreground">Initializing IBKR connection...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={cn(
       "min-h-screen bg-background text-foreground transition-colors duration-300",
@@ -164,6 +202,11 @@ function App() {
           <div className="flex items-center gap-4">
             <h1 className="text-xl font-bold font-mono">Penny Stock Scanner Pro</h1>
             <MarketStatus />
+            {error && (
+              <div className="text-xs text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded">
+                {error}
+              </div>
+            )}
           </div>
           
           <div className="flex items-center gap-4">

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { MarketHours, getMarketHours } from '@/lib/market';
+import { MarketHours } from '@/types';
+import { getMarketHours } from '@/lib/market';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
