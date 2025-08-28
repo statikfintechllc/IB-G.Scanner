@@ -13,7 +13,8 @@ import { StockChart } from '@/components/StockChart';
 import { AlertsManager } from '@/components/AlertsManager';
 import { IBKRSettings } from '@/components/IBKRSettings';
 import { AISearch } from '@/components/AISearch';
-import { Toaster } from 'sonner';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 const DEFAULT_FILTERS: ScannerFilters = {
@@ -114,6 +115,7 @@ function App() {
     }
 
     if (tabs.length >= 6) {
+      toast.error('Maximum 6 tabs allowed. Close a tab to open a new one.');
       return; // Max tabs reached
     }
 
@@ -186,26 +188,28 @@ function App() {
       />
 
       {/* Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-hidden">
         {activeTab?.type === 'scanner' ? (
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="h-full flex flex-col">
             <div className="p-6 pb-4 flex-shrink-0">
               <FilterPanel 
                 filters={filters} 
                 onFiltersChange={setFilters}
               />
             </div>
-            <div className="flex-1 overflow-hidden px-6 pb-6">
-              <div className="h-full overflow-auto">
-                <ScannerTable 
-                  stocks={filteredStocks}
-                  onStockSelect={handleStockSelect}
-                />
+            <div className="flex-1 min-h-0 px-6 pb-6">
+              <div className="h-full border border-border rounded-lg overflow-hidden">
+                <ScrollArea className="h-full">
+                  <ScannerTable 
+                    stocks={filteredStocks}
+                    onStockSelect={handleStockSelect}
+                  />
+                </ScrollArea>
               </div>
             </div>
           </div>
         ) : (
-          <div className="flex-1 overflow-hidden">
+          <div className="h-full">
             {activeTab?.symbol && (
               <StockChart 
                 symbol={activeTab.symbol}

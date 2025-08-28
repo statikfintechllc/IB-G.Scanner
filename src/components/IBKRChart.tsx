@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { createChart, ColorType, IChartApi, ISeriesApi, CandlestickData, Time } from 'lightweight-charts';
+import { createChart, ColorType } from 'lightweight-charts';
+import type { IChartApi, ISeriesApi, CandlestickData, Time } from 'lightweight-charts';
 import { ChartData, TechnicalIndicator, ChartTimeframe } from '@/types';
 import { ibkrService } from '@/lib/ibkr';
 import { Button } from '@/components/ui/button';
