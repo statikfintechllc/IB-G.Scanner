@@ -163,7 +163,6 @@
 }
 
 /* Fix dialog overlay positioning and centering */
-[data-radix-popper-content-wrapper],
 [data-radix-portal] {
   position: fixed !important;
   inset: 0 !important;
@@ -182,10 +181,13 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  pointer-events: auto !important;
 }
 
-/* Center dialog content within overlay */
-[data-radix-dialog-content] {
+/* Center ALL dialog content - override any positioning */
+[data-radix-dialog-content],
+[role="dialog"],
+.dialog-content {
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
@@ -195,64 +197,66 @@
   margin: 0 !important;
   pointer-events: auto !important;
   z-index: 51 !important;
+  right: auto !important;
+  bottom: auto !important;
 }
 
-/* Ensure popovers also center properly */
+/* Force popover content to center relative to viewport, not trigger */
 [data-radix-popover-content] {
-  position: absolute !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
   pointer-events: auto !important;
   z-index: 52 !important;
+  right: auto !important;
+  bottom: auto !important;
 }
 
-/* Fallback for any dialog elements */
+/* Override any transform-origin that might affect centering */
+[data-radix-dialog-content],
+[data-radix-popover-content],
 [role="dialog"] {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  margin: 0 !important;
-  pointer-events: auto !important;
-  z-index: 51 !important;
+  transform-origin: center center !important;
 }
 
-/* Force absolute centering for all dialogs */
-.dialog-content,
-[data-state="open"][role="dialog"] {
+/* Ensure all modal-type components center properly */
+[data-state="open"][role="dialog"],
+[data-state="open"][data-radix-dialog-content],
+.dialog-overlay > * {
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
+  right: auto !important;
+  bottom: auto !important;
 }
 
-/* AI Search Dialog specific styling */
-.ai-search-dialog {
-  max-width: 75vw !important;
-  width: 75vw !important;
-  max-height: 75vh !important;
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+/* Make dialog content more compact horizontally */
+[role="dialog"] {
+  max-width: 70vw !important;
+  width: auto !important;
+  min-width: 400px !important;
 }
 
 /* Make inner content boxes more compact horizontally */
-.ai-search-dialog .grid,
-.ai-search-dialog .flex {
+[role="dialog"] .grid,
+[role="dialog"] .flex {
   gap: 0.75rem !important;
 }
 
 /* Reduce padding on all dialog content boxes */
-.ai-search-dialog [data-slot="content"],
-[role="dialog"] [data-slot="content"] {
+[role="dialog"] [data-slot="content"],
+[role="dialog"] .p-6 {
   padding: 1rem !important;
 }
 
 /* Make inner content sections more compact */
-.ai-search-dialog .w-1\\/2 {
+[role="dialog"] .w-1\/2 {
   width: 45% !important;
 }
 
-.ai-search-dialog .w-full {
+[role="dialog"] .w-full {
   max-width: 100% !important;
 }
 
@@ -263,4 +267,9 @@
 
 [role="dialog"] .space-y-3 > * + * {
   margin-top: 0.5rem !important;
+}
+
+/* Compact the dialog header and content sections */
+[role="dialog"] .space-y-6 > * + * {
+  margin-top: 1rem !important;
 }
