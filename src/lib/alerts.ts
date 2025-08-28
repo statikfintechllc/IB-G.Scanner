@@ -1,4 +1,5 @@
-import { PriceAlert, Stock, NotificationSettings } from '@/types';
+import { PriceAlert, Stock, NotificationSettings, PatternAnalysis, RealTimePattern } from '@/types';
+import { aiPatternService } from '@/lib/aiPatterns';
 import { toast } from 'sonner';
 
 /**
@@ -8,6 +9,8 @@ import { toast } from 'sonner';
 export class AlertService {
   private alerts: Map<string, PriceAlert> = new Map();
   private priceHistory: Map<string, number[]> = new Map();
+  private patternHistory: Map<string, RealTimePattern[]> = new Map();
+  private lastPatternCheck: Date = new Date();
   private settings: NotificationSettings = {
     enabled: true,
     sound: true,
@@ -93,6 +96,13 @@ export class AlertService {
       this.checkVolumeAlerts(stock);
       this.checkBreakoutAlerts(stock);
     });
+
+    // Check for pattern recognition alerts every 30 seconds
+    const now = new Date();
+    if (now.getTime() - this.lastPatternCheck.getTime() > 30000) {
+      this.checkPatternAlerts(stocks);
+      this.lastPatternCheck = now;
+    }
   }
 
   /**
@@ -312,6 +322,83 @@ export class AlertService {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Check for pattern recognition alerts
+   */
+  private async checkPatternAlerts(stocks: Stock[]): Promise<void> {
+    try {
+      const patterns = aiPatternService.analyzeRealTimePatterns(stocks);
+      
+      patterns.forEach(pattern => {
+        if (!pattern.actionable || pattern.strength < 0.7) return;
+
+        // Check if we already alerted for this pattern recently
+        const symbolPatterns = this.patternHistory.get(pattern.symbol) || [];
+        const recentPattern = symbolPatterns.find(p => 
+          p.pattern.pattern === pattern.pattern.pattern && 
+          new Date().getTime() - p.timestamp.getTime() < 300000 // 5 minutes
+        );
+
+        if (recentPattern) return;
+
+        // Store this pattern
+        symbolPatterns.push(pattern);
+        this.patternHistory.set(pattern.symbol, symbolPatterns.slice(-5)); // Keep last 5
+
+        // Create pattern alert
+        const alertId = this.addAlert({
+          symbol: pattern.symbol,
+          type: 'pattern_recognition',
+          value: pattern.price,
+          enabled: true,
+          pattern: pattern.pattern,
+          confidence: pattern.strength
+        });
+
+        const alert = this.alerts.get(alertId);
+        if (alert) {
+          const message = `${pattern.symbol}: ${pattern.pattern.pattern} pattern detected! Confidence: ${(pattern.strength * 100).toFixed(0)}%`;
+          this.triggerAlert(alert, message);
+        }
+      });
+    } catch (error) {
+      console.warn('Pattern alert check failed:', error);
+    }
+  }
+
+  /**
+   * Add AI signal alert
+   */
+  addAISignalAlert(symbol: string, signal: string, confidence: number, pattern?: PatternAnalysis): string {
+    return this.addAlert({
+      symbol,
+      type: 'ai_signal',
+      value: confidence,
+      enabled: true,
+      pattern,
+      confidence,
+      message: signal
+    });
+  }
+
+  /**
+   * Get pattern history for a symbol
+   */
+  getPatternHistory(symbol: string): RealTimePattern[] {
+    return this.patternHistory.get(symbol) || [];
+  }
+
+  /**
+   * Clear pattern history
+   */
+  clearPatternHistory(symbol?: string): void {
+    if (symbol) {
+      this.patternHistory.delete(symbol);
+    } else {
+      this.patternHistory.clear();
+    }
   }
 }
 

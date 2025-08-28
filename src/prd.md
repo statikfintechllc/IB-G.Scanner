@@ -35,12 +35,20 @@
 
 ## Essential Features
 
-### AI-Powered Search & Pattern Recognition
-- **Functionality**: Natural language search for stocks with pattern analysis, memory, and learning capabilities
-- **Purpose**: Intelligent discovery of trading opportunities using AI to identify patterns humans might miss
-- **Success Criteria**: Search results relevant 80%+ of the time, pattern recognition confidence scores accurate
+### AI Top Picks & Market Analysis
+- **Functionality**: Automated AI-powered market scanning that continuously analyzes all stocks and provides real-time recommendations with confidence scores, pattern detection, and risk assessment
+- **Purpose**: Leverage AI to identify high-probability trading opportunities automatically without manual scanning
+- **Success Criteria**: AI recommendations achieve 70%+ accuracy in directional predictions, pattern recognition identifies actionable signals
 
-### Core Scanner Engine
+### Advanced Pattern Recognition Alerts
+- **Functionality**: Real-time pattern detection using AI algorithms that automatically trigger alerts when specific chart patterns, volume anomalies, or AI signals are detected
+- **Purpose**: Never miss important trading opportunities by having AI constantly monitor for complex patterns
+- **Success Criteria**: Pattern alerts trigger within 30 seconds of pattern completion, 80%+ of pattern alerts result in expected price movement
+
+### AI-Powered Search & Memory
+- **Functionality**: Natural language search for stocks with pattern analysis, search memory, and learning capabilities
+- **Purpose**: Intelligent discovery of trading opportunities using AI to search and remember user preferences
+- **Success Criteria**: Search results relevant 80%+ of the time, search memory improves recommendations over time
 - **Functionality**: Real-time filtering of penny stocks ($0.01-$5.00) based on price, volume, market cap, float, and percentage changes
 - **Purpose**: Quickly identify trading opportunities from thousands of stocks
 - **Success Criteria**: Filter results update within 3 seconds of market data changes

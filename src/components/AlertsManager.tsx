@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { Bell, Plus, Trash2, Target, TrendingUp, Volume2, AlertTriangle } from '@phosphor-icons/react';
+import { Bell, Plus, Trash2, Target, TrendingUp, Volume2, AlertTriangle, Brain, Lightbulb } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -131,6 +131,8 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
       case 'price_below': return <TrendingUp size={16} className="rotate-180" />;
       case 'volume_spike': return <Volume2 size={16} />;
       case 'breakout': return <Target size={16} />;
+      case 'pattern_recognition': return <Brain size={16} />;
+      case 'ai_signal': return <Lightbulb size={16} />;
     }
   };
 
@@ -140,6 +142,8 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
       case 'price_below': return 'Price Below';
       case 'volume_spike': return 'Volume Spike';
       case 'breakout': return 'Breakout Pattern';
+      case 'pattern_recognition': return 'Pattern Recognition';
+      case 'ai_signal': return 'AI Signal';
     }
   };
 
@@ -152,6 +156,10 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
         return `${(value / 1000000).toFixed(1)}M avg`;
       case 'breakout':
         return 'Pattern';
+      case 'pattern_recognition':
+        return `${value}% confidence`;
+      case 'ai_signal':
+        return `Score: ${value}`;
     }
   };
 
@@ -172,52 +180,60 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl h-[80vh] flex flex-col p-0">
+        <DialogHeader className="p-6 pb-4">
           <DialogTitle className="flex items-center gap-2">
             <Bell size={20} />
             Price Alerts & Notifications
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="alerts" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="alerts">Alerts</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
+        <div className="flex-1 min-h-0 px-6">
+          <Tabs defaultValue="alerts" className="h-full flex flex-col">
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="alerts">Alerts</TabsTrigger>
+              <TabsTrigger value="settings">Settings</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="alerts" className="space-y-4">
-            {/* Add New Alert */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Plus size={18} />
-                  Create New Alert
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div>
-                    <Label htmlFor="symbol">Symbol</Label>
-                    <Input
-                      id="symbol"
-                      placeholder="AAPL"
-                      value={newAlert.symbol}
-                      onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="type">Alert Type</Label>
-                    <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="price_above">Price Above</SelectItem>
-                        <SelectItem value="price_below">Price Below</SelectItem>
-                        <SelectItem value="volume_spike">Volume Spike</SelectItem>
-                        <SelectItem value="breakout">Breakout Pattern</SelectItem>
+            <div className="flex-1 min-h-0">
+              <TabsContent value="alerts" className="h-full mt-0">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                  {/* Add New Alert */}
+                  <Card className="h-fit">
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Plus size={18} />
+                        Create New Alert
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-1 gap-4">
+                        <div>
+                          <Label htmlFor="symbol">Symbol</Label>
+                          <Input
+                            id="symbol"
+                            placeholder="AAPL"
+                            value={newAlert.symbol}
+                            onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
+                          />
+                        </div>
+                        
+                        <div>
+                          <Label htmlFor="type">Alert Type</Label>
+                          <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="price_above">Price Above</SelectItem>
+                              <SelectItem value="price_below">Price Below</SelectItem>
+                              <SelectItem value="volume_spike">Volume Spike</SelectItem>
+                              <SelectItem value="breakout">Breakout Pattern</SelectItem>
+                              <SelectItem value="pattern_recognition">Pattern Recognition</SelectItem>
+                              <SelectItem value="ai_signal">AI Signal</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </SelectContent>
                     </Select>
                   </div>
@@ -246,25 +262,27 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
               </CardContent>
             </Card>
 
-            {/* Active Alerts */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-lg">Active Alerts ({alerts.length})</CardTitle>
-                {alerts.some(a => a.triggered) && (
-                  <Button variant="outline" size="sm" onClick={handleClearTriggered}>
-                    Clear Triggered
-                  </Button>
-                )}
-              </CardHeader>
-              <CardContent>
-                {alerts.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <AlertTriangle size={48} className="mx-auto mb-4 opacity-50" />
-                    <p>No alerts configured</p>
-                    <p className="text-sm">Create your first alert above</p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
+                  {/* Active Alerts */}
+                  <div className="flex flex-col min-h-0">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold">Active Alerts ({alerts.length})</h3>
+                      {alerts.some(a => a.triggered) && (
+                        <Button variant="outline" size="sm" onClick={handleClearTriggered}>
+                          Clear Triggered
+                        </Button>
+                      )}
+                    </div>
+                    
+                    <div className="flex-1 min-h-0 border rounded-lg overflow-hidden">
+                      <ScrollArea className="h-full">
+                        {alerts.length === 0 ? (
+                          <div className="text-center py-8 text-muted-foreground">
+                            <AlertTriangle size={48} className="mx-auto mb-4 opacity-50" />
+                            <p>No alerts configured</p>
+                            <p className="text-sm">Create your first alert</p>
+                          </div>
+                        ) : (
+                          <div className="p-4 space-y-2">
                     {alerts.map(alert => (
                       <div 
                         key={alert.id}
@@ -321,21 +339,21 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                           >
                             <Trash2 size={14} />
                           </Button>
-                        </div>
-                      </div>
-                    ))}
+                          )}
+                        )}
+                      </ScrollArea>
+                    </div>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
+                </div>
+              </TabsContent>
 
-          <TabsContent value="settings" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Notification Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
+              <TabsContent value="settings" className="h-full mt-0">
+                <ScrollArea className="h-full">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Notification Settings</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="enabled">Enable Notifications</Label>
@@ -416,10 +434,15 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                     disabled={!settings.enabled}
                   />
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+                      </CardContent>
+                    </Card>
+                  </ScrollArea>
+                </TabsContent>
+              </div>
+            </div>
+          </Tabs>
+        </div>
+        <div className="p-6"></div>
       </DialogContent>
     </Dialog>
   );

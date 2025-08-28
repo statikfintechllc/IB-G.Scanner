@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { X, BarChart } from '@phosphor-icons/react';
+import { X, BarChart, Brain } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { Tab, Stock } from '@/types';
 import { TabSelector } from './TabSelector';
@@ -52,6 +52,8 @@ export function TabSystem({
               <div className="flex items-center gap-2 min-w-0">
                 {tab.type === 'scanner' ? (
                   <BarChart size={16} className="text-muted-foreground flex-shrink-0" />
+                ) : tab.type === 'ai_picks' ? (
+                  <Brain size={16} className="text-primary flex-shrink-0" />
                 ) : (
                   <div className="w-2 h-2 bg-accent rounded-full flex-shrink-0" />
                 )}
@@ -60,7 +62,7 @@ export function TabSystem({
                 </span>
               </div>
               
-              {tab.type !== 'scanner' && (
+              {tab.type !== 'scanner' && tab.type !== 'ai_picks' && (
                 <Button
                   size="sm"
                   variant="ghost"

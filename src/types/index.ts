@@ -32,7 +32,7 @@ export interface ScannerFilters {
 
 export interface Tab {
   id: string;
-  type: 'scanner' | 'chart';
+  type: 'scanner' | 'chart' | 'ai_picks';
   title: string;
   symbol?: string;
 }
@@ -61,12 +61,14 @@ export interface ChartData {
 export interface PriceAlert {
   id: string;
   symbol: string;
-  type: 'price_above' | 'price_below' | 'volume_spike' | 'breakout';
+  type: 'price_above' | 'price_below' | 'volume_spike' | 'breakout' | 'pattern_recognition' | 'ai_signal';
   value: number;
   enabled: boolean;
   triggered: boolean;
   createdAt: Date;
   message?: string;
+  pattern?: PatternAnalysis;
+  confidence?: number;
 }
 
 export interface IBKRConnection {
@@ -130,4 +132,47 @@ export interface MarketPattern {
   indicators: string[];
   conditions: Record<string, any>;
   accuracy: number;
+}
+
+export interface AIRecommendation {
+  id: string;
+  symbol: string;
+  type: 'buy' | 'sell' | 'watch' | 'strong_buy';
+  confidence: number;
+  reasoning: string[];
+  patterns: PatternAnalysis[];
+  priceTarget: number;
+  stopLoss: number;
+  timeframe: string;
+  risk: 'low' | 'medium' | 'high';
+  createdAt: Date;
+  aiScore: number;
+  technicalScore: number;
+  fundamentalScore: number;
+}
+
+export interface AIMarketScan {
+  id: string;
+  timestamp: Date;
+  scanType: 'momentum' | 'breakout' | 'value' | 'pattern' | 'full_spectrum';
+  recommendations: AIRecommendation[];
+  marketSentiment: 'bullish' | 'bearish' | 'neutral';
+  volumeAnalysis: {
+    unusualVolume: Stock[];
+    volumeLeaders: Stock[];
+  };
+  patternMatches: {
+    stock: Stock;
+    patterns: PatternAnalysis[];
+  }[];
+}
+
+export interface RealTimePattern {
+  symbol: string;
+  pattern: PatternAnalysis;
+  timestamp: Date;
+  price: number;
+  volume: number;
+  strength: number;
+  actionable: boolean;
 }

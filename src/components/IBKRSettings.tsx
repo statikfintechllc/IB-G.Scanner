@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Settings, Wifi, WifiOff, AlertTriangle, CheckCircle, XCircle } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
@@ -121,7 +122,7 @@ export function IBKRSettings() {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Settings size={20} />
@@ -129,7 +130,8 @@ export function IBKRSettings() {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <ScrollArea className="flex-1">
+          <div className="space-y-6 p-1">
           {/* Connection Status */}
           <Card>
             <CardHeader>
@@ -307,7 +309,8 @@ export function IBKRSettings() {
               </div>
             </CardContent>
           </Card>
-        </div>
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );

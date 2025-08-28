@@ -13,6 +13,7 @@ import { StockChart } from '@/components/StockChart';
 import { AlertsManager } from '@/components/AlertsManager';
 import { IBKRSettings } from '@/components/IBKRSettings';
 import { AISearch } from '@/components/AISearch';
+import { AITopPicks } from '@/components/AITopPicks';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -35,9 +36,10 @@ function App() {
   const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
   const [filters, setFilters] = useKV<ScannerFilters>('scanner-filters', DEFAULT_FILTERS);
   const [tabs, setTabs] = useKV<Tab[]>('scanner-tabs', [
+    { id: 'ai_picks', type: 'ai_picks', title: 'AI Top Picks' },
     { id: 'scanner', type: 'scanner', title: 'Scanner' }
   ]);
-  const [activeTabId, setActiveTabId] = useKV<string>('active-tab', 'scanner');
+  const [activeTabId, setActiveTabId] = useKV<string>('active-tab', 'ai_picks');
 
   // Initialize data
   useEffect(() => {
@@ -131,14 +133,14 @@ function App() {
   };
 
   const handleTabClose = (tabId: string) => {
-    if (tabId === 'scanner') return; // Can't close scanner tab
+    if (tabId === 'scanner' || tabId === 'ai_picks') return; // Can't close scanner or AI picks tabs
 
     setTabs(prevTabs => {
       const newTabs = prevTabs.filter(tab => tab.id !== tabId);
       
-      // If we closed the active tab, switch to scanner
+      // If we closed the active tab, switch to AI picks
       if (activeTabId === tabId) {
-        setActiveTabId('scanner');
+        setActiveTabId('ai_picks');
       }
       
       return newTabs;
@@ -189,7 +191,9 @@ function App() {
 
       {/* Content */}
       <div className="flex-1 overflow-hidden">
-        {activeTab?.type === 'scanner' ? (
+        {activeTab?.type === 'ai_picks' ? (
+          <AITopPicks stocks={filteredStocks} onStockSelect={handleStockSelect} />
+        ) : activeTab?.type === 'scanner' ? (
           <div className="h-full flex flex-col">
             <div className="p-6 pb-4 flex-shrink-0">
               <FilterPanel 
