@@ -104,7 +104,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-[95vw] w-[1600px] h-[90vh] flex flex-col">
+      <DialogContent className="max-w-[98vw] w-[3200px] h-[90vh] flex flex-col">
         <DialogHeader className="flex-shrink-0 pb-4">
           <DialogTitle className="flex items-center gap-2 text-xl">
             <Brain size={24} />
@@ -139,9 +139,9 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1 grid grid-cols-12 gap-6 min-h-0">
-            {/* Search Results - Larger area */}
-            <div className="col-span-8 flex flex-col min-h-0">
+          <div className="flex-1 flex gap-6 min-h-0">
+            {/* Search Results - Left half */}
+            <div className="flex-1 flex flex-col min-h-0">
               <div className="flex-shrink-0 mb-4">
                 <h3 className="text-xl font-semibold flex items-center gap-3">
                   <Target size={24} />
@@ -223,76 +223,85 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
               </div>
             </div>
 
-            {/* Sidebar - Better organized */}
-            <div className="col-span-4 flex flex-col gap-4 min-h-0">
-              {/* Search Suggestions - Fixed height */}
-              <Card className="flex-shrink-0">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Lightbulb size={18} />
-                    Quick Suggestions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <div className="h-40 overflow-y-auto custom-scrollbar">
-                    <div className="space-y-2">
-                      {suggestions.map((suggestion, index) => (
-                        <Button
-                          key={index}
-                          variant="ghost"
-                          size="sm"
-                          className="w-full justify-start text-sm h-auto py-3 px-3 text-left whitespace-normal"
-                          onClick={() => handleSuggestionClick(suggestion)}
-                        >
-                          <span className="break-words leading-relaxed">{suggestion}</span>
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Market Insights - Flexible height */}
-              <Card className="flex-1 min-h-0">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <TrendingUp size={18} />
-                    Market Insights
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 pt-0 flex flex-col min-h-0">
-                  <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
-                    <div className="space-y-3">
-                      {insights.map((insight, index) => (
-                        <div key={index} className="text-sm text-muted-foreground p-3 bg-muted/20 rounded-md break-words leading-relaxed">
-                          {insight}
+            {/* Right half - Suggestions and Insights side by side */}
+            <div className="flex-1 flex flex-col gap-4 min-h-0">
+              {/* Top Row - Suggestions and Insights side by side */}
+              <div className="flex gap-4 flex-1 min-h-0">
+                {/* Search Suggestions - Left */}
+                <div className="flex-1 flex flex-col min-h-0">
+                  <Card className="flex-1 flex flex-col min-h-0">
+                    <CardHeader className="pb-3 flex-shrink-0">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Lightbulb size={20} />
+                        Quick Suggestions
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0 flex-1 flex flex-col min-h-0">
+                      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+                        <div className="space-y-3">
+                          {suggestions.map((suggestion, index) => (
+                            <Button
+                              key={index}
+                              variant="ghost"
+                              size="sm"
+                              className="w-full justify-start text-sm h-auto py-4 px-4 text-left"
+                              onClick={() => handleSuggestionClick(suggestion)}
+                            >
+                              <span className="whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed">
+                                {suggestion}
+                              </span>
+                            </Button>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
 
-              {/* Search History - Fixed height */}
+                {/* Market Insights - Right */}
+                <div className="flex-1 flex flex-col min-h-0">
+                  <Card className="flex-1 flex flex-col min-h-0">
+                    <CardHeader className="pb-3 flex-shrink-0">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <TrendingUp size={20} />
+                        Market Insights
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-0 flex-1 flex flex-col min-h-0">
+                      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+                        <div className="space-y-4">
+                          {insights.map((insight, index) => (
+                            <div key={index} className="text-sm text-muted-foreground p-4 bg-muted/20 rounded-md whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed">
+                              {insight}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Search History - Bottom */}
               <Card className="flex-shrink-0">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <History size={18} />
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <History size={20} />
                     Recent Searches
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4 pt-0">
-                  <div className="h-32 overflow-y-auto custom-scrollbar">
-                    <div className="space-y-2">
+                  <div className="h-40 overflow-y-auto custom-scrollbar">
+                    <div className="space-y-3">
                       {searchHistory.slice(0, 5).map((search, index) => (
                         <Button
                           key={index}
                           variant="ghost"
                           size="sm"
-                          className="w-full justify-start text-sm h-auto py-2 px-3 whitespace-normal"
+                          className="w-full justify-start text-sm h-auto py-3 px-4"
                           onClick={() => handleSuggestionClick(search.query)}
                         >
-                          <div className="break-words leading-relaxed">
+                          <div className="whitespace-nowrap overflow-hidden text-ellipsis leading-relaxed">
                             <span>{search.query}</span>
                             <span className="text-muted-foreground ml-2">
                               ({search.results.length})
