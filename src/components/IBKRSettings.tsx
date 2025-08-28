@@ -122,16 +122,17 @@ export function IBKRSettings() {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2">
             <Settings size={20} />
             IBKR TWS Connection Settings
           </DialogTitle>
         </DialogHeader>
 
-        <ScrollArea className="flex-1">
-          <div className="space-y-6 p-1">
+        <div className="flex-1 min-h-0">
+          <ScrollArea className="h-full">
+            <div className="space-y-6 p-4">
           {/* Connection Status */}
           <Card>
             <CardHeader>
@@ -309,8 +310,9 @@ export function IBKRSettings() {
               </div>
             </CardContent>
           </Card>
-          </div>
-        </ScrollArea>
+            </div>
+          </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );
