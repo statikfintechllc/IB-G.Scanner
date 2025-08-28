@@ -13,7 +13,13 @@ export const ErrorFallback = ({ error, resetErrorBoundary }: ErrorFallbackProps)
   if (import.meta.env.DEV) throw error;
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div 
+      className="min-h-screen bg-background text-foreground flex items-center justify-center p-4"
+      style={{
+        backgroundColor: 'oklch(0.08 0.012 240.5)',
+        color: 'oklch(0.976 0.004 240.5)'
+      }}
+    >
       <div className="w-full max-w-md">
         <Alert variant="destructive" className="mb-6">
           <WarningTriangle />

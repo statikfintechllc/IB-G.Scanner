@@ -6,15 +6,23 @@
     @apply border-border;
   }
   
+  html {
+    background-color: oklch(0.08 0.012 240.5) !important; /* Force dark background */
+    color: oklch(0.976 0.004 240.5) !important;
+  }
+  
   body {
     @apply bg-background text-foreground !important;
     background-color: var(--background) !important;
     color: var(--foreground) !important;
+    margin: 0;
+    padding: 0;
   }
   
   #root {
     @apply bg-background text-foreground;
     min-height: 100vh;
+    background-color: var(--background) !important;
   }
 }
 
