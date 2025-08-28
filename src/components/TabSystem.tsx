@@ -2,13 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Plus, BarChart } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
-
-export interface Tab {
-  id: string;
-  type: 'scanner' | 'chart';
-  title: string;
-  symbol?: string;
-}
+import { Tab } from '@/types';
 
 interface TabSystemProps {
   tabs: Tab[];
@@ -88,3 +82,5 @@ export function TabSystem({
     </div>
   );
 }
+
+export type { Tab };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stock, ScannerFilters } from '@/types';
+import { Stock, ScannerFilters, Tab } from '@/types';
 import { generateMockData, updateStockPrices } from '@/lib/mockData';
 import { getMarketHours } from '@/lib/market';
 import { alertService } from '@/lib/alerts';
@@ -8,7 +8,7 @@ import { useKV } from '@github/spark/hooks';
 import { ScannerTable } from '@/components/ScannerTable';
 import { FilterPanel } from '@/components/FilterPanel';
 import { MarketStatus } from '@/components/MarketStatus';
-import { TabSystem, Tab } from '@/components/TabSystem';
+import { TabSystem } from '@/components/TabSystem';
 import { StockChart } from '@/components/StockChart';
 import { AlertsManager } from '@/components/AlertsManager';
 import { IBKRSettings } from '@/components/IBKRSettings';

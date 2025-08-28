@@ -30,6 +30,13 @@ export interface ScannerFilters {
   newsOnly: boolean;
 }
 
+export interface Tab {
+  id: string;
+  type: 'scanner' | 'chart';
+  title: string;
+  symbol?: string;
+}
+
 export interface ChartTimeframe {
   value: '1m' | '5m' | '15m' | '30m' | '1h' | '1d';
   label: string;
