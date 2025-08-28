@@ -121,7 +121,7 @@ export function IBKRSettings() {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="ibkr-dialog w-[75vw] max-w-[75vw] h-[70vh] overflow-hidden flex flex-col p-4 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      <DialogContent className="w-[75vw] max-w-[75vw] h-[70vh] overflow-hidden flex flex-col p-4">
         <DialogHeader className="flex-shrink-0 pb-3">
           <DialogTitle className="text-base flex items-center gap-2">
             <Settings size={16} />
