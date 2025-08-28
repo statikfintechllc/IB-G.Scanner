@@ -190,7 +190,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="w-[75vw] max-w-[75vw] h-[65vh] flex flex-col p-4">
+      <DialogContent className="max-w-[90vw] w-[90vw] h-[75vh] flex flex-col p-4">
         <DialogHeader className="pb-3 flex-shrink-0">
           <DialogTitle className="text-sm flex items-center gap-2">
             <Bell size={14} />
