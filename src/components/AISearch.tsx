@@ -106,7 +106,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-[95vw] w-[3200px] h-[90vh] flex flex-col p-10">
+      <DialogContent className="max-w-[98vw] w-[4800px] h-[90vh] flex flex-col p-10">
         <DialogHeader className="flex-shrink-0 pb-4">
           <DialogTitle className="flex items-center gap-2 text-lg">
             <Brain size={20} />
