@@ -210,29 +210,29 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
                   {/* Add New Alert */}
                   <Card className="flex-shrink-0 h-fit">
-                    <CardHeader>
+                    <CardHeader className="pb-3">
                       <CardTitle className="text-lg flex items-center gap-2">
                         <Plus size={18} />
                         Create New Alert
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-4 px-4 pb-4">
                       <div className="grid grid-cols-1 gap-4">
                         <div>
-                          <Label htmlFor="symbol">Symbol</Label>
+                          <Label htmlFor="symbol" className="text-sm font-medium">Symbol</Label>
                           <Input
                             id="symbol"
                             placeholder="AAPL"
                             value={newAlert.symbol}
                             onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
-                            className="font-mono"
+                            className="font-mono mt-1"
                           />
                         </div>
                         
                         <div>
-                          <Label htmlFor="type">Alert Type</Label>
+                          <Label htmlFor="type" className="text-sm font-medium">Alert Type</Label>
                           <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
-                            <SelectTrigger>
+                            <SelectTrigger className="mt-1">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -247,7 +247,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                         </div>
                   
                         <div>
-                          <Label htmlFor="value">
+                          <Label htmlFor="value" className="text-sm font-medium">
                             {newAlert.type === 'volume_spike' ? 'Average Volume' : newAlert.type === 'breakout' ? 'Sensitivity' : 'Price'}
                           </Label>
                           <Input
@@ -257,10 +257,11 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                             placeholder={newAlert.type === 'volume_spike' ? '1000000' : newAlert.type === 'breakout' ? '1' : '1.0000'}
                             value={newAlert.value || ''}
                             onChange={(e) => setNewAlert(prev => ({ ...prev, value: parseFloat(e.target.value) || 0 }))}
+                            className="mt-1"
                           />
                         </div>
                   
-                        <div className="flex items-end">
+                        <div className="pt-2">
                           <Button onClick={handleAddAlert} className="w-full">
                             <Plus size={16} className="mr-2" />
                             Add Alert
@@ -284,9 +285,9 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                     <div className="flex-1 min-h-0 border border-border rounded-lg overflow-hidden">
                       <div className="h-full overflow-y-auto custom-scrollbar">
                         {alerts.length === 0 ? (
-                          <div className="text-center py-8 text-muted-foreground h-full flex flex-col items-center justify-center">
+                          <div className="text-center py-8 text-muted-foreground h-full flex flex-col items-center justify-center px-4">
                             <AlertTriangle size={48} className="mx-auto mb-4 opacity-50" />
-                            <p>No alerts configured</p>
+                            <p className="text-base">No alerts configured</p>
                             <p className="text-sm">Create your first alert</p>
                           </div>
                         ) : (
@@ -309,7 +310,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                                   
                                   <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 flex-wrap">
-                                      <span className="font-mono font-semibold">{alert.symbol}</span>
+                                      <span className="font-mono font-semibold text-sm">{alert.symbol}</span>
                                       <Badge variant="outline" className="text-xs">
                                         {getAlertTypeLabel(alert.type)}
                                       </Badge>

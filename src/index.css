@@ -5,40 +5,54 @@
   * {
     @apply border-border;
   }
+  
+  body {
+    @apply bg-background text-foreground !important;
+    background-color: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+  
+  #root {
+    @apply bg-background text-foreground;
+    min-height: 100vh;
+  }
 }
 
-:root {
-  /* Financial App Dark Theme */
-  --background: oklch(0.08 0.012 240.5); /* #0F172A */
-  --foreground: oklch(0.976 0.004 240.5); /* #F8FAFC */
+/* Force dark financial theme - override all conflicts */
+:root,
+:root.dark,
+.dark {
+  /* Financial App Dark Theme - Override any conflicting definitions */
+  --background: oklch(0.08 0.012 240.5) !important; /* #0F172A */
+  --foreground: oklch(0.976 0.004 240.5) !important; /* #F8FAFC */
   
-  --card: oklch(0.12 0.015 240.5); /* #1E293B */
-  --card-foreground: oklch(0.976 0.004 240.5); /* #F8FAFC */
-  --popover: oklch(0.12 0.015 240.5);
-  --popover-foreground: oklch(0.976 0.004 240.5);
+  --card: oklch(0.12 0.015 240.5) !important; /* #1E293B */
+  --card-foreground: oklch(0.976 0.004 240.5) !important; /* #F8FAFC */
+  --popover: oklch(0.12 0.015 240.5) !important;
+  --popover-foreground: oklch(0.976 0.004 240.5) !important;
   
-  --primary: oklch(0.4 0.177 258.9); /* #1E3A8A */
-  --primary-foreground: oklch(1 0 0); /* #FFFFFF */
-  --secondary: oklch(0.25 0.015 240.5); /* #374151 */
-  --secondary-foreground: oklch(0.976 0.004 240.5);
+  --primary: oklch(0.4 0.177 258.9) !important; /* #1E3A8A */
+  --primary-foreground: oklch(1 0 0) !important; /* #FFFFFF */
+  --secondary: oklch(0.25 0.015 240.5) !important; /* #374151 */
+  --secondary-foreground: oklch(0.976 0.004 240.5) !important;
   
-  --muted: oklch(0.18 0.015 240.5);
-  --muted-foreground: oklch(0.55 0.015 240.5); /* #6B7280 */
+  --muted: oklch(0.18 0.015 240.5) !important;
+  --muted-foreground: oklch(0.55 0.015 240.5) !important; /* #6B7280 */
   
-  --accent: oklch(0.6 0.15 258.9); /* #3B82F6 */
-  --accent-foreground: oklch(1 0 0);
+  --accent: oklch(0.6 0.15 258.9) !important; /* #3B82F6 */
+  --accent-foreground: oklch(1 0 0) !important;
   
-  --destructive: oklch(0.55 0.22 27.33); /* #DC2626 */
-  --destructive-foreground: oklch(1 0 0);
+  --destructive: oklch(0.55 0.22 27.33) !important; /* #DC2626 */
+  --destructive-foreground: oklch(1 0 0) !important;
   
-  --success: oklch(0.5 0.15 160); /* #059669 */
-  --success-foreground: oklch(1 0 0);
+  --success: oklch(0.5 0.15 160) !important; /* #059669 */
+  --success-foreground: oklch(1 0 0) !important;
   
-  --border: oklch(0.2 0.015 240.5);
-  --input: oklch(0.2 0.015 240.5);
-  --ring: oklch(0.6 0.15 258.9);
+  --border: oklch(0.2 0.015 240.5) !important;
+  --input: oklch(0.2 0.015 240.5) !important;
+  --ring: oklch(0.6 0.15 258.9) !important;
   
-  --radius: 0.5rem;
+  --radius: 0.5rem !important;
 }
 
 /* Market Hours Themes */
@@ -59,34 +73,34 @@
 }
 
 @theme {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-background: var(--background) !important;
+  --color-foreground: var(--foreground) !important;
+  --color-card: var(--card) !important;
+  --color-card-foreground: var(--card-foreground) !important;
+  --color-popover: var(--popover) !important;
+  --color-popover-foreground: var(--popover-foreground) !important;
+  --color-primary: var(--primary) !important;
+  --color-primary-foreground: var(--primary-foreground) !important;
+  --color-secondary: var(--secondary) !important;
+  --color-secondary-foreground: var(--secondary-foreground) !important;
+  --color-muted: var(--muted) !important;
+  --color-muted-foreground: var(--muted-foreground) !important;
+  --color-accent: var(--accent) !important;
+  --color-accent-foreground: var(--accent-foreground) !important;
+  --color-destructive: var(--destructive) !important;
+  --color-destructive-foreground: var(--destructive-foreground) !important;
+  --color-success: var(--success) !important;
+  --color-success-foreground: var(--success-foreground) !important;
+  --color-border: var(--border) !important;
+  --color-input: var(--input) !important;
+  --color-ring: var(--ring) !important;
 
-  --radius-sm: calc(var(--radius) * 0.5);
-  --radius-md: var(--radius);
-  --radius-lg: calc(var(--radius) * 1.5);
-  --radius-xl: calc(var(--radius) * 2);
-  --radius-2xl: calc(var(--radius) * 3);
-  --radius-full: 9999px;
+  --radius-sm: calc(var(--radius) * 0.5) !important;
+  --radius-md: var(--radius) !important;
+  --radius-lg: calc(var(--radius) * 1.5) !important;
+  --radius-xl: calc(var(--radius) * 2) !important;
+  --radius-2xl: calc(var(--radius) * 3) !important;
+  --radius-full: 9999px !important;
 }
 
 /* Custom utility classes */
@@ -102,31 +116,40 @@
   background: linear-gradient(135deg, var(--market-tint) 0%, transparent 100%);
 }
 
-/* Custom scrollbar styling */
+/* Custom scrollbar styling - blends with UI */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: var(--muted) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
+  border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
-  transition: background-color 0.2s ease;
+  background: var(--muted);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--muted-foreground);
+  border-color: var(--border);
 }
 
 .custom-scrollbar::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+/* Ensure scrollbar doesn't affect layout */
+.custom-scrollbar {
+  overflow-x: hidden;
+  overflow-y: auto;
 }

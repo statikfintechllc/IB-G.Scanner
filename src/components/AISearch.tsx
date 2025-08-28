@@ -215,7 +215,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                   ) : (
                     <div className="p-8 text-center text-muted-foreground h-full flex flex-col items-center justify-center">
                       <Brain size={32} className="mx-auto mb-2 opacity-50" />
-                      <p>No search results yet</p>
+                      <p className="text-base">No search results yet</p>
                       <p className="text-xs">Try searching for patterns, sectors, or conditions</p>
                     </div>
                   )}
