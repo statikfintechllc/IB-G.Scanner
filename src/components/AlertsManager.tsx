@@ -362,100 +362,93 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
               </TabsContent>
 
               <TabsContent value="settings" className="h-full mt-0">
-                <div className="h-full overflow-y-auto custom-scrollbar">
-                  <Card className="h-fit">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-sm">Notification Settings</CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-3 pt-0">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-3">
-                          <h4 className="font-semibold text-sm">General Settings</h4>
-                          
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <Label htmlFor="enabled" className="text-xs">Enable Notifications</Label>
-                              <p className="text-xs text-muted-foreground">Master switch for all notifications</p>
-                            </div>
-                            <Switch
-                              id="enabled"
-                              checked={settings.enabled}
-                              onCheckedChange={(checked) => handleSettingsChange('enabled', checked)}
-                            />
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <Label htmlFor="sound" className="text-xs">Sound Notifications</Label>
-                              <p className="text-xs text-muted-foreground">Play sound when alerts trigger</p>
-                            </div>
-                            <Switch
-                              id="sound"
-                              checked={settings.sound}
-                              onCheckedChange={(checked) => handleSettingsChange('sound', checked)}
-                              disabled={!settings.enabled}
-                            />
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <Label htmlFor="desktop" className="text-xs">Desktop Notifications</Label>
-                              <p className="text-xs text-muted-foreground">Show browser notifications</p>
-                            </div>
-                            <Switch
-                              id="desktop"
-                              checked={settings.desktop}
-                              onCheckedChange={(checked) => handleSettingsChange('desktop', checked)}
-                              disabled={!settings.enabled}
-                            />
-                          </div>
+                <div className="h-full overflow-y-auto custom-scrollbar p-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm mb-2">General Settings</h4>
+                      
+                      <div className="flex items-center justify-between py-2 px-3 rounded-lg border bg-card/50">
+                        <div className="flex-1 min-w-0">
+                          <Label htmlFor="enabled" className="text-xs font-medium">Enable Notifications</Label>
+                          <p className="text-xs text-muted-foreground">Master switch for all notifications</p>
                         </div>
-
-                        <div className="space-y-3">
-                          <h4 className="font-semibold text-sm">Alert Types</h4>
-                          
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <Label htmlFor="priceAlerts" className="text-xs">Price Alerts</Label>
-                              <p className="text-xs text-muted-foreground">Enable price-based alerts</p>
-                            </div>
-                            <Switch
-                              id="priceAlerts"
-                              checked={settings.priceAlerts}
-                              onCheckedChange={(checked) => handleSettingsChange('priceAlerts', checked)}
-                              disabled={!settings.enabled}
-                            />
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <Label htmlFor="volumeAlerts" className="text-xs">Volume Alerts</Label>
-                              <p className="text-xs text-muted-foreground">Enable volume spike alerts</p>
-                            </div>
-                            <Switch
-                              id="volumeAlerts"
-                              checked={settings.volumeAlerts}
-                              onCheckedChange={(checked) => handleSettingsChange('volumeAlerts', checked)}
-                              disabled={!settings.enabled}
-                            />
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <Label htmlFor="newsAlerts" className="text-xs">News Alerts</Label>
-                              <p className="text-xs text-muted-foreground">Enable news-based alerts</p>
-                            </div>
-                            <Switch
-                              id="newsAlerts"
-                              checked={settings.newsAlerts}
-                              onCheckedChange={(checked) => handleSettingsChange('newsAlerts', checked)}
-                              disabled={!settings.enabled}
-                            />
-                          </div>
-                        </div>
+                        <Switch
+                          id="enabled"
+                          checked={settings.enabled}
+                          onCheckedChange={(checked) => handleSettingsChange('enabled', checked)}
+                        />
                       </div>
-                    </CardContent>
-                  </Card>
+
+                      <div className="flex items-center justify-between py-2 px-3 rounded-lg border bg-card/50">
+                        <div className="flex-1 min-w-0">
+                          <Label htmlFor="sound" className="text-xs font-medium">Sound Notifications</Label>
+                          <p className="text-xs text-muted-foreground">Play sound when alerts trigger</p>
+                        </div>
+                        <Switch
+                          id="sound"
+                          checked={settings.sound}
+                          onCheckedChange={(checked) => handleSettingsChange('sound', checked)}
+                          disabled={!settings.enabled}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between py-2 px-3 rounded-lg border bg-card/50">
+                        <div className="flex-1 min-w-0">
+                          <Label htmlFor="desktop" className="text-xs font-medium">Desktop Notifications</Label>
+                          <p className="text-xs text-muted-foreground">Show browser notifications</p>
+                        </div>
+                        <Switch
+                          id="desktop"
+                          checked={settings.desktop}
+                          onCheckedChange={(checked) => handleSettingsChange('desktop', checked)}
+                          disabled={!settings.enabled}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-sm mb-2">Alert Types</h4>
+                      
+                      <div className="flex items-center justify-between py-2 px-3 rounded-lg border bg-card/50">
+                        <div className="flex-1 min-w-0">
+                          <Label htmlFor="priceAlerts" className="text-xs font-medium">Price Alerts</Label>
+                          <p className="text-xs text-muted-foreground">Enable price-based alerts</p>
+                        </div>
+                        <Switch
+                          id="priceAlerts"
+                          checked={settings.priceAlerts}
+                          onCheckedChange={(checked) => handleSettingsChange('priceAlerts', checked)}
+                          disabled={!settings.enabled}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between py-2 px-3 rounded-lg border bg-card/50">
+                        <div className="flex-1 min-w-0">
+                          <Label htmlFor="volumeAlerts" className="text-xs font-medium">Volume Alerts</Label>
+                          <p className="text-xs text-muted-foreground">Enable volume spike alerts</p>
+                        </div>
+                        <Switch
+                          id="volumeAlerts"
+                          checked={settings.volumeAlerts}
+                          onCheckedChange={(checked) => handleSettingsChange('volumeAlerts', checked)}
+                          disabled={!settings.enabled}
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-between py-2 px-3 rounded-lg border bg-card/50">
+                        <div className="flex-1 min-w-0">
+                          <Label htmlFor="newsAlerts" className="text-xs font-medium">News Alerts</Label>
+                          <p className="text-xs text-muted-foreground">Enable news-based alerts</p>
+                        </div>
+                        <Switch
+                          id="newsAlerts"
+                          checked={settings.newsAlerts}
+                          onCheckedChange={(checked) => handleSettingsChange('newsAlerts', checked)}
+                          disabled={!settings.enabled}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </TabsContent>
             </div>
