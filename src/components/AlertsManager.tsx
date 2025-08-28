@@ -264,8 +264,8 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                         <Button onClick={handleAddAlert} className="text-xs h-7 px-3">
                           <Plus size={12} className="mr-1" />
                           Add Alert
-                  
-                        <Button onClick={handleAddAlert} className="text-sm h-9 w-full">
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
 
