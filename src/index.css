@@ -162,7 +162,7 @@
   overflow-y: auto;
 }
 
-/* Fix dialog overlay positioning and centering */
+/* FORCE CENTER ALL MODAL CONTENT - NUCLEAR OPTION */
 [data-radix-portal] {
   position: fixed !important;
   inset: 0 !important;
@@ -184,52 +184,52 @@
   pointer-events: auto !important;
 }
 
-/* Center ALL dialog content - override any positioning */
+/* ABSOLUTE CENTER EVERYTHING - NO EXCEPTIONS */
 [data-radix-dialog-content],
+[data-radix-popover-content],
 [role="dialog"],
-.dialog-content {
+.dialog-content,
+[data-radix-dropdown-menu-content],
+[data-radix-select-content] {
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
-  max-width: 90vw !important;
+  max-width: 70vw !important;
   max-height: 90vh !important;
   margin: 0 !important;
+  padding: 1rem !important;
   pointer-events: auto !important;
   z-index: 51 !important;
   right: auto !important;
   bottom: auto !important;
+  inset: auto !important;
 }
 
-/* Force popover content to center relative to viewport, not trigger */
-[data-radix-popover-content] {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  pointer-events: auto !important;
-  z-index: 52 !important;
-  right: auto !important;
-  bottom: auto !important;
-}
-
-/* Override any transform-origin that might affect centering */
-[data-radix-dialog-content],
-[data-radix-popover-content],
-[role="dialog"] {
-  transform-origin: center center !important;
-}
-
-/* Ensure all modal-type components center properly */
-[data-state="open"][role="dialog"],
-[data-state="open"][data-radix-dialog-content],
-.dialog-overlay > * {
+/* OVERRIDE ANY POSITIONING STYLES */
+[data-state="open"] {
   position: fixed !important;
   top: 50% !important;
   left: 50% !important;
   transform: translate(-50%, -50%) !important;
   right: auto !important;
   bottom: auto !important;
+  inset: auto !important;
+}
+
+/* NUCLEAR OVERRIDE FOR ALL MODAL ELEMENTS */
+div[role="dialog"],
+div[data-radix-dialog-content],
+div[data-radix-popover-content],
+div[data-radix-dropdown-menu-content] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  right: auto !important;
+  bottom: auto !important;
+  inset: auto !important;
+  margin: 0 !important;
 }
 
 /* Make dialog content more compact horizontally */
