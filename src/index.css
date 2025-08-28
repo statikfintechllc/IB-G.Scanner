@@ -162,29 +162,35 @@
   overflow-y: auto;
 }
 
-/* Center all dialogs and fix positioning */
-[data-radix-popper-content-wrapper],
-[data-state="open"][role="dialog"] {
+/* Fix dialog overlay positioning and centering */
+[data-radix-overlay] {
   position: fixed !important;
   inset: 0 !important;
   z-index: 50 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
 }
 
-/* Dialog content centering and sizing */
-[role="dialog"][data-state="open"] {
+/* Center dialog content within overlay */
+[data-radix-dialog-content] {
   position: relative !important;
-  max-width: 85vw !important;
-  width: 85vw !important;
+  max-width: 80vw !important;
+  width: auto !important;
   max-height: 85vh !important;
-  margin: auto !important;
+  margin: 0 !important;
   transform: none !important;
   top: auto !important;
   left: auto !important;
   right: auto !important;
   bottom: auto !important;
+}
+
+/* Fallback for any dialog elements */
+[role="dialog"] {
+  position: relative !important;
+  margin: 0 auto !important;
 }
 
 /* AI Search Dialog specific styling */
