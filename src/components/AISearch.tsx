@@ -104,7 +104,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-[98vw] w-[1600px] h-[90vh] flex flex-col">
+      <DialogContent className="max-w-[95vw] w-[1800px] h-[85vh] flex flex-col">
         <DialogHeader className="flex-shrink-0 pb-4">
           <DialogTitle className="flex items-center gap-2 text-xl">
             <Brain size={24} />
@@ -141,7 +141,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
           {/* Main Content Area - Two Column Layout */}
           <div className="flex-1 flex gap-8 min-h-0">
             {/* Left Column - Search Results */}
-            <div className="w-1/2 flex flex-col min-h-0">
+            <div className="w-3/5 flex flex-col min-h-0">
               <div className="flex-shrink-0 mb-4">
                 <h3 className="text-xl font-semibold flex items-center gap-3">
                   <Target size={24} />
@@ -224,7 +224,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
             </div>
 
             {/* Right Column - Recent Searches and Suggestions */}
-            <div className="w-1/2 flex flex-col gap-6 min-h-0">
+            <div className="w-2/5 flex flex-col gap-6 min-h-0">
               {/* Recent Searches - Top */}
               <div className="flex-1 min-h-0">
                 <div className="flex-shrink-0 mb-4">
@@ -265,7 +265,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
               </div>
 
               {/* Quick Suggestions and Market Insights - Side by side at bottom */}
-              <div className="flex gap-4 h-80 flex-shrink-0">
+              <div className="flex gap-6 h-80 flex-shrink-0">
                 {/* Quick Suggestions */}
                 <div className="flex-1 flex flex-col min-h-0">
                   <div className="flex-shrink-0 mb-3">
@@ -285,7 +285,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                             className="w-full justify-start text-sm h-auto py-3 px-3 text-left rounded-md"
                             onClick={() => handleSuggestionClick(suggestion)}
                           >
-                            <span className="leading-relaxed">{suggestion}</span>
+                            <span className="leading-relaxed whitespace-normal">{suggestion}</span>
                           </Button>
                         ))}
                       </div>
@@ -305,7 +305,7 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                     <div className="h-full overflow-y-auto custom-scrollbar p-4">
                       <div className="space-y-3">
                         {insights.map((insight, index) => (
-                          <div key={index} className="text-sm text-muted-foreground p-3 bg-muted/20 rounded-md leading-relaxed">
+                          <div key={index} className="text-sm text-muted-foreground p-3 bg-muted/20 rounded-md leading-relaxed whitespace-normal">
                             {insight}
                           </div>
                         ))}
