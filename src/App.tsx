@@ -33,13 +33,26 @@ function App() {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
   const [filters, setFilters] = useKV<ScannerFilters>('scanner-filters', DEFAULT_FILTERS);
-  const [tabs, setTabs] = useKV<Tab[]>('scanner-tabs', [
+  const [tabs, setTabs] = useKV<Tab[]>('scanner-tabs-v2', [
     { id: 'sfti_top10', type: 'sfti_top10', title: 'SFTi Top 10' },
     { id: 'scanner', type: 'scanner', title: 'Scanner' }
   ]);
-  const [activeTabId, setActiveTabId] = useKV<string>('active-tab', 'sfti_top10');
+  const [activeTabId, setActiveTabId] = useKV<string>('active-tab-v2', 'sfti_top10');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Ensure tabs are properly initialized
+  useEffect(() => {
+    const correctTabs = [
+      { id: 'sfti_top10', type: 'sfti_top10', title: 'SFTi Top 10' },
+      { id: 'scanner', type: 'scanner', title: 'Scanner' }
+    ];
+    
+    if (tabs.length !== 2 || !tabs.find(t => t.id === 'sfti_top10') || !tabs.find(t => t.id === 'scanner')) {
+      console.log('Resetting tabs to correct order');
+      setTabs(correctTabs);
+    }
+  }, []);
 
   // Initialize IBKR connection and data
   useEffect(() => {

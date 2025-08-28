@@ -27,6 +27,9 @@ export function TabSystem({
 }: TabSystemProps) {
   const [draggedTab, setDraggedTab] = useState<string | null>(null);
 
+  // Debug: Log tabs to console
+  console.log('TabSystem rendering tabs:', tabs);
+
   const handleTabClose = (e: React.MouseEvent, tabId: string) => {
     e.stopPropagation();
     onTabClose(tabId);
