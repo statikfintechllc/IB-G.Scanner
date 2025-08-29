@@ -207,16 +207,19 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
 
             <div className="flex-1 min-h-0 overflow-hidden">
               <TabsContent value="alerts" className="h-full mt-0 overflow-hidden">
-                <div className="h-full flex flex-col gap-3">
+                <div className="h-full flex flex-col gap-2">
+                  {/* New Alert Label */}
+                  <div className="flex-shrink-0">
+                    <div className="text-xs font-medium text-muted-foreground flex items-center gap-1 mb-1">
+                      <Plus size={12} />
+                      New Alert
+                    </div>
+                  </div>
+
                   {/* Create New Alert - Compressed */}
                   <Card className="flex-shrink-0">
                     <CardContent className="p-3">
                       <div className="flex gap-2 items-center flex-wrap">
-                        <div className="text-xs font-medium text-muted-foreground flex items-center gap-1 mr-1">
-                          <Plus size={12} />
-                          New Alert
-                        </div>
-                        
                         <div className="flex-1 min-w-[70px]">
                           <Input
                             placeholder="AAPL"
@@ -262,7 +265,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                   </Card>
 
                   {/* Active Alerts - Dynamically Expanding */}
-                  <div className="flex-1 min-h-0 flex flex-col">
+                  <div className="flex-1 min-h-0 flex flex-col mt-1">
                     <div className="flex items-center justify-between mb-2 flex-shrink-0">
                       <h3 className="text-sm font-semibold">Active Alerts ({alerts.length})</h3>
                       {alerts.some(a => a.triggered) && (
