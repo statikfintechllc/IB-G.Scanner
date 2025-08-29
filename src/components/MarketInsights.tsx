@@ -50,27 +50,28 @@ export function MarketInsights({ stocks }: MarketInsightsProps) {
       </DialogTrigger>
       
       <DialogContent className="max-w-[800px] w-[800px] h-[600px] flex flex-col p-4">
-        <DialogHeader className="flex-shrink-0 pb-3">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="flex items-center gap-2 text-sm">
-              <TrendingUp size={16} />
-              Market Insights & Analysis
-            </DialogTitle>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={refreshInsights}
-              disabled={isLoading}
-              className="text-xs"
-            >
-              {isLoading ? (
-                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary" />
-              ) : (
-                'Refresh'
-              )}
-            </Button>
-          </div>
+        <DialogHeader className="flex-shrink-0 pb-2">
+          <DialogTitle className="flex items-center gap-2 text-sm">
+            <TrendingUp size={16} />
+            Market Insights & Analysis
+          </DialogTitle>
         </DialogHeader>
+        
+        <div className="flex-shrink-0 pb-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={refreshInsights}
+            disabled={isLoading}
+            className="text-xs"
+          >
+            {isLoading ? (
+              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary" />
+            ) : (
+              'Refresh'
+            )}
+          </Button>
+        </div>
 
         <div className="flex-1 min-h-0">
           <div className="h-full border border-border rounded-lg overflow-hidden bg-card/30">
