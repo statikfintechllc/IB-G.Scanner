@@ -108,14 +108,14 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
         <CollapsibleTrigger asChild>
           <Button 
             variant="ghost" 
-            className="w-full justify-between p-3 h-auto font-medium"
+            className="w-full justify-between px-3 py-2 h-8 font-medium"
           >
             <div className="flex items-center gap-2">
-              <Filter size={16} />
-              Scanner Filters
+              <Filter size={14} />
+              <span className="text-sm">Scanner Filters</span>
             </div>
             <ChevronDown 
-              size={16} 
+              size={14} 
               className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
             />
           </Button>
