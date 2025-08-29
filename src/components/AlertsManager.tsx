@@ -190,45 +190,45 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-[90vw] w-[90vw] h-[75vh] flex flex-col p-4">
-        <DialogHeader className="pb-3 flex-shrink-0">
-          <DialogTitle className="text-sm flex items-center gap-2">
-            <Bell size={14} />
+      <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-[90vw] translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg h-[80vh] flex flex-col">
+        <DialogHeader className="pb-2 flex-shrink-0">
+          <DialogTitle className="text-base flex items-center gap-2">
+            <Bell size={16} />
             Price Alerts & Notifications
           </DialogTitle>
         </DialogHeader>
 
         <div className="flex-1 min-h-0">
           <Tabs defaultValue="alerts" className="h-full flex flex-col">
-            <TabsList className="grid w-full grid-cols-2 mb-3 flex-shrink-0 h-8">
+            <TabsList className="grid w-full grid-cols-2 mb-3 flex-shrink-0 h-9">
               <TabsTrigger value="alerts" className="text-sm">Alerts</TabsTrigger>
               <TabsTrigger value="settings" className="text-sm">Settings</TabsTrigger>
             </TabsList>
 
             <div className="flex-1 min-h-0 overflow-hidden">
               <TabsContent value="alerts" className="h-full mt-0 overflow-hidden">
-                <div className="h-full max-h-full overflow-hidden flex flex-col gap-2">
-                  {/* Create New Alert - Ultra Compact */}
+                <div className="h-full flex flex-col gap-3">
+                  {/* Create New Alert - Compressed */}
                   <Card className="flex-shrink-0">
-                    <CardContent className="p-2">
+                    <CardContent className="p-3">
                       <div className="flex gap-2 items-center flex-wrap">
-                        <div className="text-xs font-semibold text-muted-foreground flex items-center gap-1 mr-1">
+                        <div className="text-xs font-medium text-muted-foreground flex items-center gap-1 mr-1">
                           <Plus size={12} />
-                          Create New Alert
+                          New Alert
                         </div>
                         
-                        <div className="flex-1 min-w-[80px]">
+                        <div className="flex-1 min-w-[70px]">
                           <Input
                             placeholder="AAPL"
                             value={newAlert.symbol}
                             onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
-                            className="font-mono text-xs h-6 px-2"
+                            className="font-mono text-xs h-7 px-2"
                           />
                         </div>
                         
-                        <div className="flex-1 min-w-[100px]">
+                        <div className="flex-1 min-w-[90px]">
                           <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
-                            <SelectTrigger className="text-xs h-6 px-2">
+                            <SelectTrigger className="text-xs h-7 px-2">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -242,18 +242,18 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                           </Select>
                         </div>
                   
-                        <div className="flex-1 min-w-[80px]">
+                        <div className="flex-1 min-w-[70px]">
                           <Input
                             type="number"
                             step={newAlert.type.includes('price') ? '0.0001' : '1000'}
                             placeholder={newAlert.type === 'volume_spike' ? '1000000' : newAlert.type === 'breakout' ? '1' : '1.0000'}
                             value={newAlert.value || ''}
                             onChange={(e) => setNewAlert(prev => ({ ...prev, value: parseFloat(e.target.value) || 0 }))}
-                            className="text-xs h-6 px-2"
+                            className="text-xs h-7 px-2"
                           />
                         </div>
                   
-                        <Button onClick={handleAddAlert} className="text-xs h-6 px-3">
+                        <Button onClick={handleAddAlert} className="text-xs h-7 px-3">
                           <Plus size={12} className="mr-1" />
                           Add
                         </Button>
@@ -261,56 +261,56 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                     </CardContent>
                   </Card>
 
-                  {/* Active Alerts - Takes much more space */}
-                  <div className="flex-1 min-h-0 overflow-hidden flex flex-col" style={{ minHeight: '400px' }}>
+                  {/* Active Alerts - Dynamically Expanding */}
+                  <div className="flex-1 min-h-0 flex flex-col">
                     <div className="flex items-center justify-between mb-2 flex-shrink-0">
                       <h3 className="text-sm font-semibold">Active Alerts ({alerts.length})</h3>
                       {alerts.some(a => a.triggered) && (
-                        <Button variant="outline" size="sm" onClick={handleClearTriggered} className="text-sm h-7 px-3">
+                        <Button variant="outline" size="sm" onClick={handleClearTriggered} className="text-xs h-7 px-3">
                           Clear Triggered
                         </Button>
                       )}
                     </div>
                     
-                    <div className="flex-1 min-h-0 border border-border rounded-lg overflow-hidden bg-card/50">
-                      <div className="h-full overflow-y-auto custom-scrollbar">
+                    <div className="flex-1 min-h-0 border border-border rounded-lg bg-card/30 overflow-hidden">
+                      <div className="h-full overflow-y-auto custom-scrollbar p-2">
                         {alerts.length === 0 ? (
-                          <div className="text-center py-8 text-muted-foreground h-full flex flex-col items-center justify-center px-4">
-                            <AlertTriangle size={32} className="mx-auto mb-2 opacity-50" />
-                            <p className="text-sm">No alerts configured</p>
-                            <p className="text-sm opacity-75">Create your first alert above</p>
+                          <div className="text-center py-12 text-muted-foreground h-full flex flex-col items-center justify-center">
+                            <AlertTriangle size={40} className="mx-auto mb-3 opacity-50" />
+                            <p className="text-sm font-medium">No alerts configured</p>
+                            <p className="text-xs opacity-75 mt-1">Create your first alert above</p>
                           </div>
                         ) : (
-                          <div className="p-3 space-y-2">
+                          <div className="space-y-2">
                             {alerts.map(alert => (
                               <div 
                                 key={alert.id}
                                 className={cn(
-                                  "flex items-center justify-between p-3 rounded border text-sm",
-                                  alert.triggered ? "bg-destructive/10 border-destructive/50" : "bg-card"
+                                  "flex items-center justify-between p-3 rounded-md border text-sm transition-colors",
+                                  alert.triggered ? "bg-destructive/10 border-destructive/30" : "bg-card/80 hover:bg-card"
                                 )}
                               >
                                 <div className="flex items-center gap-3 flex-1 min-w-0">
                                   <div className={cn(
                                     "p-2 rounded-full flex-shrink-0",
-                                    alert.triggered ? "bg-destructive/20" : "bg-muted"
+                                    alert.triggered ? "bg-destructive/20 text-destructive" : "bg-muted text-muted-foreground"
                                   )}>
                                     {getAlertIcon(alert.type)}
                                   </div>
                                   
                                   <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 flex-wrap">
-                                      <span className="font-mono font-bold">{alert.symbol}</span>
-                                      <Badge variant="outline" className="text-xs h-4 px-2 py-0">
+                                      <span className="font-mono font-bold text-sm">{alert.symbol}</span>
+                                      <Badge variant="outline" className="text-xs h-5 px-2 py-0">
                                         {getAlertTypeLabel(alert.type)}
                                       </Badge>
-                                      <span className="text-muted-foreground">
+                                      <span className="text-muted-foreground text-sm">
                                         {formatAlertValue(alert.type, alert.value)}
                                       </span>
                                     </div>
                                     
                                     {alert.triggered && alert.message && (
-                                      <p className="text-destructive mt-1 truncate">{alert.message}</p>
+                                      <p className="text-destructive mt-1 text-xs truncate">{alert.message}</p>
                                     )}
                                   </div>
                                 </div>
@@ -327,7 +327,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                                       variant="outline" 
                                       size="sm"
                                       onClick={() => handleResetAlert(alert.id)}
-                                      className="text-sm h-7 px-2"
+                                      className="text-xs h-7 px-2"
                                     >
                                       Reset
                                     </Button>
@@ -353,15 +353,15 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
               </TabsContent>
 
               <TabsContent value="settings" className="h-full mt-0 overflow-hidden">
-                <div className="h-full max-h-full overflow-y-auto custom-scrollbar">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 h-fit">
+                <div className="h-full overflow-y-auto custom-scrollbar">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
                     <div className="space-y-3">
                       <h4 className="font-semibold text-sm mb-2">General Settings</h4>
                       
                       <div className="flex items-center justify-between py-3 px-3 rounded border bg-card/50">
                         <div className="flex-1 min-w-0">
                           <Label htmlFor="enabled" className="text-sm font-medium">Enable Notifications</Label>
-                          <p className="text-sm text-muted-foreground">Master switch for all notifications</p>
+                          <p className="text-xs text-muted-foreground">Master switch for all notifications</p>
                         </div>
                         <Switch
                           id="enabled"
@@ -374,7 +374,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                       <div className="flex items-center justify-between py-3 px-3 rounded border bg-card/50">
                         <div className="flex-1 min-w-0">
                           <Label htmlFor="sound" className="text-sm font-medium">Sound Notifications</Label>
-                          <p className="text-sm text-muted-foreground">Play sound when alerts trigger</p>
+                          <p className="text-xs text-muted-foreground">Play sound when alerts trigger</p>
                         </div>
                         <Switch
                           id="sound"
@@ -388,7 +388,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                       <div className="flex items-center justify-between py-3 px-3 rounded border bg-card/50">
                         <div className="flex-1 min-w-0">
                           <Label htmlFor="desktop" className="text-sm font-medium">Desktop Notifications</Label>
-                          <p className="text-sm text-muted-foreground">Show browser notifications</p>
+                          <p className="text-xs text-muted-foreground">Show browser notifications</p>
                         </div>
                         <Switch
                           id="desktop"
@@ -406,7 +406,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                       <div className="flex items-center justify-between py-3 px-3 rounded border bg-card/50">
                         <div className="flex-1 min-w-0">
                           <Label htmlFor="priceAlerts" className="text-sm font-medium">Price Alerts</Label>
-                          <p className="text-sm text-muted-foreground">Enable price-based alerts</p>
+                          <p className="text-xs text-muted-foreground">Enable price-based alerts</p>
                         </div>
                         <Switch
                           id="priceAlerts"
@@ -420,7 +420,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                       <div className="flex items-center justify-between py-3 px-3 rounded border bg-card/50">
                         <div className="flex-1 min-w-0">
                           <Label htmlFor="volumeAlerts" className="text-sm font-medium">Volume Alerts</Label>
-                          <p className="text-sm text-muted-foreground">Enable volume spike alerts</p>
+                          <p className="text-xs text-muted-foreground">Enable volume spike alerts</p>
                         </div>
                         <Switch
                           id="volumeAlerts"
@@ -434,7 +434,7 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                       <div className="flex items-center justify-between py-3 px-3 rounded border bg-card/50">
                         <div className="flex-1 min-w-0">
                           <Label htmlFor="newsAlerts" className="text-sm font-medium">News Alerts</Label>
-                          <p className="text-sm text-muted-foreground">Enable news-based alerts</p>
+                          <p className="text-xs text-muted-foreground">Enable news-based alerts</p>
                         </div>
                         <Switch
                           id="newsAlerts"
