@@ -103,12 +103,12 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   };
 
   return (
-    <Card className="mb-4">
+    <Card className="mb-2">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button 
             variant="ghost" 
-            className="w-full justify-between p-4 h-auto font-medium"
+            className="w-full justify-between p-3 h-auto font-medium"
           >
             <div className="flex items-center gap-2">
               <Filter size={16} />
@@ -121,18 +121,19 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
           </Button>
         </CollapsibleTrigger>
         
-        <CollapsibleContent className="px-4 pb-4">
-          <div className="space-y-6">
+        <CollapsibleContent className="px-3 pb-3">
+          <div className="space-y-3">
             {/* Preset Filters */}
             <div>
-              <Label className="text-sm font-medium mb-2 block">Quick Presets</Label>
-              <div className="flex flex-wrap gap-2">
+              <Label className="text-sm font-medium mb-1 block">Quick Presets</Label>
+              <div className="flex flex-wrap gap-1">
                 {Object.entries(PRESET_FILTERS).map(([name, preset]) => (
                   <Button 
                     key={name}
                     size="sm" 
                     variant="outline"
                     onClick={() => applyPreset(preset)}
+                    className="text-xs px-2 py-1 h-auto"
                   >
                     {name}
                   </Button>
@@ -141,20 +142,20 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                   size="sm" 
                   variant="outline"
                   onClick={resetFilters}
-                  className="text-muted-foreground"
+                  className="text-muted-foreground text-xs px-2 py-1 h-auto"
                 >
-                  <RotateCcw size={14} className="mr-1" />
+                  <RotateCcw size={12} className="mr-1" />
                   Reset
                 </Button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3">
               {/* Price Range */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">Price Range</Label>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">Price Range</Label>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-1">
                     <Input
                       type="number"
                       placeholder="Min"
@@ -163,11 +164,11 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                         ...filters,
                         priceMin: parseFloat(e.target.value) || 0
                       })}
-                      className="text-xs"
+                      className="text-xs h-8"
                       step="0.01"
                       min="0.01"
                     />
-                    <span className="text-muted-foreground">to</span>
+                    <span className="text-xs text-muted-foreground">to</span>
                     <Input
                       type="number"
                       placeholder="Max"
@@ -176,7 +177,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                         ...filters,
                         priceMax: parseFloat(e.target.value) || 5
                       })}
-                      className="text-xs"
+                      className="text-xs h-8"
                       step="0.01"
                       max="5.00"
                     />
@@ -188,8 +189,8 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               </div>
 
               {/* Market Cap Range */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">Market Cap</Label>
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">Market Cap</Label>
                 <Slider
                   value={[filters.marketCapMin, filters.marketCapMax]}
                   min={1_000_000}
@@ -200,6 +201,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                     marketCapMin: min,
                     marketCapMax: max
                   })}
+                  className="py-2"
                 />
                 <div className="text-xs text-muted-foreground">
                   {formatValue(filters.marketCapMin, 'marketcap')} - {formatValue(filters.marketCapMax, 'marketcap')}
@@ -207,8 +209,8 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               </div>
 
               {/* Float Range */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">Float</Label>
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">Float</Label>
                 <Slider
                   value={[filters.floatMin, filters.floatMax]}
                   min={1_000_000}
@@ -219,6 +221,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                     floatMin: min,
                     floatMax: max
                   })}
+                  className="py-2"
                 />
                 <div className="text-xs text-muted-foreground">
                   {formatValue(filters.floatMin, 'volume')} - {formatValue(filters.floatMax, 'volume')}
@@ -226,8 +229,8 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               </div>
 
               {/* Volume */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">Min Volume</Label>
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">Min Volume</Label>
                 <Slider
                   value={[filters.volumeMin]}
                   min={100_000}
@@ -237,6 +240,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                     ...filters,
                     volumeMin: min
                   })}
+                  className="py-2"
                 />
                 <div className="text-xs text-muted-foreground">
                   Min: {formatValue(filters.volumeMin, 'volume')}
@@ -244,8 +248,8 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               </div>
 
               {/* Change % Range */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">Change %</Label>
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">Change %</Label>
                 <Slider
                   value={[filters.changeMin, filters.changeMax]}
                   min={-100}
@@ -256,6 +260,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                     changeMin: min,
                     changeMax: max
                   })}
+                  className="py-2"
                 />
                 <div className="text-xs text-muted-foreground">
                   {formatValue(filters.changeMin, 'percent')} - {formatValue(filters.changeMax, 'percent')}
@@ -263,9 +268,9 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
               </div>
 
               {/* News Only Toggle */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">News Filter</Label>
-                <div className="flex items-center space-x-2">
+              <div className="space-y-2">
+                <Label className="text-xs font-medium">News Filter</Label>
+                <div className="flex items-center space-x-2 py-2">
                   <Switch
                     checked={filters.newsOnly}
                     onCheckedChange={(checked) => onFiltersChange({

@@ -16,6 +16,7 @@ import { MarketInsights } from '@/components/MarketInsights';
 import { SFTiTop10 } from '@/components/SFTiTop10';
 import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import iconImg from '@/assets/images/icon.png';
 
 const DEFAULT_FILTERS: ScannerFilters = {
   priceMin: 0.01,
@@ -214,7 +215,10 @@ function App() {
       <div className="border-b border-border bg-card/50 backdrop-blur">
         <div className="flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-bold font-mono">Penny Stock Scanner Pro</h1>
+            <div className="flex items-center gap-3">
+              <img src={iconImg} alt="SFTi" className="w-8 h-8" />
+              <h1 className="text-xl font-bold font-mono">SFTi Stock Scanner</h1>
+            </div>
             <MarketStatus />
             {error && (
               <div className="text-xs text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded">
@@ -252,7 +256,7 @@ function App() {
           <SFTiTop10 stocks={filteredStocks} onStockSelect={handleStockSelect} />
         ) : activeTab?.type === 'scanner' ? (
           <div className="h-full flex flex-col">
-            <div className="p-6 pb-4 flex-shrink-0">
+            <div className="p-6 pb-2 flex-shrink-0">
               <FilterPanel 
                 filters={filters} 
                 onFiltersChange={setFilters}
