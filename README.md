@@ -62,7 +62,7 @@ wget -qO- https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/main/in
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/statikfintechllc/interactive-brokers.git
    cd sfti-stock-scanner
    ```
 
