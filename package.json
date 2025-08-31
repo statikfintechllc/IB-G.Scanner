@@ -87,7 +87,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.21.0",
-        "@tailwindcss/postcss": "^4.1.8",
+        "@tailwindcss/postcss": "^4.1.12",
         "@types/react": "^19.0.10",
         "@types/react-dom": "^19.0.4",
         "@vitejs/plugin-react": "^5.0.2",
