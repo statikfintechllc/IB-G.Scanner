@@ -9,7 +9,11 @@
         "build": "tsc -b --noCheck && vite build",
         "lint": "eslint .",
         "optimize": "vite optimize",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "server": "node server.js",
+        "router": "node router.js",
+        "start:full": "concurrently \"npm run server\" \"npm run router\" \"npm run dev\"",
+        "start:prod": "concurrently \"npm run server\" \"npm run router\" \"npm run preview\""
     },
     "dependencies": {
         "@github/spark": "^0.39.0",
@@ -74,7 +78,12 @@
         "uuid": "^11.1.0",
         "vaul": "^1.1.2",
         "ws": "^8.18.3",
-        "zod": "^3.25.76"
+        "zod": "^3.25.76",
+        "express": "^4.18.2",
+        "cors": "^2.8.5",
+        "compression": "^1.7.4",
+        "express-rate-limit": "^6.7.0",
+        "concurrently": "^8.2.2"
     },
     "devDependencies": {
         "@eslint/js": "^9.21.0",
