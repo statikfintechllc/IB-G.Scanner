@@ -17,7 +17,7 @@ A professional, real-time penny stock scanner with Interactive Brokers (IBKR) in
 
 The SFTi Stock Scanner uses a three-tier architecture for reliable data delivery:
 
-```
+```txt
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │  IBKR TWS/      │    │  Router Service │    │  Public Server  │
 │  Gateway        │◄───┤  (router.js)    │◄───┤  (server.js)    │
