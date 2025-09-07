@@ -86,7 +86,7 @@
         "concurrently": "^8.2.2"
     },
     "devDependencies": {
-        "@eslint/js": "^9.21.0",
+        "@eslint/js": "^9.35.0",
         "@tailwindcss/postcss": "^4.1.12",
         "@types/react": "^19.0.10",
         "@types/react-dom": "^19.0.4",
