@@ -203,49 +203,65 @@ class SFTiServer {
     
     setupWebSocket() {
         this.wss.on('connection', (ws, req) => {
-            console.log(`[SERVER] New client connected: ${req.socket.remoteAddress}`);
-            this.clients.add(ws);
-            
-            // Send initial data
-            ws.send(JSON.stringify({
-                type: 'connected',
-                timestamp: Date.now(),
-                market_data_count: this.marketData.size
-            }));
-            
-            ws.on('message', (data) => {
+            let isRouter = false;
+            let firstMessageHandled = false;
+
+            // Wait for the first message to determine connection type
+            ws.once('message', (data) => {
+                let message;
                 try {
-                    const message = JSON.parse(data);
-                    this.handleClientMessage(ws, message);
+                    message = JSON.parse(data);
                 } catch (error) {
-                    console.error('[SERVER] Invalid client message:', error.message);
+                    console.error('[SERVER] Invalid initial message:', error.message);
+                    ws.close();
+                    return;
+                }
+
+                if (message.type === 'router_connected') {
+                    // Router connection
+                    isRouter = true;
+                    console.log('[SERVER] Router connected');
+                    this.routerConnection = ws;
+                    this.setupRouterHandlers(ws);
+                } else {
+                    // Regular client connection
+                    console.log(`[SERVER] New client connected: ${req.socket.remoteAddress}`);
+                    this.clients.add(ws);
+                    // Send initial data
+                    ws.send(JSON.stringify({
+                        type: 'connected',
+                        timestamp: Date.now(),
+                        market_data_count: this.marketData.size
+                    }));
+                    // Set up client message handler
+                    ws.on('message', (data) => {
+                        try {
+                            const msg = JSON.parse(data);
+                            this.handleClientMessage(ws, msg);
+                        } catch (error) {
+                            console.error('[SERVER] Invalid client message:', error.message);
+                        }
+                    });
                 }
             });
-            
+
             ws.on('close', () => {
-                console.log('[SERVER] Client disconnected');
-                this.clients.delete(ws);
+                if (isRouter) {
+                    console.warn('[SERVER] Router disconnected');
+                    this.routerConnection = null;
+                } else {
+                    console.log('[SERVER] Client disconnected');
+                    this.clients.delete(ws);
+                }
             });
-            
+
             ws.on('error', (error) => {
-                console.error('[SERVER] WebSocket error:', error.message);
-                this.clients.delete(ws);
-            });
-        });
-        
-        // Router connection handling
-        this.wss.on('connection', (ws, req) => {
-            // Check if this is a router connection
-            ws.on('message', (data) => {
-                try {
-                    const message = JSON.parse(data);
-                    if (message.type === 'router_connected') {
-                        console.log('[SERVER] Router connected');
-                        this.routerConnection = ws;
-                        this.setupRouterHandlers(ws);
-                    }
-                } catch (error) {
-                    // Ignore invalid messages
+                if (isRouter) {
+                    console.error('[SERVER] Router connection error:', error.message);
+                    this.routerConnection = null;
+                } else {
+                    console.error('[SERVER] WebSocket error:', error.message);
+                    this.clients.delete(ws);
                 }
             });
         });
