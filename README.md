@@ -1,4 +1,21 @@
-# 📈 SFTi Stock Scanner
+<div align="center">
+  <a href="https://statikfintechllc.github.io/Ascend-Institute/">
+    <img src="https://img.shields.io/badge/SFTi's-darkred?style=for-the-badge&logo=dragon&logoColor=gold"/>
+  <a href="https://statikfintechllc.github.io/Ascend-Institute/">
+    <img src="https://img.shields.io/badge/Home%20Page-black?style=for-the-badge&logo=ghost&logoColor=gold"/>
+  </a><br>
+</div> 
+<div align="center">
+  <a href="https://github.com/sponsors/statikfintechllc">
+    <img src="https://skillicons.dev/icons?i=python,bash,linux,anaconda,tailwind,css,react,nodejs,electron,go,typescript,javascript,html,astro,nix&theme=dark" alt="Skill icons">
+  </a><br>
+  <a href="https://github.com/sponsors/statikfintechllc">
+    <img src="https://raw.githubusercontent.com/KDK-Grim/WorkFlowRepo-Mirror/master/docs/ticker-bot/ticker.gif" alt="Repo Ticker Stats" height="36">
+  </a>
+
+# SFTi Stock Scanner
+
+</div> 
 
 A professional, real-time penny stock scanner with Interactive Brokers (IBKR) integration, featuring AI-powered analysis, pattern recognition, and comprehensive market insights.
 
