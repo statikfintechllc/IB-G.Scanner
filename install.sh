@@ -165,14 +165,14 @@ check_prerequisites() {
 setup_repository() {
     log "Setting up SFTi Stock Scanner..."
     
-    if [ -d "sfti-stock-scanner" ]; then
-        warn "Directory 'sfti-stock-scanner' already exists. Updating..."
-        cd sfti-stock-scanner
+    if [ -d "IB-G.Scanner" ]; then
+        warn "Directory 'IB-G.Scanner' already exists. Updating..."
+        cd IB-G.Scanner
         git pull origin main || warn "Failed to update repository"
     else
         log "Cloning repository..."
-        git clone https://github.com/your-repo/sfti-stock-scanner.git
-        cd sfti-stock-scanner
+        git clone https://github.com/statikfintechllc/IB-G.Scanner.git
+        cd IB-G.Scanner
     fi
 }
 
@@ -183,8 +183,12 @@ install_dependencies() {
     # Clear npm cache if needed
     npm cache clean --force 2>/dev/null || true
     
-    # Install dependencies
-    npm install
+        # Install main dependencies
+        npm install
+        # Ensure critical dependencies are present
+        npm install typescript --save-dev
+        npm install @stoqey/ib helmet
+        npm install axios
     
     if [ $? -eq 0 ]; then
         log "Dependencies installed successfully ✓"
@@ -196,11 +200,16 @@ install_dependencies() {
 # Create desktop shortcuts
 create_shortcuts() {
     log "Creating desktop shortcuts..."
-    
+    # Check for graphical environment and Desktop folder
+    if [ -n "$DISPLAY" ] && [ -d "$HOME/Desktop" ]; then
+        DESKTOP_PATH="$HOME/Desktop"
+    else
+        warn "No graphical environment or Desktop folder detected. Shortcut will be placed in $HOME."
+        DESKTOP_PATH="$HOME"
+    fi
     case "$OS" in
         "linux"|"debian"|"redhat"|"arch")
-            # Create .desktop file
-            DESKTOP_FILE="$HOME/Desktop/SFTi-Stock-Scanner.desktop"
+            DESKTOP_FILE="$DESKTOP_PATH/SFTi-Stock-Scanner.desktop"
             cat > "$DESKTOP_FILE" << EOF
 [Desktop Entry]
 Name=SFTi Stock Scanner
@@ -212,14 +221,13 @@ Type=Application
 Categories=Office;Finance;
 EOF
             chmod +x "$DESKTOP_FILE"
-            log "Desktop shortcut created ✓"
+            log "Desktop shortcut created at $DESKTOP_FILE ✓"
             ;;
         "macos")
-            # Create app alias
             APP_NAME="SFTi Stock Scanner"
-            ALIAS_PATH="$HOME/Desktop/$APP_NAME"
+            ALIAS_PATH="$DESKTOP_PATH/$APP_NAME"
             ln -sf "$(pwd)" "$ALIAS_PATH" 2>/dev/null || true
-            log "Desktop alias created ✓"
+            log "Desktop alias created at $ALIAS_PATH ✓"
             ;;
     esac
 }
@@ -227,33 +235,33 @@ EOF
 # Create startup scripts
 create_scripts() {
     log "Creating startup scripts..."
-    
+    PROJECT_ROOT="$(pwd)"
     # Development script
-    cat > start-dev.sh << 'EOF'
+    cat > "$PROJECT_ROOT/start-dev.sh" << EOF
 #!/bin/bash
 echo "Starting SFTi Stock Scanner in development mode..."
+cd "$PROJECT_ROOT"
 npm run dev
 EOF
-    chmod +x start-dev.sh
-    
+    chmod +x "$PROJECT_ROOT/start-dev.sh"
     # Production build script
-    cat > build-prod.sh << 'EOF'
+    cat > "$PROJECT_ROOT/build-prod.sh" << EOF
 #!/bin/bash
 echo "Building SFTi Stock Scanner for production..."
+cd "$PROJECT_ROOT"
 npm run build
 echo "Production build complete. Run 'npm run preview' to test."
 EOF
-    chmod +x build-prod.sh
-    
-    # Server script (will be created separately)
-    log "Startup scripts created ✓"
+    chmod +x "$PROJECT_ROOT/build-prod.sh"
+    log "Startup scripts created in $PROJECT_ROOT ✓"
 }
 
-# Setup firewall rules (if needed)
 setup_firewall() {
     if command_exists ufw; then
         log "Configuring firewall for development server..."
         sudo ufw allow 5173/tcp comment "SFTi Stock Scanner Dev Server" 2>/dev/null || true
+    else
+        warn "ufw not found. Skipping firewall configuration."
     fi
 }
 

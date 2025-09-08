@@ -1,17 +1,20 @@
-const express = require('express');
-const WebSocket = require('ws');
-const cors = require('cors');
-const EventEmitter = require('events');
-const ib = require('node-ib');
-require('dotenv').config();
+import express from 'express';
+import http from 'http';
+import { WebSocketServer } from 'ws';
+import cors from 'cors';
+import EventEmitter from 'events';
+import pkg from '@stoqey/ib';
+const { IBApi, EventName, ErrorCode, Contract } = pkg;
+import dotenv from 'dotenv';
+dotenv.config();
 
 class IBKRRouter extends EventEmitter {
     constructor() {
         super();
         
-        this.app = express();
-        this.server = null;
-        this.wss = null;
+    this.app = express();
+    this.server = http.createServer(this.app);
+    this.wss = null;
         this.ib = null;
         this.connected = false;
         this.subscriptions = new Set();
@@ -69,9 +72,12 @@ class IBKRRouter extends EventEmitter {
     }
     
     setupWebSocket() {
-        this.wss = new WebSocket.Server({ 
+        this.wss = new WebSocketServer({ 
             server: this.server,
             path: '/ws'
+        });
+        this.server.listen(this.config.port, this.config.host, () => {
+            console.log(`Router listening on ${this.config.host}:${this.config.port}`);
         });
         
         this.wss.on('connection', (ws, req) => {
@@ -160,50 +166,41 @@ class IBKRRouter extends EventEmitter {
     connectToIBKR() {
         console.log('Connecting to IBKR TWS/Gateway...');
         
-        this.ib = new ib({
+        this.ib = new IBApi({
+            clientId: this.config.ibkr.clientId,
             host: this.config.ibkr.host,
-            port: this.config.ibkr.port,
-            clientId: this.config.ibkr.clientId
+            port: this.config.ibkr.port
         });
         
-        this.ib.on('connected', () => {
+        this.ib.on(EventName.connected, () => {
             console.log('Connected to IBKR');
             this.connected = true;
             this.emit('connected');
         });
-        
-        this.ib.on('disconnected', () => {
+        this.ib.on(EventName.disconnected, () => {
             console.log('Disconnected from IBKR');
             this.connected = false;
             this.emit('disconnected');
-            
-            // Attempt to reconnect
             setTimeout(() => {
                 this.connectToIBKR();
             }, 5000);
         });
-        
-        this.ib.on('error', (error) => {
-            console.error('IBKR error:', error);
+        this.ib.on(EventName.error, (err, code, reqId) => {
+            console.error('IBKR error:', err);
             this.connected = false;
         });
-        
-        this.ib.on('tickPrice', (reqId, tickType, price, canAutoExecute) => {
+        this.ib.on(EventName.tickPrice, (reqId, tickType, price, canAutoExecute) => {
             this.handleTickPrice(reqId, tickType, price);
         });
-        
-        this.ib.on('tickSize', (reqId, tickType, size) => {
+        this.ib.on(EventName.tickSize, (reqId, tickType, size) => {
             this.handleTickSize(reqId, tickType, size);
         });
-        
-        this.ib.on('tickGeneric', (reqId, tickType, value) => {
+        this.ib.on(EventName.tickGeneric, (reqId, tickType, value) => {
             this.handleTickGeneric(reqId, tickType, value);
         });
-        
-        this.ib.on('realtimeBar', (reqId, time, open, high, low, close, volume, wap, count) => {
+        this.ib.on(EventName.realtimeBar, (reqId, time, open, high, low, close, volume, wap, count) => {
             this.handleRealtimeBar(reqId, time, open, high, low, close, volume);
         });
-        
         try {
             this.ib.connect();
         } catch (error) {
@@ -684,9 +681,9 @@ class IBKRRouter extends EventEmitter {
 }
 
 // Start the router
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
     const router = new IBKRRouter();
     router.start();
 }
 
-module.exports = IBKRRouter;
+export default IBKRRouter;

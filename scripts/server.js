@@ -1,11 +1,13 @@
-const express = require('express');
-const WebSocket = require('ws');
-const cors = require('cors');
-const helmet = require('helmet');
-const compression = require('compression');
-const rateLimit = require('rate-limiter-flexible');
-const axios = require('axios');
-require('dotenv').config();
+import express from 'express';
+import { WebSocketServer, WebSocket } from 'ws';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
+// Import axios (make sure it's installed)
+import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
 
 class SFTiServer {
     constructor() {
@@ -67,7 +69,7 @@ class SFTiServer {
         this.app.use(express.urlencoded({ extended: true }));
         
         // Rate limiting
-        const rateLimiter = new rateLimit.RateLimiterMemory({
+    const rateLimiter = new RateLimiterMemory({
             keyGenerator: (req) => req.ip,
             points: this.config.rateLimit.max,
             duration: this.config.rateLimit.window / 1000
@@ -269,7 +271,8 @@ class SFTiServer {
         this.app.use(express.static('public'));
         
         // Fallback for SPA
-        this.app.get('*', (req, res) => {
+        // Use a catch-all middleware for SPA fallback
+        this.app.use((req, res) => {
             res.sendFile('index.html', { root: 'public' });
         });
         
@@ -284,7 +287,7 @@ class SFTiServer {
     }
     
     setupWebSocket() {
-        this.wss = new WebSocket.Server({ 
+        this.wss = new WebSocketServer({ 
             port: this.config.wsPort,
             host: this.config.host
         });
@@ -416,19 +419,18 @@ class SFTiServer {
             case 'marketData':
                 this.updateMarketData(message.data);
                 break;
-                
             case 'alert':
                 this.broadcastAlert(message.data);
                 break;
-                
             case 'news':
                 this.broadcastNews(message.data);
                 break;
-                
             case 'error':
                 console.error('Router error:', message.error);
                 break;
-                
+            case 'response':
+                console.log('Router response:', message);
+                break;
             default:
                 console.log('Unknown router message type:', message.type);
         }
@@ -554,9 +556,9 @@ class SFTiServer {
 }
 
 // Start the server
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
     const server = new SFTiServer();
     server.start();
 }
 
-module.exports = SFTiServer;
+export default SFTiServer;

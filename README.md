@@ -64,10 +64,10 @@ The SFTi Stock Scanner uses a three-tier architecture for reliable data delivery
 
 ```bash
 # Download and run the universal installer
-curl -sSL https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/master/install.sh | bash
 
 # Or with wget
-wget -qO- https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/main/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/master/install.sh | bash
 ```
 
 ### Method 2: Manual Installation
