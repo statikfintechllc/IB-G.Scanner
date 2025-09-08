@@ -78,20 +78,20 @@ wget -qO- https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/main/in
 ### Installation
 
 1. **Clone the repository**
-   ```bash
+```bash
    git clone https://github.com/statikfintechllc/interactive-brokers.git
    cd sfti-stock-scanner
-   ```
+```
 
 2. **Install dependencies**
-   ```bash
+```bash
    npm install
-   ```
+```
 
 3. **Start the development server**
-   ```bash
+```bash
    npm run dev
-   ```
+```
 
 4. **Open in browser**
    Navigate to `http://localhost:5173`
@@ -101,17 +101,18 @@ wget -qO- https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/main/in
 For production environments with multiple users:
 
 1. **Install dependencies**
-   ```bash
+```bash
    npm install express cors compression express-rate-limit concurrently
-   ```
+```
 
 2. **Build the application**
-   ```bash
+```bash
    npm run build
-   ```
+```
 
 3. **Start all services**
-   ```bash
+
+```bash
    # Start all services (router, server, and web app)
    npm run start:prod
    
@@ -119,7 +120,7 @@ For production environments with multiple users:
    npm run server    # Public server on port 3001
    npm run router    # IBKR router service
    npm run preview   # Web app on port 4173
-   ```
+```
 
 ## 🔧 Service Management
 
@@ -335,3 +336,71 @@ The app includes an automatic update system:
 ---
 
 **⚠️ Disclaimer**: This software is for educational and analysis purposes. Always verify data independently before making trading decisions. Past performance does not guarantee future results.
+
+---
+
+<div align="center">
+  <a href="https://github.com/sponsors/statikfintechllc">
+    <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/L.W.badge.svg" alt="Like my work?" />
+  </a>
+</div>
+<div align="center">
+<a href="https://github.com/sponsors/statikfintechllc">
+  <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/git.sponsor.svg">
+</a><br>
+<a href="https://ko-fi.com/statikfintech_llc">
+  <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/kofi.sponsor.svg">
+</a><br>
+<a href="https://patreon.com/StatikFinTech_LLC">
+  <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/patreon.sponsor.svg">
+</a><br>
+<a href="https://cash.app/$statikmoney8">
+  <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/cashapp.sponsor.svg">
+</a><br>
+<a href="https://paypal.me/statikmoney8">
+  <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/paypal.sponsor.svg">
+</a><br>
+<a href="https://www.blockchain.com/explorer/addresses/btc/bc1qarsr966ulmcs3mlcvae7p63v4j2y2vqrw74jl8">
+  <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/bitcoin.sponsor.svg">
+</a><br>
+<a href="https://etherscan.io/address/0xC2db50A0fc6c95f36Af7171D8C41F6998184103F">
+  <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/ethereum.sponsor.svg">
+</a><br>
+<a href="https://www.chime.com">
+  <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/chime.sponsor.svg">
+</a>
+</div>
+
+ **Want to See you're own ideas built, or to sponsor hardware directly? Reach Out to:**
+- **Email:** [ascend.gremlin@gmail.com](mailto:ascend.gremlin@gmail.com) | [ascend.help@gmail.com](mailto:ascend.help@gmail.com)
+- **Call Us:** [+1 (620) 266-9837](sms:+16202669837)  
+- **Text Us:** [+1 (785) 443-6288](sms:+17854436288)  
+- **DM:**  
+  - a) [LinkedIn: StatikFinTech, LLC](https://www.linkedin.com/in/statikfintech-llc-780804368/)
+  - b) [X: @GremlinsForge](https://twitter.com/GremlinsForge)  
+
+**See Our [Open Funding Proposal](https://github.com/statikfintechllc/Ascend-Institute/blob/master/About%20Us/OPEN_FUNDING_PROPOSAL.md)**
+
+<div align="center">
+
+  <br/> [© 2025 StatikFinTech, LLC](https://www.github.com/statikfintechllc/GremlinGPT/blob/master/LICENSE.md)
+
+  <a href="https://github.com/statikfintechllc">
+    <img src="https://img.shields.io/badge/-000000?logo=github&logoColor=white&style=flat-square" alt="GitHub">
+  </a>
+  <a href="https://www.linkedin.com/in/daniel-morris-780804368">
+    <img src="https://img.shields.io/badge/In-e11d48?logo=linkedin&logoColor=white&style=flat-square" alt="LinkedIn">
+  </a>
+  <a href="mailto:ascend.gremlin@gmail.com">
+    <img src="https://img.shields.io/badge/-D14836?logo=gmail&logoColor=white&style=flat-square" alt="Email">
+  </a>
+  <a href="https://www.youtube.com/@Gremlins_Forge">
+    <img src="https://img.shields.io/badge/-FF0000?logo=youtube&logoColor=white&style=flat-square" alt="YouTube">
+  </a>
+  <a href="https://x.com/GremlinsForge">
+    <img src="https://img.shields.io/badge/-000000?logo=x&logoColor=white&style=flat-square" alt="X">
+  </a>
+  <a href="https://medium.com/@ascend.gremlin">
+    <img src="https://img.shields.io/badge/-000000?logo=medium&logoColor=white&style=flat-square" alt="Medium">
+  </a>  
+</div>
