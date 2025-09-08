@@ -13,7 +13,7 @@
     <img src="https://raw.githubusercontent.com/KDK-Grim/WorkFlowRepo-Mirror/master/docs/ticker-bot/ticker.gif" alt="Repo Ticker Stats" height="36">
   </a>
 </div>
-<div align="center"> 
+<div align="center">
   <img src="https://img.shields.io/github/stars/statikfintechllc/IB-G.Scanner?style=social" alt="Stars"/>
   <img src="https://img.shields.io/github/forks/statikfintechllc/IB-G.Scanner?style=social" alt="Forks"/>
   <img src="https://img.shields.io/github/last-commit/statikfintechllc/IB-G.Scanner?style=social" alt="Last Commit"/>
