@@ -12,10 +12,14 @@
   <a href="https://github.com/sponsors/statikfintechllc">
     <img src="https://raw.githubusercontent.com/KDK-Grim/WorkFlowRepo-Mirror/master/docs/ticker-bot/ticker.gif" alt="Repo Ticker Stats" height="36">
   </a>
+</div>
+<div align="center">
+  <img src="https://img.shields.io/github/stars/statikfintechllc/IB-G.Scanner?style=social" alt="Stars"/>
+  <img src="https://img.shields.io/github/forks/statikfintechllc/IB-G.Scanner?style=social" alt="Forks"/>
+  <img src="https://img.shields.io/github/last-commit/statikfintechllc/IB-G.Scanner?style=social" alt="Last Commit"/>
+</div>
 
 # SFTi Stock Scanner
-
-</div> 
 
 A professional, real-time penny stock scanner with Interactive Brokers (IBKR) integration, featuring AI-powered analysis, pattern recognition, and comprehensive market insights.
 
@@ -370,17 +374,6 @@ The app includes an automatic update system:
   <img src="https://raw.githubusercontent.com/statikfintechllc/statikfintechllc/master/badges/chime.sponsor.svg">
 </a>
 </div>
-
- **Want to See you're own ideas built, or to sponsor hardware directly? Reach Out to:**
-- **Email:** [ascend.gremlin@gmail.com](mailto:ascend.gremlin@gmail.com) | [ascend.help@gmail.com](mailto:ascend.help@gmail.com)
-- **Call Us:** [+1 (620) 266-9837](sms:+16202669837)  
-- **Text Us:** [+1 (785) 443-6288](sms:+17854436288)  
-- **DM:**  
-  - a) [LinkedIn: StatikFinTech, LLC](https://www.linkedin.com/in/statikfintech-llc-780804368/)
-  - b) [X: @GremlinsForge](https://twitter.com/GremlinsForge)  
-
-**See Our [Open Funding Proposal](https://github.com/statikfintechllc/Ascend-Institute/blob/master/About%20Us/OPEN_FUNDING_PROPOSAL.md)**
-
 <div align="center">
 
   <br/> [© 2025 StatikFinTech, LLC](https://www.github.com/statikfintechllc/GremlinGPT/blob/master/LICENSE.md)
@@ -404,3 +397,9 @@ The app includes an automatic update system:
     <img src="https://img.shields.io/badge/-000000?logo=medium&logoColor=white&style=flat-square" alt="Medium">
   </a>  
 </div>
+
+<!--
+<div align="center">
+  <img src="https://komarev.com/ghpvc/?username=statikfintechllc&color=8b0000&style=flat-square" alt="Profile Views">
+</div>
+-->
