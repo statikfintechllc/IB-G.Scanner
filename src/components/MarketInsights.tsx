@@ -76,8 +76,7 @@ export function MarketInsights({ stocks }: MarketInsightsProps) {
       </DialogTrigger>      <DialogContent className="max-w-[90vw] w-[90vw] h-[80vh] lg:max-w-[800px] lg:w-[800px] lg:h-[600px] flex flex-col p-4">
         <DialogHeader className="flex-shrink-0 pb-2">
           <DialogTitle className="flex items-center gap-2 text-sm lg:text-base">
-            <TrendingUp size={16} className="lg:hidden" />
-            <TrendingUp size={20} className="hidden lg:block" />
+            <TrendingUp size={20} className="text-accent" />
             Market Insights & Analysis
           </DialogTitle>
         </DialogHeader>
@@ -113,8 +112,7 @@ export function MarketInsights({ stocks }: MarketInsightsProps) {
                       <CardContent className="p-3 lg:p-4">
                         <div className="flex items-start gap-2 lg:gap-3">
                           <div className="flex-shrink-0 mt-1">
-                            <Lightbulb size={14} className="text-accent lg:hidden" />
-                            <Lightbulb size={16} className="text-accent hidden lg:block" />
+                            <Lightbulb size={16} className="text-accent" />
                           </div>
                           <div className="text-xs lg:text-sm text-foreground leading-relaxed whitespace-normal break-words">
                             {insight}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Stock, ScannerFilters, Tab } from '@/types';
 import { getMarketHours } from '@/lib/market';
 import { alertService } from '@/lib/alerts';
-import { ibkrBrowserService } from '@/lib/ibkr-browser';
+import { ibkrGateway } from '@/lib/ibkr-gateway-browser';
 import { useKV } from '@github/spark/hooks';
 import { ScannerTable } from '@/components/ScannerTable';
 import { FilterPanel } from '@/components/FilterPanel';
@@ -65,7 +65,7 @@ function App() {
         setError(null);
         
         // Check for existing IBKR session
-        const status = await ibkrBrowserService.getConnectionStatus();
+        const status = await ibkrGateway.getConnectionStatus();
         if (status.authenticated) {
           console.log('IBKR already authenticated');
           setStocks([]);

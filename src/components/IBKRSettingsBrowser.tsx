@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ibkrBrowserService } from '@/lib/ibkr-browser';
+import { ibkrGateway } from '@/lib/ibkr-gateway-browser';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
@@ -38,13 +38,13 @@ export function IBKRSettings() {
 
   const checkAuthStatus = async () => {
     try {
-      const status = await ibkrBrowserService.getConnectionStatus();
+      const status = await ibkrGateway.getConnectionStatus();
       setIsAuthenticated(status.authenticated);
       
       if (status.authenticated) {
         // Try to fetch accounts
         try {
-          const accountData = await ibkrBrowserService.getAccounts();
+          const accountData = await ibkrGateway.getAccounts();
           setAccounts(accountData);
         } catch (error) {
           console.warn('Could not fetch accounts:', error);
@@ -58,19 +58,29 @@ export function IBKRSettings() {
   const handleLogin = async () => {
     setIsLoading(true);
     try {
+      toast.info('Starting IBKR gateway and authentication...', {
+        description: 'Please wait while we connect to IBKR services'
+      });
+      
+      // Start the embedded gateway first
+      await ibkrGateway.startEmbeddedGateway();
+      
       toast.info('Opening IBKR login window...', {
         description: 'Please complete authentication and close the popup when done'
       });
       
-      const result = await ibkrBrowserService.authenticateWithPopup();
+      const result = await ibkrGateway.authenticateWithPopup();
       
-      if (result.success) {
+      if (result) {
+        // Start monitoring after successful authentication
+        await ibkrGateway.startMonitoring();
+        
         toast.success('Successfully authenticated with IBKR!', {
           description: 'You can now access market data and trading features'
         });
         await checkAuthStatus();
       } else {
-        toast.error(result.error || 'Authentication failed', {
+        toast.error('Authentication failed', {
           description: 'Please try again or check your IBKR credentials'
         });
       }
@@ -86,7 +96,7 @@ export function IBKRSettings() {
 
   const handleLogout = async () => {
     try {
-      await ibkrBrowserService.logout();
+      await ibkrGateway.logout();
       setIsAuthenticated(false);
       setAccounts([]);
       toast.success('Logged out successfully');
