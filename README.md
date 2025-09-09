@@ -21,12 +21,15 @@
 
 # SFTi Stock Scanner
 
-A professional, real-time penny stock scanner with Interactive Brokers (IBKR) integration, featuring AI-powered analysis, pattern recognition, and comprehensive market insights.
+A professional, real-time penny stock scanner with Interactive Brokers (IBKR) integration, featuring AI-powered analysis, pattern recognition, and comprehensive market insights. **Now available as a Progressive Web App (PWA) for mobile deployment!**
 
 ## 🌟 Features
 
 - **Real-time Market Data**: Live IBKR integration for accurate penny stock scanning
 - **AI-Powered Analysis**: Smart stock recommendations and pattern recognition
+- **Progressive Web App**: Install on iPhone/Android for native app experience
+- **Browser-Only IBKR**: Direct connection to IBKR Client Portal - no backend required
+- **Offline Capability**: Works without internet for cached data and core features
 - **Advanced Filtering**: Price, volume, market cap, and float-based filtering
 - **Interactive Charts**: Professional candlestick charts with technical indicators
 - **Price Alerts**: Real-time notifications for breakout patterns
@@ -34,9 +37,24 @@ A professional, real-time penny stock scanner with Interactive Brokers (IBKR) in
 - **Multi-Tab Interface**: Analyze multiple stocks simultaneously
 - **Dark Professional Theme**: Bloomberg Terminal-inspired interface
 
+## 📱 **NEW: Mobile PWA Deployment**
+
+The SFTi Stock Scanner now runs entirely on your phone without needing your computer!
+
+### **Quick Mobile Setup:**
+1. **Deploy to HTTPS hosting** (Vercel/Netlify/GitHub Pages)
+2. **Open in Safari** on iPhone (or Chrome on Android)
+3. **Add to Home Screen** via Share button
+4. **Login to IBKR** in app settings
+5. **Trade at 3am** without turning on your computer! 🌙📱
+
+**See [PWA-DEPLOYMENT.md](Documentation/PWA-DEPLOYMENT.md) for complete mobile setup guide.**
+
 ## 🏗️ Architecture
 
-The SFTi Stock Scanner uses a three-tier architecture for reliable data delivery:
+The SFTi Stock Scanner supports two deployment modes:
+
+### **Mode 1: Desktop/Server Architecture (Traditional)**
 
 ```txt
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -51,12 +69,28 @@ The SFTi Stock Scanner uses a three-tier architecture for reliable data delivery
                                                └─────────────────┘
 ```
 
+### **Mode 2: PWA Architecture (Mobile-First)**
+
+```txt
+┌─────────────────┐    ┌─────────────────┐
+│  IBKR Client    │    │  PWA App        │
+│  Portal Web API │◄───┤  (React + SW)   │
+│  (Remote)       │    │  (iPhone/Phone) │
+└─────────────────┘    └─────────────────┘
+```
+
 ### Components
 
+**Desktop Mode:**
 1. **IBKR TWS/Gateway**: Interactive Brokers' trading platform providing real-time market data
 2. **Router Service**: Local Node.js service that connects to IBKR and forwards data
 3. **Public Server**: Web server that receives data from router and serves to clients
 4. **Web Client**: React-based frontend with real-time charts and scanning interface
+
+**PWA Mode:**
+1. **IBKR Client Portal**: Direct web API connection to Interactive Brokers
+2. **PWA App**: Self-contained Progressive Web App with service worker for offline capability
+3. **Browser Runtime**: Runs entirely in mobile browser with native app experience
 
 ## 🚀 Installation Methods
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Stock, ScannerFilters, Tab } from '@/types';
 import { getMarketHours } from '@/lib/market';
 import { alertService } from '@/lib/alerts';
-import { ibkrService } from '@/lib/ibkr';
+import { ibkrBrowserService } from '@/lib/ibkr-browser';
 import { useKV } from '@github/spark/hooks';
 import { ScannerTable } from '@/components/ScannerTable';
 import { FilterPanel } from '@/components/FilterPanel';
@@ -10,7 +10,7 @@ import { MarketStatus } from '@/components/MarketStatus';
 import { TabSystem } from '@/components/TabSystem';
 import { StockChart } from '@/components/StockChart';
 import { AlertsManager } from '@/components/AlertsManager';
-import { IBKRSettings } from '@/components/IBKRSettings';
+import { IBKRSettings } from '@/components/IBKRSettingsBrowser';
 import { AISearch } from '@/components/AISearch';
 import { MarketInsights } from '@/components/MarketInsights';
 import { SFTiTop10 } from '@/components/SFTiTop10';
@@ -64,14 +64,14 @@ function App() {
         setLoading(true);
         setError(null);
         
-        // Try to connect to IBKR
-        const connection = await ibkrService.connect();
-        if (connection.connected) {
-          console.log('IBKR connected successfully');
-          // For now, start with empty array - real implementation would fetch watchlist
+        // Check for existing IBKR session
+        const status = await ibkrBrowserService.getConnectionStatus();
+        if (status.authenticated) {
+          console.log('IBKR already authenticated');
           setStocks([]);
         } else {
-          console.warn('IBKR connection failed, running in demo mode');
+          console.log('IBKR authentication required');
+          setError('IBKR authentication required - Click Settings to login');
           setStocks([]);
         }
       } catch (error) {

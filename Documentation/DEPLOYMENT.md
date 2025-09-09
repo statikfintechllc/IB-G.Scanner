@@ -1,6 +1,39 @@
 # SFTi Stock Scanner - Deployment Guide
 
-## 🚀 Production Deployment Options
+## 🚀 Deployment Options Overview
+
+The SFTi Stock Scanner supports two deployment architectures:
+
+### **Option A: PWA Mobile Deployment (Recommended)**
+- **Best for**: Mobile users, 3AM trading, independent operation
+- **Requirements**: HTTPS hosting only
+- **IBKR Connection**: Direct browser-to-IBKR Client Portal Web API
+- **Infrastructure**: Zero server requirements
+- **Guide**: See [PWA-DEPLOYMENT.md](PWA-DEPLOYMENT.md) for complete setup
+
+### **Option B: Traditional Server Deployment**
+- **Best for**: Desktop users, enterprise environments
+- **Requirements**: Server infrastructure + IBKR TWS/Gateway
+- **IBKR Connection**: Node.js backend via TWS API
+- **Infrastructure**: Full server stack required
+- **Guide**: See below for traditional deployment
+
+---
+
+## 📱 **Quick PWA Mobile Setup**
+
+For most users, the PWA deployment is recommended:
+
+1. **Build and deploy to HTTPS hosting** (Vercel/Netlify)
+2. **Install on iPhone**: Safari → Share → Add to Home Screen  
+3. **Login to IBKR**: Open app → Settings → Login to IBKR
+4. **Trade independently**: No computer required!
+
+**Complete guide**: [PWA-DEPLOYMENT.md](PWA-DEPLOYMENT.md)
+
+---
+
+## 🖥️ **Traditional Server Deployment**
 
 ### Option 1: Single Server Deployment
 
