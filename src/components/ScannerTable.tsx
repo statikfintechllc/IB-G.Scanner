@@ -1,9 +1,29 @@
 import { useState, useEffect } from 'react';
 import { Stock } from '@/types';
 import { formatPrice, formatPercent, formatVolume, formatMarketCap } from '@/lib/market';
-import { TrendingUp, TrendingDown, News } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+
+// Custom SVG Icons
+const TrendingUp = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrendingDown = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17 7L7 17M7 17H17M7 17V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const News = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 22H20A2 2 0 0 0 22 20V4A2 2 0 0 0 20 2H8A2 2 0 0 0 6 4V16A2 2 0 0 1 4 18Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M6 18H4A2 2 0 0 1 2 16V7A1 1 0 0 1 3 6H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M18 14H10M15 18H10M10 6H18V10H10V6Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 interface ScannerTableProps {
   stocks: Stock[];
@@ -109,9 +129,9 @@ export function ScannerTable({ stocks, onStockSelect }: ScannerTableProps) {
   );
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
-        <thead className="border-b border-border">
+    <div className="overflow-x-auto overflow-y-visible scrollbar-hide touch-scroll">
+      <table className="w-full min-w-[800px]">
+        <thead className="border-b border-border sticky top-0 bg-background">
           <tr>
             <SortableHeader field="symbol">Ticker</SortableHeader>
             <SortableHeader field="changePercent">Chg%</SortableHeader>

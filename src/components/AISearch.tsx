@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, Brain, Target, Lightbulb, History, ChevronDown } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +10,49 @@ import { Stock, AISearchResult, SearchMemory } from '@/types';
 import { useKV } from '@github/spark/hooks';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+
+// Custom SVG Icons
+const Search = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+    <path d="21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Brain = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 5C13.66 5 15 3.66 15 2C15 3.66 16.34 5 18 5C16.34 5 15 6.34 15 8C15 6.34 13.66 5 12 5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 22C10.34 22 9 20.66 9 19C9 20.66 7.66 22 6 22C7.66 22 9 20.66 9 19C9 17.34 10.34 16 12 16C13.66 16 15 17.34 15 19C15 20.66 13.66 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 16V5M15 8V19M9 8V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Target = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+
+const Lightbulb = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 21H15M12 3C8.686 3 6 5.686 6 9C6 11.209 7.209 13.109 9 14.17V16C9 16.552 9.448 17 10 17H14C14.552 17 15 16.552 15 16V14.17C16.791 13.109 18 11.209 18 9C18 5.686 15.314 3 12 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const History = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 12A9 9 0 1 0 12 3A9 9 0 0 0 3 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 7V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const ChevronDown = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 interface AISearchProps {
   stocks: Stock[];
@@ -88,14 +130,20 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <Brain size={16} />
-          AI Search
+      {/* Mobile Button */}
+      <DialogTrigger asChild className="block lg:hidden">
+        <Button variant="outline" size="md" className="gap-1 flex-1 max-w-[90px]">
+          <span className="text-sm">AI Search</span>
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-[90vw] w-[90vw] h-[75vh] flex flex-col p-4">
+      {/* Web Button */}
+      <DialogTrigger asChild className="hidden lg:inline-flex">
+        <Button variant="outline" size="lg" className="gap-3 px-6 py-3">
+          <Brain size={24} />
+          <span className="text-lg font-medium">AI Search</span>
+        </Button>
+      </DialogTrigger>      <DialogContent className="max-w-[90vw] w-[90vw] h-[75vh] flex flex-col p-4">
         <DialogHeader className="flex-shrink-0 pb-3">
           <DialogTitle className="flex items-center gap-2 text-sm">
             <Brain size={16} />
@@ -105,15 +153,14 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
 
         <div className="flex-1 flex flex-col gap-4 min-h-0">
           {/* Search Input with History Dropdown */}
-          <div className="flex gap-2 flex-shrink-0">
-            <div className="relative flex-1 max-w-md">
-              <Search size={14} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+          <div className="flex gap-2 flex-shrink-0 items-center">
+            <div className="relative flex-1">
               <Input
                 placeholder="Search for breakout patterns, high volume stocks..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="pl-9 h-8 text-sm"
+                className="pr-8 h-8 text-sm"
               />
               
               {/* Recent Searches Dropdown */}
@@ -122,9 +169,9 @@ export function AISearch({ stocks, onStockSelect }: AISearchProps) {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-4 w-4 p-0"
+                    className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted/50"
                   >
-                    <ChevronDown size={10} />
+                    <History size={12} />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-96 p-2" align="end">

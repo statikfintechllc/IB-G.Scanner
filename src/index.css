@@ -162,3 +162,29 @@
   overflow-y: auto;
 }
 
+/* Hidden scrollbar for mobile-friendly scrolling */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Touch scrolling improvements */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Enhanced touch interaction for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .touch-scroll {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: auto;
+    overscroll-behavior-y: contain;
+  }
+}
+

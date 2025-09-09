@@ -8,8 +8,48 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { TrendingUp, TrendingDown, Volume2, Target, Wifi, WifiOff } from '@phosphor-icons/react';
+import { Footer } from '@/components/Footer';
 import { cn } from '@/lib/utils';
+
+// Custom SVG Icons
+const TrendingUp = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrendingDown = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17 7L7 17M7 17H17M7 17V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Volume2 = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M19.07 4.93A10 10 0 0 1 23 12A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 17 12A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Target = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+
+const Wifi = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5 12.55A11 11 0 0 1 12 9A11 11 0 0 1 19 12.55M8.46 16.35A5 5 0 0 1 12 15A5 5 0 0 1 15.54 16.35M12 20H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const WifiOff = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 1L23 23M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55A10.94 10.94 0 0 1 8.7 10.8M8.46 16.35A5 5 0 0 1 12 15A5 5 0 0 1 15.54 16.35M12 20H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 interface IBKRChartProps {
   symbol: string;
@@ -486,8 +526,8 @@ export function IBKRChart({ symbol, currentPrice, change, changePercent }: IBKRC
       </Card>
 
       {/* Chart Container */}
-      <CardContent className="flex-1 m-6 mt-0 p-6 pt-0">
-        <div className="relative h-full">
+      <CardContent className="flex-1 m-6 mt-0 p-6 pt-0 flex flex-col">
+        <div className="relative flex-1">
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-card/50 backdrop-blur-sm z-10">
               <div className="text-center">
@@ -500,6 +540,9 @@ export function IBKRChart({ symbol, currentPrice, change, changePercent }: IBKRC
           )}
           <div ref={chartContainerRef} className="w-full h-full" />
         </div>
+        
+        {/* Footer for chart tabs */}
+        <Footer />
       </CardContent>
     </div>
   );

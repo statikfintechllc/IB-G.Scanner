@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Plus, Search } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -11,10 +10,11 @@ import { cn } from '@/lib/utils';
 interface TabSelectorProps {
   stocks: Stock[];
   onStockSelect: (symbol: string) => void;
+  onCreateEmptyTab?: () => void;
   openTabSymbols: string[];
 }
 
-export function TabSelector({ stocks, onStockSelect, openTabSymbols }: TabSelectorProps) {
+export function TabSelector({ stocks, onStockSelect, onCreateEmptyTab, openTabSymbols }: TabSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -31,6 +31,18 @@ export function TabSelector({ stocks, onStockSelect, openTabSymbols }: TabSelect
     setSearchQuery('');
   };
 
+  const handleCreateEmptyTab = () => {
+    if (onCreateEmptyTab) {
+      onCreateEmptyTab();
+      setIsOpen(false);
+    }
+  };
+
+  const handleSearch = () => {
+    // Focus search behavior - could add additional search functionality here if needed
+    // For now, the search is already reactive through the input onChange
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -40,29 +52,104 @@ export function TabSelector({ stocks, onStockSelect, openTabSymbols }: TabSelect
           className="px-3 py-2 border-l border-border rounded-none hover:bg-muted/50 flex-shrink-0"
           title="Add new chart tab"
         >
-          <Plus size={16} />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="max-w-2xl w-[700px]">
-        <DialogHeader className="pb-3">
-          <DialogTitle className="text-sm">Add Chart Tab</DialogTitle>
+      <DialogContent className="max-w-[90vw] w-[90vw] h-[75vh] lg:max-w-2xl lg:w-[700px] lg:h-auto flex flex-col p-4">
+        <DialogHeader className="flex-shrink-0 pb-3">
+          <div className="flex items-center justify-center">
+            <DialogTitle className="text-sm lg:text-base">Add Chart Tab</DialogTitle>
+            {onCreateEmptyTab && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleCreateEmptyTab}
+                className="flex items-center gap-1.5 px-2 py-1 h-7 text-xs ml-4"
+                title="Create empty chart tab"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 5v14m-7-7h14" />
+                </svg>
+                <span className="hidden sm:inline">Empty Tab</span>
+              </Button>
+            )}
+          </div>
         </DialogHeader>
 
-        <div className="space-y-3">
+        <div className="space-y-3 flex-1 min-h-0">
           {/* Search */}
-          <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search stocks..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
+          <div className="relative flex gap-2 flex-shrink-0">
+            <div className="relative flex-1">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+              <Input
+                placeholder="Search stocks..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              />
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleSearch}
+              className="flex items-center gap-1.5 px-3 py-2 h-10 flex-shrink-0"
+              title="Search stocks"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+              <span className="hidden sm:inline text-sm">Search</span>
+            </Button>
           </div>
 
           {/* Stock List */}
-          <ScrollArea className="h-48">
+          <ScrollArea className="h-48 lg:h-64 flex-1">
             <div className="space-y-1 pr-2">
               {availableStocks.length > 0 ? (
                 availableStocks.slice(0, 50).map((stock) => (

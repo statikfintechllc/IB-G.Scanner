@@ -14,6 +14,7 @@ import { IBKRSettings } from '@/components/IBKRSettings';
 import { AISearch } from '@/components/AISearch';
 import { MarketInsights } from '@/components/MarketInsights';
 import { SFTiTop10 } from '@/components/SFTiTop10';
+import { Footer } from '@/components/Footer';
 import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import iconImg from '@/assets/images/icon.png';
@@ -36,7 +37,7 @@ function App() {
   const [filteredStocks, setFilteredStocks] = useState<Stock[]>([]);
   const [filters, setFilters] = useKV<ScannerFilters>('scanner-filters', DEFAULT_FILTERS);
   const [tabs, setTabs] = useKV<Tab[]>('scanner-tabs-v2', [
-    { id: 'sfti_top10', type: 'sfti_top10', title: 'SFTi Top 10' },
+    { id: 'sfti_top10', type: 'sfti_top10', title: 'AI Picks' },
     { id: 'scanner', type: 'scanner', title: 'Scanner' }
   ]);
   const [activeTabId, setActiveTabId] = useKV<string>('active-tab-v2', 'sfti_top10');
@@ -46,7 +47,7 @@ function App() {
   // Ensure tabs are properly initialized
   useEffect(() => {
     const correctTabs = [
-      { id: 'sfti_top10', type: 'sfti_top10', title: 'SFTi Top 10' },
+      { id: 'sfti_top10', type: 'sfti_top10', title: 'AI Picks' },
       { id: 'scanner', type: 'scanner', title: 'Scanner' }
     ];
     
@@ -192,6 +193,23 @@ function App() {
     handleStockSelect(symbol);
   };
 
+  const handleAddEmptyTab = () => {
+    if (tabs.length >= 6) {
+      toast.error('Maximum 6 tabs allowed. Close a tab to open a new one.');
+      return;
+    }
+
+    const newTab: Tab = {
+      id: `chart-empty-${Date.now()}`,
+      type: 'chart',
+      title: 'Empty Chart',
+      // No symbol property - creates an empty chart tab
+    };
+
+    setTabs(prevTabs => [...prevTabs, newTab]);
+    setActiveTabId(newTab.id);
+  };
+
   const activeTab = tabs.find(tab => tab.id === activeTabId);
   const currentStock = activeTab?.symbol ? stocks.find(s => s.symbol === activeTab.symbol) : null;
 
@@ -208,34 +226,76 @@ function App() {
 
   return (
     <div className={cn(
-      "min-h-screen bg-background text-foreground transition-colors duration-300",
+      "h-screen bg-background text-foreground transition-colors duration-300 flex flex-col",
       getMarketThemeClass()
     )}>
       {/* Header */}
-      <div className="border-b border-border bg-card/50 backdrop-blur">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-4">
+      <div className="border-b border-border bg-card/50 backdrop-blur flex-shrink-0">
+        {/* Desktop Layout */}
+        <div className="hidden sm:flex items-center justify-between px-6 py-3">
+          {/* Left Section: Logo, Title, Market Status */}
+          <div className="flex items-center gap-6">
             <div className="flex items-center gap-3">
-              <img src={iconImg} alt="SFTi" className="w-8 h-8" />
-              <h1 className="text-xl font-bold font-mono">SFTi Stock Scanner</h1>
+              <img src={iconImg} alt="SFTi" className="w-8 h-8 flex-shrink-0" />
+              <h1 className="text-xl font-bold font-mono whitespace-nowrap -ml-1">SFTi Stock Scanner</h1>
             </div>
-            <MarketStatus />
+            <div className="-ml-2">
+              <MarketStatus />
+            </div>
             {error && (
-              <div className="text-xs text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded">
+              <div className="text-xs text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded whitespace-nowrap">
                 {error}
               </div>
             )}
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="text-sm text-muted-foreground">
+          {/* Center Section: Stock Count */}
+          <div className="flex-1 flex justify-center">
+            <div className="text-sm text-muted-foreground whitespace-nowrap -ml-1">
               {filteredStocks.length} stocks • Updated {new Date().toLocaleTimeString()}
             </div>
+          </div>
+          
+          {/* Right Section: Action Buttons */}
+          <div className="flex items-center gap-3">
             <AISearch stocks={filteredStocks} onStockSelect={handleStockSelect} />
             <MarketInsights stocks={filteredStocks} />
             <AlertsManager />
             <IBKRSettings />
           </div>
+        </div>
+
+        {/* Mobile Layout - Stacked */}
+        <div className="sm:hidden px-4 py-2">
+          {/* Top Row: Logo + Title + Market Status */}
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <img src={iconImg} alt="SFTi" className="w-6 h-6" />
+              <h1 className="text-lg font-bold font-mono">SFTi Stock Scanner</h1>
+            </div>
+            <MarketStatus />
+          </div>
+          
+          {/* Middle Row: Stock Count + Update Time (Combined) */}
+          <div className="flex justify-center mb-2">
+            <div className="text-xs text-muted-foreground text-center">
+              {filteredStocks.length} stocks • Updated {new Date().toLocaleTimeString()}
+            </div>
+          </div>
+          
+          {/* Bottom Row: Action Buttons (Smaller) */}
+          <div className="flex items-center justify-center gap-1 scale-75">
+            <AISearch stocks={filteredStocks} onStockSelect={handleStockSelect} />
+            <MarketInsights stocks={filteredStocks} />
+            <AlertsManager />
+            <IBKRSettings />
+          </div>
+          
+          {error && (
+            <div className="text-xs text-yellow-500 bg-yellow-500/10 px-2 py-1 rounded mt-2">
+              {error}
+            </div>
+          )}
         </div>
       </div>
 
@@ -246,41 +306,53 @@ function App() {
         onTabChange={setActiveTabId}
         onTabClose={handleTabClose}
         onAddTab={handleAddTab}
+        onAddEmptyTab={handleAddEmptyTab}
         stocks={filteredStocks}
         maxTabs={6}
       />
 
       {/* Content */}
-      <div className="flex-1 overflow-hidden">
-        {activeTab?.type === 'sfti_top10' ? (
-          <SFTiTop10 stocks={filteredStocks} onStockSelect={handleStockSelect} />
-        ) : activeTab?.type === 'scanner' ? (
-          <div className="h-full flex flex-col">
-            <div className="p-6 pb-2 flex-shrink-0">
-              <FilterPanel 
-                filters={filters} 
-                onFiltersChange={setFilters}
-              />
-            </div>
-            <div className="flex-1 min-h-0 px-6 pb-6">
-              <div className="h-full border border-border rounded-lg overflow-auto custom-scrollbar">
-                <ScannerTable 
-                  stocks={filteredStocks}
-                  onStockSelect={handleStockSelect}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 overflow-hidden">
+          {activeTab?.type === 'sfti_top10' ? (
+            <SFTiTop10 stocks={filteredStocks} onStockSelect={handleStockSelect} />
+          ) : activeTab?.type === 'scanner' ? (
+            <div className="h-full flex flex-col">
+              <div className="p-3 pb-1 flex-shrink-0">
+                <FilterPanel 
+                  filters={filters} 
+                  onFiltersChange={setFilters}
                 />
               </div>
+              <div className="flex-1 min-h-0 px-3 pb-3">
+                <div className="h-full border border-border rounded-lg overflow-hidden">
+                  <div className="h-full overflow-auto">
+                    <ScannerTable 
+                      stocks={filteredStocks}
+                      onStockSelect={handleStockSelect}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="h-full">
-            {activeTab?.symbol && (
-              <StockChart 
-                symbol={activeTab.symbol}
-                currentPrice={currentStock?.price}
-                change={currentStock?.change}
-                changePercent={currentStock?.changePercent}
-              />
-            )}
+          ) : (
+            <div className="h-full">
+              {activeTab?.symbol && (
+                <StockChart 
+                  symbol={activeTab.symbol}
+                  currentPrice={currentStock?.price}
+                  change={currentStock?.change}
+                  changePercent={currentStock?.changePercent}
+                />
+              )}
+            </div>
+          )}
+        </div>
+        
+        {/* Footer - pinned to bottom for main tabs */}
+        {(activeTab?.type === 'sfti_top10' || activeTab?.type === 'scanner') && (
+          <div className="flex-shrink-0">
+            <Footer />
           </div>
         )}
       </div>

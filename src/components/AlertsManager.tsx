@@ -12,9 +12,69 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
-import { Bell, Plus, Trash2, Target, TrendingUp, Volume2, AlertTriangle, Brain, Lightbulb } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+
+// Custom SVG Icons
+const Bell = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18 8A6 6 0 0 0 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13.73 21A2 2 0 0 1 10.27 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Plus = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Trash2 = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 6H5H21M8 6V4A2 2 0 0 1 10 2H14A2 2 0 0 1 16 4V6M19 6V20A2 2 0 0 1 17 22H7A2 2 0 0 1 5 20V6H19ZM10 11V17M14 11V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Target = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+
+const TrendingUp = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Volume2 = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M19.07 4.93A10 10 0 0 1 23 12A10 10 0 0 1 19.07 19.07M15.54 8.46A5 5 0 0 1 17 12A5 5 0 0 1 15.54 15.54" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const AlertTriangle = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 9V13M12 17H12.01M10.29 3.86L1.82 18A2 2 0 0 0 3.64 21H20.36A2 2 0 0 0 22.18 18L13.71 3.86A2 2 0 0 0 10.29 3.86Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Brain = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 5C13.66 5 15 3.66 15 2C15 3.66 16.34 5 18 5C16.34 5 15 6.34 15 8C15 6.34 13.66 5 12 5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 22C10.34 22 9 20.66 9 19C9 20.66 7.66 22 6 22C7.66 22 9 20.66 9 19C9 17.34 10.34 16 12 16C13.66 16 15 17.34 15 19C15 20.66 13.66 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 16V5M15 8V19M9 8V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Lightbulb = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 21H15M12 3C8.686 3 6 5.686 6 9C6 11.209 7.209 13.109 9 14.17V16C9 16.552 9.448 17 10 17H14C14.552 17 15 16.552 15 16V14.17C16.791 13.109 18 11.209 18 9C18 5.686 15.314 3 12 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 interface AlertsManagerProps {
   symbol?: string; // If provided, opens with alert for this symbol
@@ -175,14 +235,14 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="relative">
-          <Bell size={16} className="mr-2" />
-          Alerts
+      {/* Mobile Button */}
+      <DialogTrigger asChild className="lg:hidden">
+        <Button variant="outline" size="md" className="relative flex-1 max-w-[80px]">
+          <span className="text-sm">Alerts</span>
           {alerts.filter(a => a.triggered).length > 0 && (
             <Badge 
               variant="destructive" 
-              className="absolute -top-2 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs"
+              className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs"
             >
               {alerts.filter(a => a.triggered).length}
             </Badge>
@@ -190,7 +250,18 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
         </Button>
       </DialogTrigger>
       
-      <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-[90vw] translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg h-[80vh] flex flex-col">
+      {/* Web Button */}
+      <DialogTrigger asChild className="hidden lg:inline-flex">
+        <Button variant="outline" size="lg" className="gap-3 px-6 py-3 relative">
+          <Bell size={24} />
+          <span className="text-lg font-medium">Alerts</span>
+          {alerts.length > 0 && (
+            <Badge variant="destructive" className="absolute -top-2 -right-2 px-2 py-1 text-xs">
+              {alerts.length}
+            </Badge>
+          )}
+        </Button>
+      </DialogTrigger>      <DialogContent className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-[85vw] lg:max-w-[70vw] translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg h-[80vh] flex flex-col">
         <DialogHeader className="pb-2 flex-shrink-0">
           <DialogTitle className="text-base flex items-center gap-2">
             <Bell size={16} />
@@ -218,20 +289,20 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
 
                   {/* Create New Alert - Compressed */}
                   <Card className="flex-shrink-0">
-                    <CardContent className="p-3">
-                      <div className="flex gap-2 items-center flex-wrap">
-                        <div className="flex-1 min-w-[70px]">
+                    <CardContent className="p-2">
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 items-center">
+                        <div>
                           <Input
                             placeholder="AAPL"
                             value={newAlert.symbol}
                             onChange={(e) => setNewAlert(prev => ({ ...prev, symbol: e.target.value.toUpperCase() }))}
-                            className="font-mono text-xs h-7 px-2"
+                            className="font-mono text-xs h-8 px-2"
                           />
                         </div>
                         
-                        <div className="flex-1 min-w-[90px]">
+                        <div>
                           <Select value={newAlert.type} onValueChange={(value: PriceAlert['type']) => setNewAlert(prev => ({ ...prev, type: value }))}>
-                            <SelectTrigger className="text-xs h-7 px-2">
+                            <SelectTrigger className="text-xs h-8 px-2">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -245,18 +316,18 @@ export function AlertsManager({ symbol }: AlertsManagerProps) {
                           </Select>
                         </div>
                   
-                        <div className="flex-1 min-w-[70px]">
+                        <div>
                           <Input
                             type="number"
                             step={newAlert.type.includes('price') ? '0.0001' : '1000'}
                             placeholder={newAlert.type === 'volume_spike' ? '1000000' : newAlert.type === 'breakout' ? '1' : '1.0000'}
                             value={newAlert.value || ''}
                             onChange={(e) => setNewAlert(prev => ({ ...prev, value: parseFloat(e.target.value) || 0 }))}
-                            className="text-xs h-7 px-2"
+                            className="text-xs h-8 px-2"
                           />
                         </div>
                   
-                        <Button onClick={handleAddAlert} className="text-xs h-7 px-3">
+                        <Button onClick={handleAddAlert} className="text-xs h-8 px-3 w-full">
                           <Plus size={12} className="mr-1" />
                           Add
                         </Button>

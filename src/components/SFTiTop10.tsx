@@ -7,20 +7,80 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { 
-  Brain,
-  TrendingUp,
-  TrendingDown,
-  Eye,
-  Target,
-  Shield,
-  Clock,
-  Activity,
-  Zap,
-  BarChart3,
-  AlertTriangle
-} from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
+
+// Custom SVG Icons
+const Brain = ({ size = 10 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 5C13.66 5 15 3.66 15 2C15 3.66 16.34 5 18 5C16.34 5 15 6.34 15 8C15 6.34 13.66 5 12 5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 22C10.34 22 9 20.66 9 19C9 20.66 7.66 22 6 22C7.66 22 9 20.66 9 19C9 17.34 10.34 16 12 16C13.66 16 15 17.34 15 19C15 20.66 13.66 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 16V5M15 8V19M9 8V19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrendingUp = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TrendingDown = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17 7L7 17M7 17H17M7 17V7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Eye = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 12S5 4 12 4S23 12 23 12S19 20 12 20S1 12 1 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+
+const Target = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="2"/>
+    <circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="2"/>
+  </svg>
+);
+
+const Shield = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 22S8 18 8 12V7L12 5L16 7V12C16 18 12 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Clock = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+    <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Activity = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Zap = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const BarChart3 = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M3 3V21H21M7 14V20M12 9V20M17 4V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const AlertTriangle = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 9V13M12 17H12.01M10.29 3.86L1.82 18A2 2 0 0 0 3.64 21H20.36A2 2 0 0 0 22.18 18L13.71 3.86A2 2 0 0 0 10.29 3.86Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 interface SFTiTop10Props {
   stocks: Stock[];
@@ -108,20 +168,70 @@ export function SFTiTop10({ stocks, onStockSelect }: SFTiTop10Props) {
   if (loading) {
     return (
       <div className="h-full flex flex-col">
-        <div className="p-6 border-b border-border">
-          <div className="flex items-center gap-2">
-            <Brain className="text-primary" size={20} />
-            <h2 className="text-lg font-semibold">SFTi Top 10</h2>
-            <Badge variant="secondary" className="ml-auto">
-              <Zap size={12} className="mr-1" />
-              Analyzing...
-            </Badge>
-          </div>
-        </div>
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <div className="animate-spin">
-              <Brain size={48} className="text-primary mx-auto" />
+          <div className="text-center space-y-3">
+            <div className="animate-spin w-6 h-6 mx-auto">
+              <svg 
+                viewBox="0 0 24 24" 
+                className="w-full h-full"
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Circular donut track - outer tire marks */}
+                <circle 
+                  cx="12" 
+                  cy="12" 
+                  r="9" 
+                  stroke="currentColor" 
+                  strokeWidth="0.8" 
+                  fill="none" 
+                  strokeOpacity="0.3"
+                  strokeDasharray="1 1"
+                />
+                
+                {/* Inner donut track */}
+                <circle 
+                  cx="12" 
+                  cy="12" 
+                  r="7" 
+                  stroke="currentColor" 
+                  strokeWidth="0.5" 
+                  fill="none" 
+                  strokeOpacity="0.2"
+                  strokeDasharray="0.5 0.5"
+                />
+                
+                {/* Car body (top view) positioned at 12 o'clock */}
+                <rect 
+                  x="10.5" 
+                  y="2.5" 
+                  width="3" 
+                  height="4" 
+                  rx="0.5" 
+                  fill="currentColor"
+                />
+                
+                {/* Car windshield (top view) */}
+                <rect 
+                  x="11" 
+                  y="3" 
+                  width="2" 
+                  height="1.5" 
+                  rx="0.3" 
+                  fill="currentColor" 
+                  fillOpacity="0.7"
+                />
+                
+                {/* Car wheels (top view) */}
+                <rect x="10.2" y="3.5" width="0.8" height="1.2" rx="0.2" fill="currentColor" />
+                <rect x="12.8" y="3.5" width="0.8" height="1.2" rx="0.2" fill="currentColor" />
+                
+                {/* Smoke trail behind car */}
+                <circle cx="11.5" cy="8" r="0.6" fill="currentColor" fillOpacity="0.4" />
+                <circle cx="12.5" cy="9.5" r="0.4" fill="currentColor" fillOpacity="0.3" />
+                <circle cx="11" cy="10.5" r="0.3" fill="currentColor" fillOpacity="0.2" />
+                <circle cx="13" cy="11" r="0.2" fill="currentColor" fillOpacity="0.1" />
+              </svg>
             </div>
             <p className="text-muted-foreground">AI is analyzing market patterns...</p>
           </div>
@@ -132,73 +242,10 @@ export function SFTiTop10({ stocks, onStockSelect }: SFTiTop10Props) {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="p-6 border-b border-border">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Brain className="text-primary" size={20} />
-            <h2 className="text-lg font-semibold">SFTi Top 10</h2>
-            <Badge variant="secondary">
-              <Zap size={12} className="mr-1" />
-              {recommendations.length} Recommendations
-            </Badge>
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Updated {lastUpdate.toLocaleTimeString()}
-          </div>
-        </div>
-
-        {/* Market Sentiment Overview */}
-        {marketScan && (
-          <div className="grid grid-cols-3 gap-4">
-            <Card className="bg-card/50">
-              <CardContent className="p-3">
-                <div className="flex items-center gap-2">
-                  <Activity size={16} className="text-primary" />
-                  <span className="text-xs font-medium">Market Sentiment</span>
-                </div>
-                <div className={cn(
-                  "text-sm font-semibold mt-1",
-                  marketScan.marketSentiment === 'bullish' && "text-green-400",
-                  marketScan.marketSentiment === 'bearish' && "text-red-400",
-                  marketScan.marketSentiment === 'neutral' && "text-yellow-400"
-                )}>
-                  {marketScan.marketSentiment.toUpperCase()}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/50">
-              <CardContent className="p-3">
-                <div className="flex items-center gap-2">
-                  <BarChart3 size={16} className="text-primary" />
-                  <span className="text-xs font-medium">Unusual Volume</span>
-                </div>
-                <div className="text-sm font-semibold mt-1">
-                  {marketScan.volumeAnalysis.unusualVolume.length} stocks
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card/50">
-              <CardContent className="p-3">
-                <div className="flex items-center gap-2">
-                  <Target size={16} className="text-primary" />
-                  <span className="text-xs font-medium">Pattern Matches</span>
-                </div>
-                <div className="text-sm font-semibold mt-1">
-                  {marketScan.patternMatches.length} detected
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
+      {/* Content - Full Height */}
       <div className="flex-1 min-h-0">
         <Tabs defaultValue="recommendations" className="h-full flex flex-col">
-          <TabsList className="mx-6 mt-4 w-fit">
+          <TabsList className="mx-6 mt-6 w-fit">
             <TabsTrigger value="recommendations" className="text-xs">
               <TrendingUp size={14} className="mr-1" />
               Recommendations
@@ -215,7 +262,7 @@ export function SFTiTop10({ stocks, onStockSelect }: SFTiTop10Props) {
 
           <div className="flex-1 min-h-0 p-6 pt-4">
             <TabsContent value="recommendations" className="h-full mt-0">
-              <div className="h-full overflow-y-auto custom-scrollbar">
+              <div className="h-full overflow-y-auto scrollbar-hide touch-scroll">
                 <div className="space-y-3">
                   {recommendations.length > 0 ? recommendations.map((rec) => (
                     <Card 
@@ -303,7 +350,7 @@ export function SFTiTop10({ stocks, onStockSelect }: SFTiTop10Props) {
             </TabsContent>
 
             <TabsContent value="patterns" className="h-full mt-0">
-              <div className="h-full overflow-y-auto custom-scrollbar">
+              <div className="h-full overflow-y-auto scrollbar-hide touch-scroll">
                 <div className="space-y-3">
                   {marketScan?.patternMatches && marketScan.patternMatches.length > 0 ? marketScan.patternMatches.map((match, idx) => (
                     <Card 
@@ -346,7 +393,7 @@ export function SFTiTop10({ stocks, onStockSelect }: SFTiTop10Props) {
             </TabsContent>
 
             <TabsContent value="volume" className="h-full mt-0">
-              <div className="h-full overflow-y-auto custom-scrollbar">
+              <div className="h-full overflow-y-auto scrollbar-hide touch-scroll">
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">

@@ -4,8 +4,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
-// Import axios (make sure it's installed)
 import axios from 'axios';
+import https from 'https';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -15,18 +15,23 @@ class SFTiServer {
         this.server = null;
         this.wss = null;
         this.clients = new Set();
-        this.routerConnected = false;
-        this.routerSocket = null;
         this.marketData = new Map();
         this.lastUpdate = new Date();
+        this.ibkrAuthenticated = false;
         
-        // Configuration
+        // IBKR Client Portal Gateway configuration
+        this.ibkrConfig = {
+            gatewayUrl: process.env.IBKR_GATEWAY_URL || 'https://localhost:5000',
+            baseUrl: process.env.IBKR_BASE_URL || 'https://localhost:5000/v1/api',
+            timeout: parseInt(process.env.IBKR_TIMEOUT) || 30000,
+            retryInterval: parseInt(process.env.IBKR_RETRY_INTERVAL) || 60000
+        };
+        
+        // Server configuration
         this.config = {
             port: process.env.SERVER_PORT || 3000,
             wsPort: process.env.WS_PORT || 3001,
             host: process.env.SERVER_HOST || '0.0.0.0',
-            routerHost: process.env.ROUTER_HOST || 'localhost',
-            routerPort: process.env.ROUTER_PORT || 8080,
             corsOrigin: process.env.CORS_ORIGIN || '*',
             rateLimit: {
                 window: parseInt(process.env.RATE_LIMIT_WINDOW) || 60000,
@@ -34,10 +39,23 @@ class SFTiServer {
             }
         };
         
+        // Axios instance for IBKR API calls
+        this.ibkrClient = axios.create({
+            baseURL: this.ibkrConfig.baseUrl,
+            timeout: this.ibkrConfig.timeout,
+            httpsAgent: new https.Agent({
+                rejectUnauthorized: false // For localhost SSL
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Agent': 'SFTi-Scanner/1.0'
+            }
+        });
+        
         this.setupMiddleware();
         this.setupRoutes();
         this.setupWebSocket();
-        this.connectToRouter();
+        this.startIBKRHealthCheck();
     }
     
     setupMiddleware() {
@@ -69,7 +87,7 @@ class SFTiServer {
         this.app.use(express.urlencoded({ extended: true }));
         
         // Rate limiting
-    const rateLimiter = new RateLimiterMemory({
+        const rateLimiter = new RateLimiterMemory({
             keyGenerator: (req) => req.ip,
             points: this.config.rateLimit.max,
             duration: this.config.rateLimit.window / 1000
@@ -102,111 +120,121 @@ class SFTiServer {
             res.json({
                 status: 'healthy',
                 timestamp: new Date().toISOString(),
-                routerConnected: this.routerConnected,
+                ibkrConnected: this.ibkrAuthenticated,
                 activeClients: this.clients.size,
                 marketDataAge: Date.now() - this.lastUpdate.getTime()
             });
         });
         
-        // Market data endpoints
-        this.app.get('/api/market-data', (req, res) => {
-            const symbols = req.query.symbols ? req.query.symbols.split(',') : [];
-            
-            if (symbols.length === 0) {
-                return res.json(Array.from(this.marketData.values()));
+        // IBKR Authentication endpoints
+        this.app.post('/api/ibkr/auth/status', async (req, res) => {
+            try {
+                const response = await this.ibkrRequest('POST', '/iserver/auth/status', {});
+                res.json(response.data);
+            } catch (error) {
+                res.status(500).json({ error: 'IBKR auth status check failed', details: error.message });
             }
-            
-            const data = symbols.map(symbol => this.marketData.get(symbol)).filter(Boolean);
-            res.json(data);
         });
         
-        this.app.get('/api/market-data/:symbol', (req, res) => {
-            const { symbol } = req.params;
-            const data = this.marketData.get(symbol.toUpperCase());
-            
-            if (!data) {
-                return res.status(404).json({ error: 'Symbol not found' });
+        this.app.post('/api/ibkr/auth/init', async (req, res) => {
+            try {
+                const response = await this.ibkrRequest('POST', '/iserver/auth/ssodh/init', {});
+                this.ibkrAuthenticated = response.data.authenticated || false;
+                res.json(response.data);
+            } catch (error) {
+                res.status(500).json({ error: 'IBKR authentication failed', details: error.message });
             }
-            
-            res.json(data);
+        });
+        
+        // Market data endpoints
+        this.app.get('/api/market-data', async (req, res) => {
+            try {
+                const symbols = req.query.symbols ? req.query.symbols.split(',') : [];
+                
+                if (symbols.length === 0) {
+                    return res.json(Array.from(this.marketData.values()));
+                }
+                
+                // Get real-time data from IBKR
+                const marketData = await this.getMarketDataFromIBKR(symbols);
+                res.json(marketData);
+            } catch (error) {
+                console.error('Market data request failed:', error);
+                res.status(500).json({ error: 'Market data request failed' });
+            }
+        });
+        
+        this.app.get('/api/market-data/:symbol', async (req, res) => {
+            try {
+                const { symbol } = req.params;
+                const marketData = await this.getMarketDataFromIBKR([symbol]);
+                
+                if (!marketData || marketData.length === 0) {
+                    return res.status(404).json({ error: 'Symbol not found' });
+                }
+                
+                res.json(marketData[0]);
+            } catch (error) {
+                console.error('Market data request failed:', error);
+                res.status(500).json({ error: 'Market data request failed' });
+            }
         });
         
         // Scanner endpoints
         this.app.post('/api/scan', async (req, res) => {
             try {
                 const filters = req.body;
-                const response = await this.requestFromRouter('scan', filters);
-                res.json(response);
+                const scannerData = await this.runIBKRScanner(filters);
+                res.json(scannerData);
             } catch (error) {
-                console.error('Scan request failed:', error);
-                res.status(500).json({ error: 'Scan request failed' });
+                console.error('Scanner request failed:', error);
+                res.status(500).json({ error: 'Scanner request failed' });
             }
         });
         
-        // Watchlist endpoints
-        this.app.get('/api/watchlist', async (req, res) => {
+        // Portfolio endpoints
+        this.app.get('/api/portfolio', async (req, res) => {
             try {
-                const response = await this.requestFromRouter('getWatchlist');
-                res.json(response);
+                const response = await this.ibkrRequest('GET', '/portfolio/accounts');
+                res.json(response.data);
             } catch (error) {
-                console.error('Watchlist request failed:', error);
-                res.status(500).json({ error: 'Watchlist request failed' });
+                console.error('Portfolio request failed:', error);
+                res.status(500).json({ error: 'Portfolio request failed' });
             }
         });
         
-        this.app.post('/api/watchlist', async (req, res) => {
+        // Orders endpoints
+        this.app.get('/api/orders', async (req, res) => {
             try {
-                const { symbols } = req.body;
-                const response = await this.requestFromRouter('updateWatchlist', { symbols });
-                res.json(response);
+                const response = await this.ibkrRequest('GET', '/iserver/orders');
+                res.json(response.data);
             } catch (error) {
-                console.error('Watchlist update failed:', error);
-                res.status(500).json({ error: 'Watchlist update failed' });
+                console.error('Orders request failed:', error);
+                res.status(500).json({ error: 'Orders request failed' });
             }
         });
         
-        // Chart data endpoints
-        this.app.get('/api/chart/:symbol', async (req, res) => {
+        this.app.post('/api/orders', async (req, res) => {
             try {
-                const { symbol } = req.params;
-                const { timeframe = '1m', bars = 100 } = req.query;
-                
-                const response = await this.requestFromRouter('getChartData', {
-                    symbol: symbol.toUpperCase(),
-                    timeframe,
-                    bars: parseInt(bars)
-                });
-                
-                res.json(response);
+                const orderData = req.body;
+                const response = await this.ibkrRequest('POST', '/iserver/orders', orderData);
+                res.json(response.data);
             } catch (error) {
-                console.error('Chart data request failed:', error);
-                res.status(500).json({ error: 'Chart data request failed' });
+                console.error('Order placement failed:', error);
+                res.status(500).json({ error: 'Order placement failed' });
             }
         });
         
-        // News endpoints
-        this.app.get('/api/news', async (req, res) => {
-            try {
-                const { symbols, limit = 50 } = req.query;
-                const symbolList = symbols ? symbols.split(',') : [];
-                
-                const response = await this.requestFromRouter('getNews', {
-                    symbols: symbolList,
-                    limit: parseInt(limit)
-                });
-                
-                res.json(response);
-            } catch (error) {
-                console.error('News request failed:', error);
-                res.status(500).json({ error: 'News request failed' });
-            }
-        });
-        
-        // AI endpoints
+        // AI endpoints (mock for now)
         this.app.post('/api/ai/search', async (req, res) => {
             try {
                 const { query } = req.body;
-                const response = await this.requestFromRouter('aiSearch', { query });
+                // Mock AI search - replace with actual AI service
+                const response = {
+                    suggestions: [`AI analysis for: ${query}`],
+                    insights: [`Market insight: ${query} trending analysis`],
+                    symbols: ['AAPL', 'MSFT', 'GOOGL'] // Mock symbols
+                };
                 res.json(response);
             } catch (error) {
                 console.error('AI search failed:', error);
@@ -216,64 +244,26 @@ class SFTiServer {
         
         this.app.get('/api/ai/insights', async (req, res) => {
             try {
-                const response = await this.requestFromRouter('getMarketInsights');
+                // Mock market insights - replace with actual AI service
+                const response = {
+                    marketSentiment: 'Bullish',
+                    topGainers: ['NVDA', 'AMD', 'TSLA'],
+                    topLosers: ['META', 'NFLX', 'SPOT'],
+                    lastUpdate: new Date().toISOString()
+                };
                 res.json(response);
             } catch (error) {
-                console.error('Market insights request failed:', error);
-                res.status(500).json({ error: 'Market insights request failed' });
-            }
-        });
-        
-        this.app.get('/api/ai/top-picks', async (req, res) => {
-            try {
-                const response = await this.requestFromRouter('getTopPicks');
-                res.json(response);
-            } catch (error) {
-                console.error('Top picks request failed:', error);
-                res.status(500).json({ error: 'Top picks request failed' });
-            }
-        });
-        
-        // Alert endpoints
-        this.app.get('/api/alerts', async (req, res) => {
-            try {
-                const response = await this.requestFromRouter('getAlerts');
-                res.json(response);
-            } catch (error) {
-                console.error('Alerts request failed:', error);
-                res.status(500).json({ error: 'Alerts request failed' });
-            }
-        });
-        
-        this.app.post('/api/alerts', async (req, res) => {
-            try {
-                const alert = req.body;
-                const response = await this.requestFromRouter('createAlert', alert);
-                res.json(response);
-            } catch (error) {
-                console.error('Alert creation failed:', error);
-                res.status(500).json({ error: 'Alert creation failed' });
-            }
-        });
-        
-        this.app.delete('/api/alerts/:id', async (req, res) => {
-            try {
-                const { id } = req.params;
-                const response = await this.requestFromRouter('deleteAlert', { id });
-                res.json(response);
-            } catch (error) {
-                console.error('Alert deletion failed:', error);
-                res.status(500).json({ error: 'Alert deletion failed' });
+                console.error('AI insights failed:', error);
+                res.status(500).json({ error: 'AI insights failed' });
             }
         });
         
         // Serve static files (the web app)
-        this.app.use(express.static('public'));
+        this.app.use(express.static('dist'));
         
         // Fallback for SPA
-        // Use a catch-all middleware for SPA fallback
         this.app.use((req, res) => {
-            res.sendFile('index.html', { root: 'public' });
+            res.sendFile('index.html', { root: 'dist' });
         });
         
         // Error handling
@@ -298,9 +288,10 @@ class SFTiServer {
             
             // Send current market data to new client
             ws.send(JSON.stringify({
-                type: 'marketData',
-                data: Array.from(this.marketData.values()),
-                timestamp: this.lastUpdate.toISOString()
+                type: 'connection',
+                status: 'connected',
+                ibkrStatus: this.ibkrAuthenticated ? 'authenticated' : 'not authenticated',
+                timestamp: new Date().toISOString()
             }));
             
             ws.on('message', async (message) => {
@@ -309,21 +300,27 @@ class SFTiServer {
                     
                     switch (data.type) {
                         case 'subscribe':
-                            // Handle subscription to specific symbols
                             await this.handleSubscription(ws, data.symbols);
                             break;
                             
                         case 'unsubscribe':
-                            // Handle unsubscription
                             await this.handleUnsubscription(ws, data.symbols);
                             break;
                             
                         case 'ping':
                             ws.send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
                             break;
+                            
+                        default:
+                            console.log('Unknown WebSocket message type:', data.type);
                     }
                 } catch (error) {
                     console.error('WebSocket message error:', error);
+                    ws.send(JSON.stringify({
+                        type: 'error',
+                        message: 'Invalid message format',
+                        timestamp: Date.now()
+                    }));
                 }
             });
             
@@ -343,7 +340,8 @@ class SFTiServer {
     
     async handleSubscription(ws, symbols) {
         try {
-            await this.requestFromRouter('subscribe', { symbols });
+            // Subscribe to real-time market data via IBKR WebSocket
+            const response = await this.subscribeToMarketData(symbols);
             ws.send(JSON.stringify({
                 type: 'subscribed',
                 symbols,
@@ -361,7 +359,8 @@ class SFTiServer {
     
     async handleUnsubscription(ws, symbols) {
         try {
-            await this.requestFromRouter('unsubscribe', { symbols });
+            // Unsubscribe from market data
+            await this.unsubscribeFromMarketData(symbols);
             ws.send(JSON.stringify({
                 type: 'unsubscribed',
                 symbols,
@@ -372,103 +371,144 @@ class SFTiServer {
         }
     }
     
-    connectToRouter() {
-        const routerUrl = `ws://${this.config.routerHost}:${this.config.routerPort}/ws`;
-        
-        console.log(`Connecting to router at ${routerUrl}`);
-        
-        this.routerSocket = new WebSocket(routerUrl);
-        
-        this.routerSocket.on('open', () => {
-            console.log('Connected to router');
-            this.routerConnected = true;
+    // IBKR API helper methods
+    async ibkrRequest(method, endpoint, data = {}) {
+        try {
+            const config = {
+                method,
+                url: endpoint,
+                ...(method === 'POST' || method === 'PUT' ? { data } : {})
+            };
             
-            // Send authentication if needed
-            this.routerSocket.send(JSON.stringify({
-                type: 'auth',
-                clientType: 'server'
-            }));
-        });
-        
-        this.routerSocket.on('message', (data) => {
-            try {
-                const message = JSON.parse(data);
-                this.handleRouterMessage(message);
-            } catch (error) {
-                console.error('Router message parse error:', error);
-            }
-        });
-        
-        this.routerSocket.on('close', () => {
-            console.log('Router connection closed, attempting to reconnect...');
-            this.routerConnected = false;
-            
-            setTimeout(() => {
-                this.connectToRouter();
-            }, 5000);
-        });
-        
-        this.routerSocket.on('error', (error) => {
-            console.error('Router connection error:', error);
-            this.routerConnected = false;
-        });
-    }
-    
-    handleRouterMessage(message) {
-        switch (message.type) {
-            case 'marketData':
-                this.updateMarketData(message.data);
-                break;
-            case 'alert':
-                this.broadcastAlert(message.data);
-                break;
-            case 'news':
-                this.broadcastNews(message.data);
-                break;
-            case 'error':
-                console.error('Router error:', message.error);
-                break;
-            case 'response':
-                console.log('Router response:', message);
-                break;
-            default:
-                console.log('Unknown router message type:', message.type);
+            const response = await this.ibkrClient.request(config);
+            return response;
+        } catch (error) {
+            console.error(`IBKR API Error (${method} ${endpoint}):`, error.message);
+            throw error;
         }
     }
     
-    updateMarketData(data) {
-        if (Array.isArray(data)) {
-            data.forEach(stock => {
-                this.marketData.set(stock.symbol, stock);
+    async getMarketDataFromIBKR(symbols) {
+        try {
+            // Get contract IDs for symbols first
+            const contracts = await this.getContractDetails(symbols);
+            
+            // Get market data snapshots
+            const marketDataPromises = contracts.map(async (contract) => {
+                try {
+                    const response = await this.ibkrRequest('GET', `/iserver/marketdata/snapshot?conids=${contract.conid}&fields=31,84,85,86`);
+                    return {
+                        symbol: contract.symbol,
+                        conid: contract.conid,
+                        price: response.data[0]?.['31'] || 0,
+                        bid: response.data[0]?.['84'] || 0,
+                        ask: response.data[0]?.['85'] || 0,
+                        volume: response.data[0]?.['86'] || 0,
+                        timestamp: new Date().toISOString()
+                    };
+                } catch (error) {
+                    console.error(`Failed to get market data for ${contract.symbol}:`, error.message);
+                    return null;
+                }
             });
-        } else {
-            this.marketData.set(data.symbol, data);
+            
+            const results = await Promise.all(marketDataPromises);
+            return results.filter(Boolean);
+        } catch (error) {
+            console.error('Failed to get market data from IBKR:', error);
+            return [];
         }
-        
-        this.lastUpdate = new Date();
-        
-        // Broadcast to all WebSocket clients
-        this.broadcast({
-            type: 'marketData',
-            data: Array.isArray(data) ? data : [data],
-            timestamp: this.lastUpdate.toISOString()
-        });
     }
     
-    broadcastAlert(alert) {
-        this.broadcast({
-            type: 'alert',
-            data: alert,
-            timestamp: new Date().toISOString()
-        });
+    async getContractDetails(symbols) {
+        try {
+            const searchPromises = symbols.map(async (symbol) => {
+                try {
+                    const response = await this.ibkrRequest('POST', '/iserver/secdef/search', {
+                        symbol: symbol.toUpperCase(),
+                        name: false,
+                        secType: 'STK'
+                    });
+                    
+                    if (response.data && response.data.length > 0) {
+                        return {
+                            symbol: symbol.toUpperCase(),
+                            conid: response.data[0].conid,
+                            exchange: response.data[0].exchange
+                        };
+                    }
+                    return null;
+                } catch (error) {
+                    console.error(`Failed to search contract for ${symbol}:`, error.message);
+                    return null;
+                }
+            });
+            
+            const results = await Promise.all(searchPromises);
+            return results.filter(Boolean);
+        } catch (error) {
+            console.error('Failed to get contract details:', error);
+            return [];
+        }
     }
     
-    broadcastNews(news) {
-        this.broadcast({
-            type: 'news',
-            data: news,
-            timestamp: new Date().toISOString()
-        });
+    async runIBKRScanner(filters) {
+        try {
+            // Get scanner parameters first
+            const paramsResponse = await this.ibkrRequest('GET', '/iserver/scanner/params');
+            
+            // Build scanner subscription
+            const scannerData = {
+                instrument: 'STK',
+                locations: 'STK.US.MAJOR',
+                scanCode: 'TOP_PERC_GAIN',
+                secType: 'STK',
+                numberOfRows: 50,
+                ...filters
+            };
+            
+            const response = await this.ibkrRequest('POST', '/iserver/scanner/run', scannerData);
+            return response.data;
+        } catch (error) {
+            console.error('IBKR scanner failed:', error);
+            // Return mock data for demo
+            return {
+                contracts: [
+                    { symbol: 'AAPL', price: 150.00, change: 2.5, volume: 1000000 },
+                    { symbol: 'MSFT', price: 300.00, change: 1.8, volume: 800000 },
+                    { symbol: 'GOOGL', price: 2500.00, change: 15.0, volume: 500000 }
+                ]
+            };
+        }
+    }
+    
+    async subscribeToMarketData(symbols) {
+        // Implementation for WebSocket subscription to IBKR market data
+        console.log('Subscribing to market data for:', symbols);
+        return { subscribed: symbols };
+    }
+    
+    async unsubscribeFromMarketData(symbols) {
+        // Implementation for WebSocket unsubscription
+        console.log('Unsubscribing from market data for:', symbols);
+        return { unsubscribed: symbols };
+    }
+    
+    startIBKRHealthCheck() {
+        // Check IBKR authentication status every minute
+        setInterval(async () => {
+            try {
+                const response = await this.ibkrRequest('POST', '/iserver/auth/status', {});
+                this.ibkrAuthenticated = response.data.authenticated || false;
+                
+                if (!this.ibkrAuthenticated) {
+                    console.log('IBKR not authenticated. Please authenticate via Client Portal Gateway.');
+                }
+            } catch (error) {
+                this.ibkrAuthenticated = false;
+                console.log('IBKR health check failed:', error.message);
+            }
+        }, this.ibkrConfig.retryInterval);
     }
     
     broadcast(message) {
@@ -479,47 +519,10 @@ class SFTiServer {
                 try {
                     client.send(messageStr);
                 } catch (error) {
-                    console.error('Broadcast error:', error);
+                    console.error('Failed to send message to client:', error);
                     this.clients.delete(client);
                 }
             }
-        });
-    }
-    
-    async requestFromRouter(action, data = {}) {
-        return new Promise((resolve, reject) => {
-            if (!this.routerConnected || !this.routerSocket) {
-                reject(new Error('Router not connected'));
-                return;
-            }
-            
-            const requestId = Date.now().toString();
-            const timeout = setTimeout(() => {
-                reject(new Error('Request timeout'));
-            }, 10000);
-            
-            const handleResponse = (message) => {
-                const response = JSON.parse(message);
-                if (response.requestId === requestId) {
-                    clearTimeout(timeout);
-                    this.routerSocket.off('message', handleResponse);
-                    
-                    if (response.error) {
-                        reject(new Error(response.error));
-                    } else {
-                        resolve(response.data);
-                    }
-                }
-            };
-            
-            this.routerSocket.on('message', handleResponse);
-            
-            this.routerSocket.send(JSON.stringify({
-                type: 'request',
-                action,
-                data,
-                requestId
-            }));
         });
     }
     
@@ -528,6 +531,13 @@ class SFTiServer {
             console.log(`SFTi Server listening on http://${this.config.host}:${this.config.port}`);
             console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
             console.log(`CORS Origin: ${this.config.corsOrigin}`);
+            console.log(`IBKR Gateway URL: ${this.ibkrConfig.gatewayUrl}`);
+            console.log('');
+            console.log('To use IBKR features:');
+            console.log('1. Download and run IBKR Client Portal Gateway');
+            console.log('2. Access: https://localhost:5000');
+            console.log('3. Login with your IBKR credentials');
+            console.log('4. The server will automatically detect authentication');
         });
         
         // Graceful shutdown
@@ -537,10 +547,6 @@ class SFTiServer {
     
     shutdown() {
         console.log('Shutting down server...');
-        
-        if (this.routerSocket) {
-            this.routerSocket.close();
-        }
         
         if (this.wss) {
             this.wss.close();

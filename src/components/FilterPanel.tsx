@@ -8,8 +8,26 @@ import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown, Filter, RotateCcw } from '@phosphor-icons/react';
 import { useKV } from '@github/spark/hooks';
+
+// Custom SVG Icons
+const ChevronDown = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const Filter = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const RotateCcw = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 4V10H7M3.51 15A9 9 0 0 0 20.49 9A9 9 0 0 0 12 3A9 9 0 0 0 5.64 5.64L1 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
 
 interface FilterPanelProps {
   filters: ScannerFilters;
@@ -103,12 +121,12 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   };
 
   return (
-    <Card className="mb-2">
+    <Card className="mb-1 py-0">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CollapsibleTrigger asChild>
           <Button 
             variant="ghost" 
-            className="w-full justify-between px-3 py-2 h-8 font-medium"
+            className="w-full justify-between px-3 py-2 h-8 font-medium rounded-none"
           >
             <div className="flex items-center gap-2">
               <Filter size={14} />
@@ -125,7 +143,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
           <div className="space-y-3">
             {/* Preset Filters */}
             <div>
-              <Label className="text-sm font-medium mb-1 block">Quick Presets</Label>
+              <Label className="text-xs font-medium mb-1 block">Quick Presets</Label>
               <div className="flex flex-wrap gap-1">
                 {Object.entries(PRESET_FILTERS).map(([name, preset]) => (
                   <Button 
@@ -133,7 +151,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                     size="sm" 
                     variant="outline"
                     onClick={() => applyPreset(preset)}
-                    className="text-xs px-2 py-1 h-auto"
+                    className="text-xs px-1.5 py-0.5 h-auto"
                   >
                     {name}
                   </Button>
@@ -142,9 +160,9 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
                   size="sm" 
                   variant="outline"
                   onClick={resetFilters}
-                  className="text-muted-foreground text-xs px-2 py-1 h-auto"
+                  className="text-muted-foreground text-xs px-1.5 py-0.5 h-auto"
                 >
-                  <RotateCcw size={12} className="mr-1" />
+                  <RotateCcw size={10} className="mr-1" />
                   Reset
                 </Button>
               </div>
