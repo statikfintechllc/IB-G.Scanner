@@ -21,27 +21,57 @@ export class IBKRBrowserService {
    */
   private async checkExistingSession(): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseUrl}/iserver/auth/status`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
+      // Try multiple endpoints to detect authentication
+      const endpoints = [
+        'https://cdcdyn.interactivebrokers.com/v1/api/iserver/auth/status',
+        'https://cdcdyn.interactivebrokers.com/v1/api/iserver/accounts'
+      ];
+
+      for (const endpoint of endpoints) {
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            signal: AbortSignal.timeout(10000)
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            
+            // Check for auth status endpoint
+            if (endpoint.includes('auth/status')) {
+              this.isAuthenticated = data.authenticated === true;
+              this.sessionId = data.session_id || null;
+              if (this.isAuthenticated) {
+                console.log('✅ IBKR authentication confirmed via auth/status');
+                return true;
+              }
+            }
+            
+            // Check for accounts endpoint (if we get data, we're authenticated)
+            if (endpoint.includes('accounts') && Array.isArray(data) && data.length > 0) {
+              this.isAuthenticated = true;
+              console.log('✅ IBKR authentication confirmed via accounts endpoint');
+              return true;
+            }
+          }
+        } catch (error) {
+          // Try next endpoint
+          continue;
         }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        this.isAuthenticated = data.authenticated || false;
-        this.sessionId = data.session_id || null;
-        return this.isAuthenticated;
       }
-    } catch (error) {
-      console.warn('No existing IBKR session found:', error);
-    }
-    return false;
-  }
 
-  /**
+      this.isAuthenticated = false;
+      return false;
+    } catch (error) {
+      console.warn('Session check failed:', error);
+      this.isAuthenticated = false;
+      return false;
+    }
+  }  /**
    * Open IBKR Client Portal login in a popup window
    */
   async authenticateWithPopup(): Promise<{ success: boolean; error?: string }> {
@@ -51,11 +81,72 @@ export class IBKRBrowserService {
       this.authWindow = window.open(
         loginUrl,
         'ibkr-auth',
-        'width=800,height=600,scrollbars=yes,resizable=yes'
+        'width=900,height=700,scrollbars=yes,resizable=yes,location=yes'
       );
+
+      if (!this.authWindow) {
+        resolve({ success: false, error: 'Failed to open popup window' });
+        return;
+      }
+
+      let checkCount = 0;
+      const maxChecks = 180; // 6 minutes total (180 * 2 seconds)
 
       // Check authentication status periodically
       const checkAuth = async () => {
+        checkCount++;
+        
+        console.log(`🔍 Checking auth status (attempt ${checkCount}/${maxChecks})...`);
+
+        // Check if popup was closed manually
+        if (this.authWindow?.closed) {
+          console.log('🪟 Popup window was closed, performing final auth check...');
+          // Give it one final check in case they closed after successful auth
+          try {
+            const finalCheck = await this.checkExistingSession();
+            if (finalCheck) {
+              console.log('✅ Authentication successful after popup close!');
+              resolve({ success: true });
+              return;
+            }
+          } catch (error) {
+            console.warn('Final auth check failed:', error);
+          }
+          
+          resolve({ success: false, error: 'Authentication window was closed before completing login' });
+          return;
+        }
+
+        // Try to check authentication status
+        try {
+          const isAuthenticated = await this.checkExistingSession();
+          if (isAuthenticated) {
+            console.log('✅ Authentication successful! Closing popup...');
+            this.authWindow?.close();
+            resolve({ success: true });
+            return;
+          }
+        } catch (error) {
+          console.warn(`Auth check ${checkCount} failed:`, error);
+        }
+
+        // Check for timeout
+        if (checkCount >= maxChecks) {
+          console.log('⏰ Authentication timeout reached');
+          this.authWindow?.close();
+          resolve({ success: false, error: 'Authentication timed out. Please try again.' });
+          return;
+        }
+
+        // Continue checking
+        setTimeout(checkAuth, 2000);
+      };
+
+      // Start checking after 3 seconds (give time for page to load)
+      console.log('🚀 Starting authentication flow...');
+      setTimeout(checkAuth, 3000);
+    });
+  }
         try {
           const isAuth = await this.checkExistingSession();
           if (isAuth) {
@@ -64,12 +155,14 @@ export class IBKRBrowserService {
             return;
           }
         } catch (error) {
-          // Continue checking
+          // CORS or network error - continue checking
+          console.log('Auth check failed (expected during login):', error);
         }
 
-        // Check if popup was closed manually
-        if (this.authWindow?.closed) {
-          resolve({ success: false, error: 'Authentication cancelled' });
+        // Check if we've exceeded max attempts
+        if (checkCount >= maxChecks) {
+          this.authWindow?.close();
+          resolve({ success: false, error: 'Authentication timeout - please try again' });
           return;
         }
 
@@ -77,8 +170,31 @@ export class IBKRBrowserService {
         setTimeout(checkAuth, 2000);
       };
 
-      // Start checking after 3 seconds
+      // Start checking after 3 seconds to allow popup to load
       setTimeout(checkAuth, 3000);
+
+      // Also listen for focus events on the main window
+      // This often indicates the user returned from the popup
+      const onFocus = async () => {
+        if (this.authWindow?.closed) {
+          window.removeEventListener('focus', onFocus);
+          return;
+        }
+
+        try {
+          const isAuth = await this.checkExistingSession();
+          if (isAuth) {
+            window.removeEventListener('focus', onFocus);
+            this.authWindow?.close();
+            resolve({ success: true });
+            return;
+          }
+        } catch (error) {
+          // Continue waiting
+        }
+      };
+
+      window.addEventListener('focus', onFocus);
     });
   }
 

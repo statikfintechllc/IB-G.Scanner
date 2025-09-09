@@ -58,16 +58,26 @@ export function IBKRSettings() {
   const handleLogin = async () => {
     setIsLoading(true);
     try {
+      toast.info('Opening IBKR login window...', {
+        description: 'Please complete authentication and close the popup when done'
+      });
+      
       const result = await ibkrBrowserService.authenticateWithPopup();
       
       if (result.success) {
-        toast.success('Successfully authenticated with IBKR!');
+        toast.success('Successfully authenticated with IBKR!', {
+          description: 'You can now access market data and trading features'
+        });
         await checkAuthStatus();
       } else {
-        toast.error(result.error || 'Authentication failed');
+        toast.error(result.error || 'Authentication failed', {
+          description: 'Please try again or check your IBKR credentials'
+        });
       }
     } catch (error) {
-      toast.error('Login failed');
+      toast.error('Login failed', {
+        description: 'Please check your internet connection and try again'
+      });
       console.error('Login error:', error);
     } finally {
       setIsLoading(false);
@@ -142,13 +152,24 @@ export function IBKRSettings() {
           {/* Action Buttons */}
           <div className="space-y-2">
             {!isAuthenticated ? (
-              <Button 
-                onClick={handleLogin} 
-                disabled={isLoading}
-                className="w-full"
-              >
-                {isLoading ? 'Connecting...' : 'Login to IBKR'}
-              </Button>
+              <>
+                <Button 
+                  onClick={handleLogin} 
+                  disabled={isLoading}
+                  className="w-full"
+                >
+                  {isLoading ? 'Connecting...' : 'Login to IBKR'}
+                </Button>
+                <div className="text-xs text-muted-foreground p-2 bg-muted rounded">
+                  <strong>Login Instructions:</strong>
+                  <ol className="list-decimal list-inside mt-1 space-y-1">
+                    <li>Click "Login to IBKR" above</li>
+                    <li>Complete authentication in the popup</li>
+                    <li>The popup will close automatically</li>
+                    <li>If not, close it manually and click "Check Status"</li>
+                  </ol>
+                </div>
+              </>
             ) : (
               <>
                 <Button 
@@ -167,6 +188,16 @@ export function IBKRSettings() {
                 </Button>
               </>
             )}
+            
+            {/* Manual Status Check Button (always visible) */}
+            <Button 
+              onClick={checkAuthStatus}
+              variant="ghost"
+              size="sm"
+              className="w-full"
+            >
+              Check Status
+            </Button>
           </div>
 
           {/* Instructions */}
