@@ -64,7 +64,7 @@
         "cors": "^2.8.5",
         "d3": "^7.9.0",
         "date-fns": "^4.1.0",
-        "embla-carousel-react": "^8.5.2",
+        "embla-carousel-react": "^8.6.0",
         "express": "^5.1.0",
         "express-rate-limit": "^6.7.0",
         "express": "^5.1.0",
