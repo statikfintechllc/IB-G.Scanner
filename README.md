@@ -57,9 +57,9 @@ The SFTi Stock Scanner supports two deployment modes:
 ### **Mode 1: Desktop/Server Architecture (Traditional)**
 
 > [!Important]
-> This graph below is being Updated
-> No longer using tradition architecure and JTS/IB-Gateway API
-> Web-Implementaion latest 09-15-25
+> This graph below is being Updated  
+> We are No longer using tradition architecure and JTS/IB-Gateway API  
+> The Web-Implementaion latest 09-15-25
 ```txt
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │  IBKR TWS/      │    │  Router Service │    │  Public Server  │
