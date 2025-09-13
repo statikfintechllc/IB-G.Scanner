@@ -2,51 +2,68 @@
 
 ## 🚀 Deployment Options Overview
 
-The SFTi Stock Scanner supports two deployment architectures:
+The SFTi Stock Scanner supports **hybrid deployment architectures** with multiple IBKR integration modes:
 
-### **Option A: PWA Mobile Deployment (Recommended)**
+### **Option A: PWA Deployment (Recommended for Mobile)**
 - **Best for**: Mobile users, 3AM trading, independent operation
 - **Requirements**: HTTPS hosting only
-- **IBKR Connection**: Direct browser-to-IBKR Client Portal Web API
+- **IBKR Connection**: Direct browser to IBKR Client Portal Web API
 - **Infrastructure**: Zero server requirements
-- **Guide**: See [PWA-DEPLOYMENT.md](PWA-DEPLOYMENT.md) for complete setup
+- **Architecture**: Frontend + Service Worker + IBKR Web API
 
-### **Option B: Traditional Server Deployment**
-- **Best for**: Desktop users, enterprise environments
-- **Requirements**: Server infrastructure + IBKR TWS/Gateway
-- **IBKR Connection**: Node.js backend via TWS API
-- **Infrastructure**: Full server stack required
-- **Guide**: See below for traditional deployment
+### **Option B: Full Stack Deployment (Recommended for Desktop)**
+- **Best for**: Desktop users, multi-user environments, enterprise
+- **Requirements**: Server + IBKR Client Portal Gateway
+- **IBKR Connection**: Express server proxy + Direct browser connection
+- **Infrastructure**: React frontend + Express server + IBKR Gateway
+- **Architecture**: Frontend + Backend + Gateway
 
----
-
-## 📱 **Quick PWA Mobile Setup**
-
-For most users, the PWA deployment is recommended:
-
-1. **Build and deploy to HTTPS hosting** (Vercel/Netlify)
-2. **Install on iPhone**: Safari → Share → Add to Home Screen  
-3. **Login to IBKR**: Open app → Settings → Login to IBKR
-4. **Trade independently**: No computer required!
-
-**Complete guide**: [PWA-DEPLOYMENT.md](PWA-DEPLOYMENT.md)
+### **Option C: Development/Local Setup**
+- **Best for**: Development, testing, local use
+- **Requirements**: Node.js + IBKR Client Portal Gateway
+- **Architecture**: Local dev server + Local gateway
 
 ---
 
-## 🖥️ **Traditional Server Deployment**
+## 📱 **PWA Mobile Deployment**
 
-### Option 1: Single Server Deployment
+### Quick Setup
 
-Deploy all components on a single server with reverse proxy:
+1. **Build for production**
+   ```bash
+   npm run build
+   ```
 
-```bash
-# 1. Install on server
-git clone <repository-url>
-cd sfti-stock-scanner
-npm install
+2. **Deploy to HTTPS hosting**
+   - Vercel: `vercel --prod`
+   - Netlify: Drag `dist/` folder to netlify.com
+   - GitHub Pages: Push to `gh-pages` branch
 
-# 2. Build production assets
-npm run build
+3. **Install on mobile**
+   - iOS: Safari → Share → Add to Home Screen
+   - Android: Chrome → Menu → Add to Home screen
+
+4. **Setup IBKR**
+   - Open PWA → Settings → IBKR Settings
+   - Login to IBKR Client Portal in popup
+   - App connects automatically
+
+**Detailed guide**: [PWA-DEPLOYMENT.md](PWA-DEPLOYMENT.md)
+
+---
+
+## 🖥️ **Full Stack Deployment**
+
+This is the recommended production deployment with both frontend and backend services.
+
+### Prerequisites
+
+- Server with Node.js 20.19.4+
+- IBKR Client Portal Gateway installed
+- SSL certificate (Let's Encrypt recommended)
+- Domain name or static IP
+
+### Step 1: Server Setup
 
 # 3. Create systemd services (Linux)
 sudo tee /etc/systemd/system/sfti-server.service > /dev/null <<EOF

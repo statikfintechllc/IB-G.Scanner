@@ -9,9 +9,32 @@ This is a professional real-time penny stock scanner with Interactive Brokers (I
 - **Frontend**: React 19, TypeScript, Vite 6.3.5, TailwindCSS 4.1.11
 - **UI Components**: Radix UI, Shadcn/ui, Phosphor Icons
 - **Charts**: Lightweight Charts library
-- **Backend Services**: Node.js with Express (server.cjs, router.cjs)
-- **Real-time Data**: WebSocket connections to Interactive Brokers TWS/Gateway
+- **Backend Services**: Express server (scripts/server.js) with WebSocket support
+- **IBKR Integration**: Client Portal Gateway browser connection + server proxy
+- **AI Services**: Built-in pattern recognition and intelligent search
 - **Build Tool**: Vite with TypeScript compilation
+
+## Architecture Overview
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  React Frontend │    │  Express Server │    │  IBKR Client    │
+│  (Port 4174)    │◄──►│  (Port 3000)    │    │  Portal Gateway │
+│  • UI/UX        │    │  • WebSocket    │    │  (Port 5000)    │
+│  • AI Patterns  │    │  • API Proxy    │◄──►│  • Auth         │
+│  • Direct IBKR  │    │  • Demo Mode    │    │  • Market Data  │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+        │                                              ▲
+        └──────────────────────────────────────────────┘
+                    Direct Browser Connection
+```
+
+**Key Files:**
+- `src/App.tsx` - Main application with tabbed interface
+- `src/lib/ibkr-gateway-browser.ts` - Direct IBKR Client Portal Gateway connection
+- `src/lib/ibkr.ts` - Alternative IBKR service with WebSocket
+- `scripts/server.js` - Express server with IBKR proxy endpoints
+- `src/lib/aiPatterns.ts` - AI pattern recognition algorithms
 
 ## Working Effectively
 
@@ -43,7 +66,7 @@ This is a professional real-time penny stock scanner with Interactive Brokers (I
    ```bash
    npm run dev
    ```
-   - **Port**: http://localhost:5000 (not 5173 as typical)
+   - **Port**: http://localhost:4174 (not 5173 as typical)
    - **Startup time**: ~1 second
    - **Auto-reload**: Yes, with HMR (Hot Module Replacement)
 
@@ -51,7 +74,7 @@ This is a professional real-time penny stock scanner with Interactive Brokers (I
    ```bash
    npm run preview
    ```
-   - **Port**: http://localhost:4173
+   - **Port**: http://localhost:4174
    - **Requires**: `npm run build` to be run first
 
 ### Linting and Code Quality
@@ -71,24 +94,19 @@ This is a professional real-time penny stock scanner with Interactive Brokers (I
    ```bash
    # Public server (works without IBKR)
    npm run server
-   # Port: 3001 (HTTP), 3002 (WebSocket)
+   # Port: 3000 (HTTP), 3001 (WebSocket)
    # Status: ✅ Works
-   
-   # IBKR router (requires TWS/Gateway)
-   npm run router
-   # Status: ❌ Fails without @ib/tws-api package and IBKR connection
-   # Expected behavior: This is normal in development
    ```
 
 8. **Start all services together**:
    ```bash
    # Development mode
    npm run start:full
-   # Runs: server + router + dev server concurrently
+   # Runs: server + dev server concurrently
    
    # Production mode  
    npm run start:prod
-   # Runs: server + router + preview server concurrently
+   # Runs: server + preview server concurrently
    ```
 
 ## Manual Validation Requirements
@@ -102,15 +120,15 @@ This is a professional real-time penny stock scanner with Interactive Brokers (I
    npm run build && npm run dev
    ```
 
-2. **Open browser and navigate to**: http://localhost:5000
+2. **Open browser and navigate to**: http://localhost:4174
 
 3. **Verify core functionality**:
    - Application loads with "SFTi Stock Scanner" title
    - Shows market hours status (Pre-market/Regular/After-hours/Closed)
    - Displays "0 stocks • Updated [timestamp]" indicating data system works
    - All main buttons are visible: AI Search, Market Insights, Alerts, IBKR
-   - Tab system works with "SFTi Top 10" and "Scanner" tabs
-   - App shows "IBKR connection failed, running in demo mode" (expected without TWS)
+   - Tab system works with "AI Picks" and "Scanner" tabs
+   - App shows "IBKR connection failed, running in demo mode" (expected without Gateway)
 
 4. **Expected visual result**: ![Working SFTi Scanner](https://github.com/user-attachments/assets/6aa08f19-8daa-4134-98d2-fff10c90f92a)
 
@@ -132,8 +150,7 @@ This is a professional real-time penny stock scanner with Interactive Brokers (I
 │   ├── types/              # TypeScript type definitions
 │   └── App.tsx             # Main application component
 ├── dist/                   # Built application (auto-generated)
-├── server.cjs              # Express HTTP/WebSocket server
-├── router.cjs              # IBKR data router service  
+├── scripts/server.js       # Express HTTP/WebSocket server
 ├── package.json            # Dependencies and scripts
 ├── vite.config.ts          # Vite build configuration
 ├── tsconfig.json           # TypeScript configuration
@@ -143,22 +160,25 @@ This is a professional real-time penny stock scanner with Interactive Brokers (I
 
 ### Service Architecture
 ```
-IBKR TWS/Gateway → router.cjs → server.cjs → Web Client (React)
-                    (port 7497)   (port 3001)   (port 5000)
+IBKR Client Portal Gateway ← → React App (Direct Connection)
+         ↓                              ↓
+Express Server (Port 3000) ← → Web Client (Port 4174)
+         ↓
+WebSocket Server (Port 3001)
 ```
 
 ## Important Development Notes
 
 ### Working Without IBKR
-- **Expected**: Router service fails without Interactive Brokers TWS/Gateway
-- **Normal behavior**: Application runs in "demo mode" 
+- **Expected**: Application runs in "demo mode" without IBKR Client Portal Gateway
+- **Normal behavior**: Shows "IBKR connection failed, running in demo mode"
 - **For development**: Use `npm run dev` and `npm run server` separately
-- **Frontend works fully** without backend services
+- **Frontend works fully** without IBKR connection
 
 ### Build and Module System
 - **Package type**: ES modules (`"type": "module"` in package.json)
-- **Backend services**: Use CommonJS (`.cjs` extension)
-- **Issue resolved**: Original `.js` files renamed to `.cjs` for compatibility
+- **Backend services**: Express server in `scripts/server.js`
+- **IBKR Integration**: Direct browser connection to Client Portal Gateway (port 5000)
 
 ### Linting Configuration
 - **ESLint version**: 9.35.0 (latest flat config format)
@@ -182,8 +202,8 @@ IBKR TWS/Gateway → router.cjs → server.cjs → Web Client (React)
 
 ### Debugging Issues
 - **Check browser console**: Look for React/JavaScript errors
-- **Verify ports**: Dev (5000), Server (3001), Preview (4173)
-- **IBKR connection**: Expected to fail in development without TWS
+- **Verify ports**: Dev (4174), Server (3000), Gateway (5000)
+- **IBKR connection**: Expected to fail in development without Client Portal Gateway
 - **Build errors**: Usually TypeScript compilation issues
 
 ### Dependencies Management
@@ -193,7 +213,7 @@ IBKR TWS/Gateway → router.cjs → server.cjs → Web Client (React)
 
 ## DO NOT Attempt
 
-- **Do not try to fix the router service** - requires IBKR TWS/Gateway setup
-- **Do not modify `.cjs` files to ES modules** - they need CommonJS for dependencies
+- **Do not try to fix the IBKR connection errors** - requires IBKR Client Portal Gateway setup
+- **Do not modify ES module structure** - package.json is configured correctly
 - **Do not remove "demo mode" functionality** - it's essential for development
 - **Do not add test frameworks** - none exist currently, keep minimal changes

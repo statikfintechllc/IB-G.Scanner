@@ -1,7 +1,7 @@
 {
-    "name": "spark-template",
+    "name": "ib-g-scanner",
     "private": true,
-    "version": "0.0.0",
+    "version": "0.1.7",
     "type": "module",
     "scripts": {
         "dev": "vite --port 4174",
@@ -11,10 +11,8 @@
         "optimize": "vite optimize",
         "preview": "vite preview --port 4174",
         "server": "node scripts/server.js",
-        "router": "node scripts/router.js",
         "start:full": "concurrently \"npm run server\" \"npm run dev\"",
-        "start:prod": "concurrently \"npm run server\" \"npm run preview\"",
-        "start:old": "concurrently \"npm run server:old\" \"npm run router\" \"npm run preview\""
+        "start:prod": "concurrently \"npm run server\" \"npm run preview\""
     },
     "dependencies": {
         "@github/spark": "^0.39.0",

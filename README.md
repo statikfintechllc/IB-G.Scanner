@@ -52,152 +52,207 @@ The SFTi Stock Scanner now runs entirely on your phone without needing your comp
 
 ## 🏗️ Architecture
 
-The SFTi Stock Scanner supports two deployment modes:
+The SFTi Stock Scanner uses a **hybrid architecture** with multiple integration modes for maximum flexibility:
 
-### **Mode 1: Desktop/Server Architecture (Traditional)**
+### **Mode 1: Browser-Direct (Primary)**
 
 ```txt
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  IBKR TWS/      │    │  Router Service │    │  Public Server  │
-│  Gateway        │◄───┤  (router.js)    │◄───┤  (server.js)    │
-│  (Data Source)  │    │  Local Bridge   │    │  Web API/WS     │
+│  React Frontend │    │  Express Server │    │  IBKR Client    │
+│  (Port 4174)    │◄──►│  (Port 3000)    │    │  Portal Gateway │
+│  • UI/UX        │    │  • WebSocket    │    │  (Port 5000)    │
+│  • AI Patterns  │    │  • API Proxy    │◄──►│  • Auth         │
+│  • Direct IBKR  │    │  • Demo Mode    │    │  • Market Data  │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-                                                       ▲
-                                               ┌─────────────────┐
-                                               │  Web Client     │
-                                               │  (React App)    │
-                                               └─────────────────┘
+        │                                              ▲
+        └──────────────────────────────────────────────┘
+                    Direct Browser Connection
 ```
 
-### **Mode 2: PWA Architecture (Mobile-First)**
+### **Mode 2: PWA/Mobile (Mobile-First)**
 
 ```txt
 ┌─────────────────┐    ┌─────────────────┐
-│  IBKR Client    │    │  PWA App        │
-│  Portal Web API │◄───┤  (React + SW)   │
-│  (Remote)       │    │  (iPhone/Phone) │
+│  PWA Frontend   │    │  IBKR Client    │
+│  (Mobile)       │◄──►│  Portal Web API │
+│  • Service Wrkr │    │  (HTTPS Remote) │
+│  • Offline      │    │  • Mobile Auth  │
+│  • Push Notifs  │    │  • REST APIs    │
 └─────────────────┘    └─────────────────┘
 ```
 
 ### Components
 
-**Desktop Mode:**
-1. **IBKR TWS/Gateway**: Interactive Brokers' trading platform providing real-time market data
-2. **Router Service**: Local Node.js service that connects to IBKR and forwards data
-3. **Public Server**: Web server that receives data from router and serves to clients
-4. **Web Client**: React-based frontend with real-time charts and scanning interface
+**Primary Architecture:**
+1. **React Frontend**: Modern TypeScript React app with tabbed interface, AI pattern recognition
+2. **Express Server**: HTTP/WebSocket server providing API proxy, rate limiting, demo mode
+3. **IBKR Client Portal Gateway**: Interactive Brokers' official web gateway (localhost:5000)
+4. **AI Pattern Service**: Built-in pattern recognition and intelligent stock analysis
 
-**PWA Mode:**
-1. **IBKR Client Portal**: Direct web API connection to Interactive Brokers
-2. **PWA App**: Self-contained Progressive Web App with service worker for offline capability
-3. **Browser Runtime**: Runs entirely in mobile browser with native app experience
+**Key Features:**
+- **Direct IBKR Integration**: Browser connects directly to Client Portal Gateway
+- **Fallback Server Mode**: Express server proxies IBKR APIs when needed  
+- **Demo Mode**: Works without IBKR connection for development/testing
+- **Real-time Updates**: WebSocket streaming for live market data
+- **AI-Powered Analysis**: Pattern recognition and intelligent recommendations
 
-## 🚀 Installation Methods
-
-### Method 1: Automatic Installation (Recommended)
-
-```bash
-# Download and run the universal installer
-curl -sSL https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/master/install.sh | bash
-
-# Or with wget
-wget -qO- https://raw.githubusercontent.com/your-repo/sfti-stock-scanner/master/install.sh | bash
-```
-
-### Method 2: Manual Installation
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Node.js** 18+ and npm
+- **Node.js** 20.19.4+ and npm 10.8.2+
 - **Interactive Brokers Account** (paper or live trading)
-- **TWS or IB Gateway** installed and running
+- **IBKR Client Portal Gateway** (download from IBKR)
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 
 ### Installation
 
 1. **Clone the repository**
-```bash
-   git clone https://github.com/statikfintechllc/interactive-brokers.git
-   cd sfti-stock-scanner
-```
+   ```bash
+   git clone https://github.com/statikfintechllc/IB-G.Scanner.git
+   cd IB-G.Scanner
+   ```
 
 2. **Install dependencies**
-```bash
+   ```bash
    npm install
-```
+   ```
 
-3. **Start the development server**
-```bash
+3. **Start development mode**
+   ```bash
    npm run dev
-```
+   ```
 
-4. **Open in browser**
-   Navigate to `http://localhost:5173`
+4. **Open browser**
+   Navigate to `http://localhost:4174`
 
-### Method 3: Production Deployment
+### IBKR Setup
 
-For production environments with multiple users:
+1. **Download IBKR Client Portal Gateway**
+   - [Official Download](https://download2.interactivebrokers.com/portal/clientportal.gw.zip)
+   - Extract to a folder (e.g., `~/ibkr-gateway`)
 
-1. **Install dependencies**
-```bash
-   npm install express cors compression express-rate-limit concurrently
-```
+2. **Start the Gateway**
+   ```bash
+   cd ~/ibkr-gateway
+   bash bin/run.sh root/conf.yaml
+   ```
+   - Gateway runs on `https://localhost:5000`
+   - Login with your IBKR credentials in the browser
 
-2. **Build the application**
-```bash
+3. **Connect the App**
+   - Start the app with `npm run dev`
+   - Click the IBKR Settings button
+   - App will connect automatically to the authenticated gateway
+
+### Production Deployment
+
+1. **Build the application**
+   ```bash
    npm run build
-```
+   ```
 
-3. **Start all services**
-
-```bash
-   # Start all services (router, server, and web app)
+2. **Start production services**
+   ```bash
    npm run start:prod
-   
-   # Or start individually
-   npm run server    # Public server on port 3001
-   npm run router    # IBKR router service
-   npm run preview   # Web app on port 4173
-```
+   ```
+
+3. **Access the application**
+   - Web App: `http://localhost:4174`
+   - API Server: `http://localhost:3000`
 
 ## 🔧 Service Management
 
-### Individual Services
+### Available Scripts
 
 ```bash
-# Start IBKR router (connects to TWS/Gateway)
-npm run router
+# Development
+npm run dev          # Start React frontend (port 4174)
+npm run server       # Start Express server (port 3000)
+npm run start:full   # Start both frontend and server
 
-# Start public server (web API and WebSocket)
-npm run server
+# Production
+npm run build        # Build optimized frontend
+npm run preview      # Preview production build (port 4174)
+npm run start:prod   # Start server + preview
 
-# Start web application (development)
-npm run dev
-
-# Start all services together
-npm run start:full
+# Utilities
+npm run lint         # Run ESLint
+npm run kill         # Kill process on port 4174
 ```
 
 ### Service Ports
 
-- **Web App**: `http://localhost:5173` (dev) or `http://localhost:4173` (prod)
-- **API Server**: `http://localhost:3001`
-- **WebSocket**: `ws://localhost:3002`
-- **IBKR TWS**: `localhost:7497` (or 4001 for Gateway)
+- **Frontend**: `http://localhost:4174` (development/production)
+- **API Server**: `http://localhost:3000` (HTTP + WebSocket on 3001)
+- **IBKR Gateway**: `https://localhost:5000` (manual start required)
+
+### Service Dependencies
+
+**Required:**
+1. **React Frontend** - User interface and AI pattern analysis
+2. **Express Server** - API proxy, WebSocket, rate limiting
+
+**Optional:**
+1. **IBKR Client Portal Gateway** - Real-time market data (runs in demo mode without)
+2. **Service Worker** - PWA offline functionality
 
 ## 🔧 IBKR Setup
 
-### Interactive Brokers Configuration
+### Client Portal Gateway Setup
 
-1. **Install TWS or IB Gateway**
-   - Download from [Interactive Brokers](https://www.interactivebrokers.com/en/trading/tws.php)
-   - Install and create account connection
+The application uses IBKR's **Client Portal Gateway** for web-based authentication and market data.
 
-2. **Configure API Access**
-   - Open TWS/Gateway
-   - Go to `Configure → API → Settings`
-   - Enable API access
-   - Set Socket Port: `7497` (TWS) or `4001` (Gateway)
+1. **Download Client Portal Gateway**
+   - [Official Download Link](https://download2.interactivebrokers.com/portal/clientportal.gw.zip)
+   - Requires Java 8+ installed on your system
+
+2. **Extract and Configure**
+   ```bash
+   # Extract the gateway
+   unzip clientportal.gw.zip -d ~/ibkr-gateway
+   cd ~/ibkr-gateway
+   ```
+
+3. **Start the Gateway**
+   ```bash
+   # Start the gateway (will open browser for login)
+   bash bin/run.sh root/conf.yaml
+   ```
+
+4. **Authenticate**
+   - Gateway opens browser to `https://localhost:5000`
+   - Login with your IBKR username and password
+   - Accept the security certificate warning
+   - Keep the gateway running while using the app
+
+5. **Connect the App**
+   - Start the scanner: `npm run dev`
+   - Click the IBKR Settings button in the app
+   - App automatically detects and connects to authenticated gateway
+
+### Account Requirements
+
+- **IBKR Pro Account** (API access required - not available on IBKR Lite)
+- **Market Data Subscription** for real-time quotes
+- **Paper Trading** or funded account for live trading
+
+### Troubleshooting
+
+**Gateway Won't Start:**
+- Ensure Java 8+ is installed: `java -version`
+- Check if port 5000 is available
+- Disable firewall/antivirus temporarily
+
+**Authentication Failed:**
+- Only one session allowed - logout from TWS/Mobile if connected
+- Clear browser cookies and try again
+- Restart gateway: `Ctrl+C` then `bash bin/run.sh root/conf.yaml`
+
+**No Market Data:**
+- Verify market data subscriptions in IBKR account
+- Check that paper trading mode has data access
+- Ensure gateway session is still authenticated
    - Add `127.0.0.1` to trusted IPs
    - Enable "Download open orders on connection"
 
