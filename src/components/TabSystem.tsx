@@ -115,7 +115,7 @@ export function TabSystem({
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="h-4 w-4 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive/20 hover:text-destructive ml-2"
+                  className="h-4 w-4 p-0 opacity-70 md:opacity-0 md:group-hover:opacity-100 transition-opacity hover:bg-destructive/20 hover:text-destructive ml-2"
                   onClick={(e) => handleTabClose(e, tab.id)}
                 >
                   <svg

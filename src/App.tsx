@@ -340,25 +340,31 @@ function App() {
               </div>
             </div>
           ) : (
-            <div className="h-full">
-              {activeTab?.symbol && (
-                <StockChart 
-                  symbol={activeTab.symbol}
-                  currentPrice={currentStock?.price}
-                  change={currentStock?.change}
-                  changePercent={currentStock?.changePercent}
-                />
-              )}
+            <div className="h-full flex flex-col">
+              <div className="flex-1">
+                {activeTab?.symbol ? (
+                  <StockChart 
+                    symbol={activeTab.symbol}
+                    currentPrice={currentStock?.price}
+                    change={currentStock?.change}
+                    changePercent={currentStock?.changePercent}
+                  />
+                ) : (
+                  <div className="h-full flex items-center justify-center bg-card/50">
+                    <div className="text-center text-muted-foreground">
+                      <div className="text-4xl mb-4">📈</div>
+                      <h3 className="text-lg font-medium mb-2">Empty Chart Tab</h3>
+                      <p className="text-sm">Select a stock from the Scanner or AI Picks to view its chart</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="flex-shrink-0">
+                <Footer />
+              </div>
             </div>
           )}
         </div>
-        
-        {/* Footer - pinned to bottom for main tabs */}
-        {(activeTab?.type === 'sfti_top10' || activeTab?.type === 'scanner') && (
-          <div className="flex-shrink-0">
-            <Footer />
-          </div>
-        )}
       </div>
 
       {/* Toast Notifications */}
