@@ -15,6 +15,7 @@ import { AISearch } from '@/components/AISearch';
 import { MarketInsights } from '@/components/MarketInsights';
 import { SFTiTop10 } from '@/components/SFTiTop10';
 import { Footer } from '@/components/Footer';
+import { OfflineBanner } from '@/components/OfflineBanner';
 import { Toaster, toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import iconImg from '@/assets/images/icon.png';
@@ -298,6 +299,9 @@ function App() {
           )}
         </div>
       </div>
+
+      {/* Offline Banner */}
+      <OfflineBanner />
 
       {/* Tabs */}
       <TabSystem

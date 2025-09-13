@@ -4,21 +4,21 @@
  */
 
 class EventEmitter {
-  private events: Map<string, Function[]> = new Map();
+  private events: Map<string, ((...args: any[]) => void)[]> = new Map();
 
   emit(event: string, ...args: any[]) {
     const handlers = this.events.get(event) || [];
     handlers.forEach(handler => handler(...args));
   }
 
-  on(event: string, handler: Function) {
+  on(event: string, handler: (...args: any[]) => void) {
     if (!this.events.has(event)) {
       this.events.set(event, []);
     }
     this.events.get(event)!.push(handler);
   }
 
-  off(event: string, handler: Function) {
+  off(event: string, handler: (...args: any[]) => void) {
     const handlers = this.events.get(event) || [];
     const index = handlers.indexOf(handler);
     if (index > -1) {
@@ -130,7 +130,7 @@ export class IBKRBrowserService extends EventEmitter {
               }, 2000);
               return;
             }
-          } catch (e) {
+          } catch {
             // Can't access popup.location due to cross-origin, this is expected
             // Continue with session checks
           }

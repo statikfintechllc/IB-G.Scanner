@@ -122,13 +122,17 @@ This document tracks the major milestones for achieving full IBKR connectivity a
 
 ### Objectives:
 - Eliminate Node.js backend dependency
+- Implement direct browser-to-IBKR Client Portal connection
+- Enable authentication via popup flow
+- Provide real-time market data polling
+- Ensure full account and trading functionality
 - Connect directly to IBKR Client Portal Web API
 - Enable authentication via browser popup
 - Implement real-time data polling
 
 ### Key Deliverables:
 - [x] Direct IBKR Client Portal Web API integration
-- [x] Browser popup authentication flow
+- [x] Popup-based authentication flow
 - [x] Real-time market data polling (5-second intervals)
 - [x] Account and position management
 - [x] Contract search and resolution
