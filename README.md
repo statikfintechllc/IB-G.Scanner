@@ -56,6 +56,10 @@ The SFTi Stock Scanner uses a **hybrid architecture** with multiple integration 
 
 ### **Mode 1: Browser-Direct (Primary)**
 
+> [!Important]
+> This graph below is being Updated  
+> We are No longer using tradition architecure and JTS/IB-Gateway API  
+> The Web-Implementaion latest 09-15-25
 ```txt
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │  React Frontend │    │  Express Server │    │  IBKR Client    │
